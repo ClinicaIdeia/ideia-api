@@ -5,7 +5,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -37,14 +36,12 @@ public class AgendaResource {
     @Autowired
     private ApplicationEventPublisher publisher;
 
-    @Autowired
-    private MessageSource messageSource;
-
     @GetMapping
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2" +
             ".hasScope('read')")
     public Page<Agenda> pesquisar(AgendaFilter filter, Pageable pageable) {
-        return this.agendaService.listaTodasAgendamentos(filter, pageable);
+       // return this.agendaService.listaAgendamentos(filter, pageable);
+        return this.agendaService.listaFuturosAgendamentos(pageable); //TODO : Ver com alex
     }
 
     @GetMapping("/resumo")

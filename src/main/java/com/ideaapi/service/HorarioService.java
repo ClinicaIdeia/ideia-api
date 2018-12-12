@@ -20,13 +20,13 @@ public class HorarioService {
     @Autowired
     private AgendaRepository agendaRepository;
 
-    public List<Horario> listaHorarios(Long codigo) {
+    public List<Horario> listaHorarios(Boolean trabalhoArmado) {
 
         List<Horario> horarios = new ArrayList<>();
 
         List<Agenda> futurosAgendas;
 
-        if (motivoRelacionadoArmaDeFogo(codigo))
+        if (trabalhoArmado)
             futurosAgendas = agendaRepository.findAllByDiaAgendaAfter(LocalDate.now().plusDays(3L));
 
         else
@@ -76,9 +76,5 @@ public class HorarioService {
                 + agenda.getDiaAgenda().getMonth().toString() + " " + agenda.getDiaAgenda().getYear());
 
         return horario;
-    }
-
-    private boolean motivoRelacionadoArmaDeFogo(Long codigo) {
-        return (codigo == 6L) || (codigo == 7L) || (codigo == 8L) || (codigo == 9L);
     }
 }

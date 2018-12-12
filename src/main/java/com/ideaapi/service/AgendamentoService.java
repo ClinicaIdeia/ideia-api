@@ -22,7 +22,7 @@ public class AgendamentoService {
     @Autowired
     private HorarioService horarioService;
 
-    public Page<Agendamento> listaTodasAgendamentos(AgendamentoFilter filter, Pageable pageable) {
+    public Page<Agendamento> listaAgendamentos(AgendamentoFilter filter, Pageable pageable) {
         return this.agendamentoRepository.filtrar(filter, pageable);
     }
 
