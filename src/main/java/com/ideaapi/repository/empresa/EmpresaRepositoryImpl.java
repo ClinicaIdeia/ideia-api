@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import com.ideaapi.model.Contato_;
 import com.ideaapi.model.Empresa;
 import com.ideaapi.model.Empresa_;
 import com.ideaapi.repository.filter.EmpresaFilter;

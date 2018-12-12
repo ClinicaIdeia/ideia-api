@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 
 import com.ideaapi.model.Agenda;
 import com.ideaapi.repository.filter.AgendaFilter;
-import com.ideaapi.repository.filter.AgendamentoFilter;
 import com.ideaapi.repository.projection.ResumoAgendamento;
 
 public interface AgendaRepositoryQuery {

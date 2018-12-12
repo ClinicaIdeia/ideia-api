@@ -1,5 +1,6 @@
 package com.ideaapi.model;
 
+import java.time.LocalTime;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -12,8 +13,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "agendamento")
@@ -39,8 +38,18 @@ public class Agendamento {
     @JoinColumn(name = "codigo_motivo")
     private Motivo motivo;
 
+    private LocalTime horaExame;
+
     @Transient
     private Long codHorario;
+
+    public LocalTime getHoraExame() {
+        return horaExame;
+    }
+
+    public void setHoraExame(LocalTime horaExame) {
+        this.horaExame = horaExame;
+    }
 
     public Long getCodHorario() {
         return codHorario;
