@@ -8,10 +8,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.repository.agendamento.AgendamentoRepositoryQuery;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface AgendamentoRepository extends JpaRepository<Agendamento, Long>, AgendamentoRepositoryQuery {
 
-    List<Agendamento> findAllByAgenda_DiaAgenda(LocalDate diaAgenda);
+    List<Agendamento> findAllByAgendaDiaAgenda(LocalDate diaAgenda);
 
-    List<Agendamento> findAllByAgenda_DiaAgenda_MonthAndAgenda_DiaAgenda_Year(Month month, Integer year);
+    List<Agendamento> findAllByAgendaDiaAgendaMonthAndAgendaDiaAgendaYear(Month month, Integer year);
 }

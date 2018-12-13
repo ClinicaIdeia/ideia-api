@@ -95,7 +95,7 @@ public class ScheduledEmailsTest extends BaseTest {
     public void envioExameExpirado() {
 
 
-        when(agendamentoRepository.findAllByAgenda_DiaAgenda(any())).thenReturn(agendamentosList);
+        when(agendamentoRepository.findAllByAgendaDiaAgenda(any())).thenReturn(agendamentosList);
 
         scheduledEmails.exameExpirando();
 
@@ -105,7 +105,7 @@ public class ScheduledEmailsTest extends BaseTest {
     @Test
     public void envioPoliciaFederal() {
 
-        when(agendamentoRepository.findAllByAgenda_DiaAgenda(any())).thenReturn(agendamentosList);
+        when(agendamentoRepository.findAllByAgendaDiaAgenda(any())).thenReturn(agendamentosList);
 
         scheduledEmails.avisoPoliciaFederal();
 
@@ -117,7 +117,7 @@ public class ScheduledEmailsTest extends BaseTest {
 
         //TODO: Acabar teste depois de enviar o email
 
-        when(agendamentoRepository.findAllByAgenda_DiaAgenda_MonthAndAgenda_DiaAgenda_Year(any(), any()))
+        when(agendamentoRepository.findAllByAgendaDiaAgendaMonthAndAgendaDiaAgendaYear(any(), any()))
                 .thenReturn(agendamentosList);
 
         scheduledEmails.emailMensalEmpresas();

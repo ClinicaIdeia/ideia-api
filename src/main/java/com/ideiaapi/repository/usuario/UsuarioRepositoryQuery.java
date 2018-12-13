@@ -1,4 +1,4 @@
-package com.ideiaapi.repository.usario;
+package com.ideiaapi.repository.usuario;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

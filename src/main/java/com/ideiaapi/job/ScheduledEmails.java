@@ -53,7 +53,7 @@ public class ScheduledEmails {
 
         LocalDate hoje = LocalDate.now();
 
-        List<Agendamento> agendamentosList = this.agendamentoRepository.findAllByAgenda_DiaAgenda(hoje.minusDays(335L));
+        List<Agendamento> agendamentosList = this.agendamentoRepository.findAllByAgendaDiaAgenda(hoje.minusDays(335L));
         List<Funcionario> funcionariosList = new ArrayList<>();
 
         agendamentosList.forEach(agendamento -> funcionariosList.add(agendamento.getFuncionario()));
@@ -79,7 +79,7 @@ public class ScheduledEmails {
 
         LocalDate hoje = LocalDate.now();
 
-        List<Agendamento> agendamentosList = this.agendamentoRepository.findAllByAgenda_DiaAgenda(hoje.plusDays(3L));
+        List<Agendamento> agendamentosList = this.agendamentoRepository.findAllByAgendaDiaAgenda(hoje.plusDays(3L));
         List<Funcionario> funcionariosList = new ArrayList<>();
 
         agendamentosList.stream()
@@ -99,7 +99,7 @@ public class ScheduledEmails {
         Integer year = earlier.getYear(); // 2018
 
         List<Agendamento> agendamentosList =
-                this.agendamentoRepository.findAllByAgenda_DiaAgenda_MonthAndAgenda_DiaAgenda_Year(lastMonth, year);
+                this.agendamentoRepository.findAllByAgendaDiaAgendaMonthAndAgendaDiaAgendaYear(lastMonth, year);
 
         //TODO : Buscar todos os exames do mês anterior
     }

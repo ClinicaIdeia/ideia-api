@@ -1,4 +1,4 @@
-package com.ideiaapi.repository.usario;
+package com.ideiaapi.repository.usuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,9 @@ import com.ideiaapi.model.Usuario;
 import com.ideiaapi.model.Usuario_;
 import com.ideiaapi.repository.filter.UsuarioFilter;
 import com.ideiaapi.repository.restricoes.paginacao.RestricoesPaginacao;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UsuarioRepositoryImpl extends RestricoesPaginacao implements UsuarioRepositoryQuery {
 
     @PersistenceContext

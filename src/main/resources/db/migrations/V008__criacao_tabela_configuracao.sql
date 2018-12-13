@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS configuracao (
 
   codigo              BIGINT PRIMARY KEY  NOT NULL,
-  chave_configuracao  VARCHAR(100)
+  chave_configuracao  VARCHAR(100),
   valor               VARCHAR(255)
 
 );

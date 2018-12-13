@@ -22,12 +22,10 @@ public class Configuracao {
     private Long codigo;
 
     @NotNull
-    @OneToOne
     @JoinColumn(name = "chave_configuracao")
     private String chave;
 
     @NotNull
-    @OneToOne
     @JoinColumn(name = "valor")
     private String valor;
 
