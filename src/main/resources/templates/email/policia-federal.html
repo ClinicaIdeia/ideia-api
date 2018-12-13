@@ -31,15 +31,12 @@
             armas :</p>
 
         <table>
-            <TH>Nome Funcionario</th>
-            <c:forEach items="${map}" var="current">
+            <th:block th:each="item : ${names}">
                 <tr>
-                    <td><c:out value="1" /><td>
+                    <td th:text="${item}"></td>
                 </tr>
-            </c:forEach>
+            </th:block>
         </table>
-
-        TODO : ver com ALEX
 
         <p>Equipe Ideia</p>
 
