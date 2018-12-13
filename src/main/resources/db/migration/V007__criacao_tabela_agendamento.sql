@@ -5,10 +5,10 @@ CREATE TABLE IF NOT EXISTS agendamento (
   codigo_motivo       BIGINT        NOT NULL,
   codigo_agenda       BIGINT        NOT NULL,
   codigo_funcionario  BIGINT        NOT NULL,
+  trabalho_armado     BOOLEAN       NOT NULL,
   FOREIGN KEY (codigo_motivo)       REFERENCES motivo(codigo),
   FOREIGN KEY (codigo_agenda)       REFERENCES agenda(codigo),
   FOREIGN KEY (codigo_funcionario)  REFERENCES funcionario(codigo)
-
 
 );
 

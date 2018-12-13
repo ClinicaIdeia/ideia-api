@@ -22,55 +22,55 @@ import com.ideaapi.repository.projection.ResumoAgendamento;
 @Service
 public class AgendamentoService {
 
-	@Autowired
-	private AgendamentoRepository agendamentoRepository;
+    @Autowired
+    private AgendamentoRepository agendamentoRepository;
 
-	@Autowired
-	private HorarioService horarioService;
+    @Autowired
+    private HorarioService horarioService;
 
-	public byte[] relatorioPorEmpresa(LocalDate inicio, LocalDate fim) {
-		return null;
-	}
+    public byte[] relatorioPorEmpresa(LocalDate inicio, LocalDate fim) {
+        return null;
+    }
 
-	public Page<Agendamento> listaTodasAgendamentos(AgendamentoFilter filter, Pageable pageable) {
-		return this.agendamentoRepository.filtrar(filter, pageable);
-	}
+    public Page<Agendamento> listaAgendamentos(AgendamentoFilter filter, Pageable pageable) {
+        return this.agendamentoRepository.filtrar(filter, pageable);
+    }
 
-	public Page<ResumoAgendamento> resumo(AgendamentoFilter filter, Pageable pageable) {
-		return this.agendamentoRepository.resumir(filter, pageable);
-	}
+    public Page<ResumoAgendamento> resumo(AgendamentoFilter filter, Pageable pageable) {
+        return this.agendamentoRepository.resumir(filter, pageable);
+    }
 
-	@Transactional
-	public Agendamento cadastraAgendamento(Agendamento entity) {
+    @Transactional
+    public Agendamento cadastraAgendamento(Agendamento entity) {
 
-		Horario horario = horarioService.buscaHorario(entity.getCodHorario());
-		LocalTime parse = LocalTime.parse(horario.getHoraExame());
-		entity.setHoraExame(parse);
+        Horario horario = horarioService.buscaHorario(entity.getCodHorario());
+        LocalTime parse = LocalTime.parse(horario.getHoraExame());
+        entity.setHoraExame(parse);
 
-		this.horarioService.queimaHorario(horario);
-		return this.agendamentoRepository.save(entity);
-	}
+        this.horarioService.queimaHorario(horario);
+        return this.agendamentoRepository.save(entity);
+    }
 
-	public Agendamento buscaAgendamento(Long codigo) {
-		Agendamento agendamento = this.agendamentoRepository.findOne(codigo);
+    public Agendamento buscaAgendamento(Long codigo) {
+        Agendamento agendamento = this.agendamentoRepository.findOne(codigo);
 
-		if (agendamento == null) {
-			throw new EmptyResultDataAccessException(1);
-		}
+        if (agendamento == null) {
+            throw new EmptyResultDataAccessException(1);
+        }
 
-		return agendamento;
-	}
+        return agendamento;
+    }
 
-	public void deletaAgendamento(Long codigo) {
-		this.agendamentoRepository.delete(codigo);
-	}
+    public void deletaAgendamento(Long codigo) {
+        this.agendamentoRepository.delete(codigo);
+    }
 
-	public ResponseEntity<Agendamento> atualizaAgendamento(Long codigo, Agendamento agendamento) {
-		Agendamento agendamentoSalvo = this.buscaAgendamento(codigo);
-		BeanUtils.copyProperties(agendamento, agendamentoSalvo, "codigo");
+    public ResponseEntity<Agendamento> atualizaAgendamento(Long codigo, Agendamento agendamento) {
+        Agendamento agendamentoSalvo = this.buscaAgendamento(codigo);
+        BeanUtils.copyProperties(agendamento, agendamentoSalvo, "codigo");
 
-		this.agendamentoRepository.save(agendamentoSalvo);
-		return ResponseEntity.ok(agendamentoSalvo);
-	}
+        this.agendamentoRepository.save(agendamentoSalvo);
+        return ResponseEntity.ok(agendamentoSalvo);
+    }
 
 }

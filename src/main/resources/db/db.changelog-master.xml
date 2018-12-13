@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <include file="db/migrations/V001__criacao_tabela_contato_empresa.sql"/>
+    <include file="db/migrations/V002__criacao_tabela_usuario_permissao.sql"/>
+    <include file="db/migrations/V003__criacao_tabela_funcionario.sql"/>
+    <include file="db/migrations/V004__criacao_tabela_horario.sql"/>
+    <include file="db/migrations/V005__criacao_tabela_agenda.sql"/>
+    <include file="db/migrations/V006__criacao_tabela_motivos.sql"/>
+    <include file="db/migrations/V007__criacao_tabela_agendamento.sql"/>
+    <include file="db/migrations/V008__criacao_tabela_configuracao.sql"/>
+
+</databaseChangeLog>
