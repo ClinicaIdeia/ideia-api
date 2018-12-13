@@ -63,8 +63,7 @@ public class HorarioService {
         this.horarioRepository.delete(codigo);
     }
 
-    public void queimaHorario(Long codHorario) {
-        Horario horario = this.buscaHorario(codHorario);
+    public void queimaHorario(Horario horario) {
         int restante = horario.getRestante();
         horario.setRestante(restante - 1);
         this.horarioRepository.save(horario);

@@ -18,23 +18,28 @@ public class UsuarioSessao {
         this.usuarioService = usuarioService;
     }
 
-
     public static Long getCodUsuario() {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        final Object principal = authentication.getPrincipal();
-        String email = (String) principal;
-        Usuario usuario = usuarioService.buscaUsuarioPorEmail(email);
-
-
-        return usuario.getCodigo();
+        return null;
     }
 
     public static String getUsername() {
         return null;
     }
 
-    public static Authentication getAuthentication() {
+    public static Usuario getUserLogado() {
+
+        Authentication authentication = getAuthentication();
+
+        if (authentication != null) {
+            final Object principal = authentication.getPrincipal();
+            String email = (String) principal;
+            return usuarioService.buscaUsuarioPorEmail(email);
+        }
+
         return null;
+    }
+
+    private static Authentication getAuthentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
     }
 }

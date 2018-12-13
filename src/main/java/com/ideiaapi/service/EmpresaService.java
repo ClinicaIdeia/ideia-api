@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.ideiaapi.model.Empresa;
@@ -36,16 +34,6 @@ public class EmpresaService {
     }
 
     public Empresa cadastraEmpresa(Empresa entity) {
-
-        Authentication authentication = (Authentication) SecurityContextHolder.getContext().getAuthentication();
-
-//        if(authentication != null){
-//            Object obj = authentication.getPrincipal();
-//            if (obj instanceof Usuario){
-//                return (Usuario) obj;
-//            }
-//        }
-
         this.empresaValidate.fluxoCriacao(entity);
 
         if (entity.getAtiva() == null) {

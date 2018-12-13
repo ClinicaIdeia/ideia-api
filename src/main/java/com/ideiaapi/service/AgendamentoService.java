@@ -1,5 +1,10 @@
 package com.ideiaapi.service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -9,9 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ideiaapi.model.Agendamento;
+import com.ideiaapi.model.Horario;
 import com.ideiaapi.repository.AgendamentoRepository;
 import com.ideiaapi.repository.filter.AgendamentoFilter;
 import com.ideiaapi.repository.projection.ResumoAgendamento;
+
 
 @Service
 public class AgendamentoService {
@@ -22,6 +29,10 @@ public class AgendamentoService {
     @Autowired
     private HorarioService horarioService;
 
+    public byte[] relatorioPorEmpresa(LocalDate inicio, LocalDate fim) {
+        return null;
+    }
+
     public Page<Agendamento> listaAgendamentos(AgendamentoFilter filter, Pageable pageable) {
         return this.agendamentoRepository.filtrar(filter, pageable);
     }
@@ -30,8 +41,14 @@ public class AgendamentoService {
         return this.agendamentoRepository.resumir(filter, pageable);
     }
 
+    @Transactional
     public Agendamento cadastraAgendamento(Agendamento entity) {
-        this.horarioService.queimaHorario(entity.getCodHorario());
+
+        Horario horario = horarioService.buscaHorario(entity.getCodHorario());
+        LocalTime parse = LocalTime.parse(horario.getHoraExame());
+        entity.setHoraExame(parse);
+
+        this.horarioService.queimaHorario(horario);
         return this.agendamentoRepository.save(entity);
     }
 
