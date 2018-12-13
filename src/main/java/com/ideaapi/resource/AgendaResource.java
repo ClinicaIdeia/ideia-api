@@ -39,9 +39,9 @@ public class AgendaResource {
     @GetMapping
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2" +
             ".hasScope('read')")
-    public Page<Agenda> pesquisar(AgendaFilter filter, Pageable pageable) {
+    public Page pesquisar(AgendaFilter filter, Pageable pageable) {
        // return this.agendaService.listaAgendamentos(filter, pageable);
-        return this.agendaService.listaFuturosAgendamentos(pageable); //TODO : Ver com alex
+        return this.agendaService.listaFuturosAgendamentos(); //TODO : Ver com alex
     }
 
     @GetMapping("/resumo")

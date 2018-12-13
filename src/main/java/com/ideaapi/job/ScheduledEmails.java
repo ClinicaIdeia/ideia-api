@@ -2,7 +2,6 @@ package com.ideaapi.job;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,7 +33,8 @@ public class ScheduledEmails {
     @Autowired
     private EnvioEmail envioEmail;
 
-    private static String EMAIL_POLICIA_FEDERAL = "psicologos.deleaq.mg@dpf.gov.br";
+    private static String emailPoliciaFederal = "psicologos.deleaq.mg@dpf.gov.br";
+    private static String emailIdeia = "clinica.ideia@gmail.com";
 
     @Scheduled(cron = "0 6 * * * *")
     public void aniversario() {
@@ -90,7 +90,7 @@ public class ScheduledEmails {
     }
 
     @Scheduled(cron = "0 1 1 * * *")
-    public void avisoEmpresas() {
+    public void emailMensalEmpresas() {
 
         LocalDate hoje = LocalDate.now();
         LocalDate earlier = hoje.minusMonths(1); // 01-11-2018
@@ -100,7 +100,6 @@ public class ScheduledEmails {
 
         List<Agendamento> agendamentosList =
                 this.agendamentoRepository.findAllByAgenda_DiaAgenda_MonthAndAgenda_DiaAgenda_Year(lastMonth, year);
-
 
         //TODO : Buscar todos os exames do mês anterior
     }
@@ -116,7 +115,7 @@ public class ScheduledEmails {
         Map<String, Object> map = new HashMap<>();
         map.put("name", funcionario.getNome());
 
-        this.envioEmail.enviarEmail("openlinkti@gmail.com",
+        this.envioEmail.enviarEmail(emailIdeia,
                 Collections.singletonList(funcionario.getEmail()),
                 "O Sistema Ideia deseja um feliz aniversário para você", "email/aniversario", map);
     }
@@ -125,7 +124,7 @@ public class ScheduledEmails {
         Map<String, Object> map = new HashMap<>();
         map.put("name", funcionario.getNome());
 
-        this.envioEmail.enviarEmail("openlinkti@gmail.com",
+        this.envioEmail.enviarEmail(emailIdeia,
                 Collections.singletonList(emailEmpresa),
                 "O Sistema Ideia - Exame expirando",
                 "email/exame-expirando", map);
@@ -141,8 +140,8 @@ public class ScheduledEmails {
             i.getAndIncrement();
         });
 
-        this.envioEmail.enviarEmail("openlinkti@gmail.com",
-                Collections.singletonList(EMAIL_POLICIA_FEDERAL),
+        this.envioEmail.enviarEmail(emailIdeia,
+                Collections.singletonList(emailPoliciaFederal),
                 "Agendamentos de exames psicologicos para trabalhos armados",
                 "email/policia-federal", map);
     }

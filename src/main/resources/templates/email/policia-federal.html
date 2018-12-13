@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 
@@ -29,7 +30,16 @@
         <p class="bg-primary">Segue a lista dos agendamentos daqui 3 dias para exames psicologicos para trabalho com
             armas :</p>
 
-        //TODO : Ver com alex
+        <table>
+            <TH>Nome Funcionario</th>
+            <c:forEach items="${map}" var="current">
+                <tr>
+                    <td><c:out value="1" /><td>
+                </tr>
+            </c:forEach>
+        </table>
+
+        TODO : ver com ALEX
 
         <p>Equipe Ideia</p>
 

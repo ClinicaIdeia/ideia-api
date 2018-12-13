@@ -74,19 +74,9 @@ public class HorarioServiceTest extends BaseTest {
 
         when(agendaRepository.findAllByDiaAgendaAfter(LocalDate.now().plusDays(3L))).thenReturn(agendaList);
 
-        List<Horario> response = horarioService.listaHorarios(6L);
+        List<Horario> response = horarioService.listaHorarios(true);
 
         assertEquals(6, response.size());
-    }
-
-    @Test
-    public void listaHorariosDos3ProximosDiasVazioArmaDeFogo() {
-
-        when(agendaRepository.findAllByDiaAgendaAfter(LocalDate.now().plusDays(3L))).thenReturn(new ArrayList<>());
-
-        List<Horario> response = horarioService.listaHorarios(9L);
-
-        assertEquals(0, response.size());
     }
 
     @Test
@@ -94,7 +84,7 @@ public class HorarioServiceTest extends BaseTest {
 
         when(agendaRepository.findAllByDiaAgendaAfter(LocalDate.now())).thenReturn(agendaList);
 
-        List<Horario> response = horarioService.listaHorarios(1L);
+        List<Horario> response = horarioService.listaHorarios(false);
 
         assertEquals(6, response.size());
     }

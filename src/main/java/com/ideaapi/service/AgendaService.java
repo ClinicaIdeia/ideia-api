@@ -30,9 +30,9 @@ public class AgendaService {
         return this.agendaRepository.filtrar(filter, pageable);
     }
 
-    public Page<Agenda> listaFuturosAgendamentos(Pageable pageable) {
+    public PageImpl<List<Agenda>> listaFuturosAgendamentos() {
         List<Agenda> agendasList = agendaRepository.findAllByDiaAgendaAfter(LocalDate.now());
-        return new PageImpl<>(agendasList, pageable, 100L);  //TODO : Ver com alex
+        return new PageImpl(agendasList);
     }
 
     public Page<ResumoAgendamento> resumo(AgendaFilter filter, Pageable pageable) {
