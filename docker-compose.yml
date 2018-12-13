@@ -4,9 +4,9 @@ services:
  postgres:
    image: postgres:9.6
    ports:
-     - "54324:54324"
+     - "54324:5432"
    environment:
-     - POSTGRES_DB=POSTGRESQL
+     - POSTGRES_DB=ideia_api
      - POSTGRES_USER=postgres
      - POSTGRES_PASSWORD=root
      - MAX_CONNECTIONS=300
