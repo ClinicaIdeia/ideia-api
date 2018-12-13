@@ -1,1 +1,1 @@
-# idea-api
+# ideia-api
