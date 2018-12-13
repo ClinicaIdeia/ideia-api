@@ -34,7 +34,7 @@ public class Empresa {
     private String cnpj;
 
     @ManyToMany
-    @JoinTable(name = "empresa_contato", joinColumns = @JoinColumn(name = "codigo_empresa")
+    @JoinTable(name = "empresa_contato", joinColumns = @JoinColumn(name = "codigo_empresa")s
             , inverseJoinColumns = @JoinColumn(name = "codigo_contato"))
     private List<Contato> contatos;
 

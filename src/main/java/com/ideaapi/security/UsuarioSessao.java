@@ -11,35 +11,35 @@ import com.ideaapi.service.UsuarioService;
 @Component
 public class UsuarioSessao {
 
-	private static UsuarioService usuarioService;
+    private static UsuarioService usuarioService;
 
-	@Autowired
-	public UsuarioSessao(UsuarioService usuarioService) {
-		this.usuarioService = usuarioService;
-	}
+    @Autowired
+    public UsuarioSessao(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
-	public static Long getCodUsuario() {
-		return null;
-	}
+    public static Long getCodUsuario() {
+        return null;
+    }
 
-	public static String getUsername() {
-		return null;
-	}
+    public static String getUsername() {
+        return null;
+    }
 
-	public static Usuario getUserLogado() {
+    public static Usuario getUserLogado() {
 
-		Authentication authentication = getAuthentication();
+        Authentication authentication = getAuthentication();
 
-		if (authentication != null) {
-			final Object principal = authentication.getPrincipal();
-			String email = (String) principal;
-			return usuarioService.buscaUsuarioPorEmail(email);
-		}
+        if (authentication != null) {
+            final Object principal = authentication.getPrincipal();
+            String email = (String) principal;
+            return usuarioService.buscaUsuarioPorEmail(email);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	private static Authentication getAuthentication() {
-		return SecurityContextHolder.getContext().getAuthentication();
-	}
+    private static Authentication getAuthentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
+    }
 }
