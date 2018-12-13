@@ -1,18 +1,5 @@
 package com.ideiaapi.job;
 
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
 import com.ideiaapi.mail.EnvioEmail;
 import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Contato;
@@ -20,6 +7,13 @@ import com.ideiaapi.model.Empresa;
 import com.ideiaapi.model.Funcionario;
 import com.ideiaapi.repository.AgendamentoRepository;
 import com.ideiaapi.repository.FuncionarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.*;
 
 @Component
 public class ScheduledEmails {
@@ -132,13 +126,10 @@ public class ScheduledEmails {
 
     private void enviarEmailPoliciaFederal(List<Funcionario> funcionariosList) {
         Map<String, Object> map = new HashMap<>();
-        AtomicInteger i = new AtomicInteger(1);
+        List<String> nomesFuncionarios = new ArrayList<>();
 
-        funcionariosList.forEach(funcionario -> {
-            String name = "funcionario" + i;
-            map.put(name, funcionario.getNome());
-            i.getAndIncrement();
-        });
+        funcionariosList.forEach(funcionario -> nomesFuncionarios.add(funcionario.getNome()));
+        map.put("names", nomesFuncionarios);
 
         this.envioEmail.enviarEmail(emailIdeia,
                 Collections.singletonList(emailPoliciaFederal),
