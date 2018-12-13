@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+          crossorigin="anonymous">
+</head>
+
+<body style="font-family: Arial; font-size: 14px;" class="container">
+
+<div class="bg-primary">
+
+    <div style="margin: 10px 0 10px 10px; padding: 50px;">
+
+        <img src="/assets/logo_ideia.png" width="300" height="150"/>
+
+        <h3>Ol&aacute;,</h3>
+
+        <p class="bg-primary">O exame de <span th:text="${name}"></span> esta quase expirando !</p>
+
+        <p>Agende um novo exame com a gente antes do atual expirar.</p>
+
+        <p>Equipe Ideia</p>
+
+    </div>
+
+</div>
+</body>
+
+</html>

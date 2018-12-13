@@ -11,5 +11,7 @@ public class ErrorsCode {
     public static String CNPJ_DUPLICADO = "empresa.cnpj-duplicado";
     public static String CPF_DUPLICADO = "funcionario.cpf-duplicado";
 
+    public static String CPF_INVALIDO = "cpf-invalido";
+
 
 }

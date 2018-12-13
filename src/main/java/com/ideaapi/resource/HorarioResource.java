@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,10 +34,10 @@ public class HorarioResource {
     @Autowired
     private ApplicationEventPublisher publisher;
 
-    @GetMapping("/motivos/{codigoMotivo}")
+    @GetMapping("/motivos")
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
-    public List<Horario> listar(@PathVariable Long codigoMotivo) {
-        return this.horarioService.listaHorarios(codigoMotivo);
+    public List<Horario> listar(@RequestParam(value = "trabalhoArmado") Boolean trabalhoArmado) {
+        return this.horarioService.listaHorarios(trabalhoArmado);
     }
 
     @PostMapping

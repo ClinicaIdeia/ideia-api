@@ -42,6 +42,9 @@ public class Agendamento {
     @Transient
     private Long codHorario;
 
+    @NotNull
+    private Boolean trabalhoArmado;
+
     public Long getCodHorario() {
         return codHorario;
     }
@@ -90,6 +93,14 @@ public class Agendamento {
 
     public void setObservacao(String observacao) {
         this.observacao = observacao;
+    }
+
+    public Boolean getTrabalhoArmado() {
+        return trabalhoArmado;
+    }
+
+    public void setTrabalhoArmado(Boolean trabalhoArmado) {
+        this.trabalhoArmado = trabalhoArmado;
     }
 
     @Override

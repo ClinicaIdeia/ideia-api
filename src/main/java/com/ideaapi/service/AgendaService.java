@@ -1,9 +1,13 @@
 package com.ideaapi.service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,8 +26,13 @@ public class AgendaService {
     @Autowired
     private HorarioService horarioService;
 
-    public Page<Agenda> listaTodasAgendamentos(AgendaFilter filter, Pageable pageable) {
+    public Page<Agenda> listaAgendamentos(AgendaFilter filter, Pageable pageable) {
         return this.agendaRepository.filtrar(filter, pageable);
+    }
+
+    public PageImpl<List<Agenda>> listaFuturosAgendamentos() {
+        List<Agenda> agendasList = agendaRepository.findAllByDiaAgendaAfter(LocalDate.now());
+        return new PageImpl(agendasList);
     }
 
     public Page<ResumoAgendamento> resumo(AgendaFilter filter, Pageable pageable) {
@@ -32,7 +41,7 @@ public class AgendaService {
 
     public Agenda cadastraAgenda(Agenda entity) {
 
-        if(!entity.getHorarios().isEmpty()) {
+        if (!entity.getHorarios().isEmpty()) {
             entity.getHorarios().forEach(this.horarioService::cadastraHorario);
         }
         return this.agendaRepository.save(entity);
