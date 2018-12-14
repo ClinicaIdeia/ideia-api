@@ -89,7 +89,7 @@ public class ScheduledEmails {
         LocalDate hoje = LocalDate.now();
         LocalDate earlier = hoje.minusMonths(1); // 01-11-2018
 
-        Month lastMonth = earlier.getMonth(); // java.time.Month = NOVEMBER
+        Integer lastMonth = earlier.getMonth().getValue(); // java.time.Month = 11
         Integer year = earlier.getYear(); // 2018
 
         List<Agendamento> agendamentosList =
