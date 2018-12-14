@@ -93,7 +93,7 @@ public class ScheduledEmails {
         Integer year = earlier.getYear(); // 2018
 
         List<Agendamento> agendamentosList =
-                this.agendamentoRepository.findAllByAgendaDiaAgendaMonthAndAgendaDiaAgendaYear(lastMonth, year);
+                this.agendamentoRepository.findAllByAgendaDiaAgendaMonthAndAgendaDiaAgendaYear(lastMonth.getValue(), year);
 
         //TODO : Buscar todos os exames do mês anterior
     }
