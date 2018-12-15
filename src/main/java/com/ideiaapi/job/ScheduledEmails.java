@@ -34,6 +34,7 @@ public class ScheduledEmails {
 
     private static String emailPoliciaFederal = "psicologos.deleaq.mg@dpf.gov.br";
     private static String emailIdeia = "clinica.ideia@gmail.com";
+    private static String emailNilza = "nilzamarquez5@gmail.com";
 
     @Scheduled(cron = "0 6 * * * *")
     public void aniversario() {
@@ -196,7 +197,7 @@ public class ScheduledEmails {
         map.put("exames", listaDosExamesDaEmpresa);
 
 
-        this.envioEmail.enviarEmail(emailIdeia,
+        this.envioEmail.enviarEmail(emailNilza,
                 Collections.singletonList(emailPoliciaFederal),
                 "Relatorio mensal de exames psicologicos",
                 "email/relatorio-mensal-por-empresa", map);
