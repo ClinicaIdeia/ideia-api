@@ -1,19 +1,24 @@
 package com.ideiaapi.job;
 
-import com.ideiaapi.mail.EnvioEmail;
-import com.ideiaapi.model.Agendamento;
-import com.ideiaapi.model.Contato;
-import com.ideiaapi.model.Empresa;
-import com.ideiaapi.model.Funcionario;
-import com.ideiaapi.repository.AgendamentoRepository;
-import com.ideiaapi.repository.FuncionarioRepository;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.*;
+import com.ideiaapi.mail.EnvioEmail;
+import com.ideiaapi.model.Agendamento;
+import com.ideiaapi.model.Contato;
+import com.ideiaapi.model.Empresa;
+import com.ideiaapi.model.Exame;
+import com.ideiaapi.model.Funcionario;
+import com.ideiaapi.repository.AgendamentoRepository;
+import com.ideiaapi.repository.FuncionarioRepository;
 
 @Component
 public class ScheduledEmails {
@@ -47,7 +52,7 @@ public class ScheduledEmails {
 
         LocalDate hoje = LocalDate.now();
 
-        List<Agendamento> agendamentosList = this.agendamentoRepository.findAllByAgendaDiaAgenda(hoje.minusDays(335L));
+        List<Agendamento> agendamentosList = this.agendamentoRepository.findAllByDate(hoje.minusDays(335L));
         List<Funcionario> funcionariosList = new ArrayList<>();
 
         agendamentosList.forEach(agendamento -> funcionariosList.add(agendamento.getFuncionario()));
@@ -73,7 +78,7 @@ public class ScheduledEmails {
 
         LocalDate hoje = LocalDate.now();
 
-        List<Agendamento> agendamentosList = this.agendamentoRepository.findAllByAgendaDiaAgenda(hoje.plusDays(3L));
+        List<Agendamento> agendamentosList = this.agendamentoRepository.findAllByDate(hoje.plusDays(3L));
         List<Funcionario> funcionariosList = new ArrayList<>();
 
         agendamentosList.stream()
@@ -89,13 +94,61 @@ public class ScheduledEmails {
         LocalDate hoje = LocalDate.now();
         LocalDate earlier = hoje.minusMonths(1); // 01-11-2018
 
-        Month lastMonth = earlier.getMonth(); // java.time.Month = NOVEMBER
+        Integer lastMonth = earlier.getMonth().getValue(); // 11
         Integer year = earlier.getYear(); // 2018
 
-        List<Agendamento> agendamentosList =
-                this.agendamentoRepository.findAllByAgendaDiaAgendaMonthAndAgendaDiaAgendaYear(lastMonth, year);
+        List<Agendamento> agendamentosList = this.agendamentoRepository.findAllByMonthAndYear(lastMonth, year);
 
-        //TODO : Buscar todos os exames do mês anterior
+        this.enviarRelatorioPorEmpresa(agendamentosList);
+    }
+
+    private void enviarRelatorioPorEmpresa(List<Agendamento> agendamentosList) {
+        HashMap<Funcionario, LocalDate> dataAgendaPorFuncionario = new HashMap<>();
+        List<Funcionario> listaDeTodosOsFuncionarios = new ArrayList<>();
+        List<Empresa> listaDeTodasAsEmpresas = new ArrayList<>();
+        List<Funcionario> listaDosFuncionariosDaEmpresa = new ArrayList<>();
+        List<Exame> listaDosExamesDaEmpresa = new ArrayList<>();
+
+        agendamentosList.forEach(
+                agendamento -> {
+                    Funcionario funcionario = agendamento.getFuncionario();
+                    listaDeTodosOsFuncionarios.add(funcionario);
+                    LocalDate diaDoExame = agendamento.getAgenda().getDiaAgenda();
+                    dataAgendaPorFuncionario.put(funcionario, diaDoExame);
+                }
+        );
+
+        listaDeTodosOsFuncionarios.forEach(
+                funcionario -> {
+                    List<Empresa> empresasDoFuncionario = funcionario.getEmpresas();
+                    empresasDoFuncionario.forEach(
+                            empresa -> {
+                                if (!listaDeTodasAsEmpresas.contains(empresa))
+                                    listaDeTodasAsEmpresas.add(empresa);
+                            }
+                    );
+                }
+        );
+
+        listaDeTodasAsEmpresas.forEach(
+                empresa -> {
+                    listaDeTodosOsFuncionarios.forEach(
+                            funcionario -> {
+                                if (funcionario.getEmpresas().contains(empresa))
+                                    listaDosFuncionariosDaEmpresa.add(funcionario);
+                            }
+                    );
+
+                    listaDosFuncionariosDaEmpresa.forEach(
+                            funcionario -> {
+                                LocalDate dataDoExameDoFuncionario = dataAgendaPorFuncionario.get(funcionario);
+                                listaDosExamesDaEmpresa.add(new Exame(funcionario.getNome(), dataDoExameDoFuncionario));
+                            }
+                    );
+
+                    this.enviarRelatorioDosExamesDeMes(empresa.getNome(), listaDosExamesDaEmpresa);
+                }
+        );
     }
 
     private Boolean diaDeAniversarioHoje(Funcionario funcionario, LocalDate hoje) {
@@ -135,6 +188,18 @@ public class ScheduledEmails {
                 Collections.singletonList(emailPoliciaFederal),
                 "Agendamentos de exames psicologicos para trabalhos armados",
                 "email/policia-federal", map);
+    }
+
+    private void enviarRelatorioDosExamesDeMes(String empresa, List<Exame> listaDosExamesDaEmpresa) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("empresa", empresa);
+        map.put("exames", listaDosExamesDaEmpresa);
+
+
+        this.envioEmail.enviarEmail(emailIdeia,
+                Collections.singletonList(emailPoliciaFederal),
+                "Relatorio mensal de exames psicologicos",
+                "email/relatorio-mensal-por-empresa", map);
     }
 
 }

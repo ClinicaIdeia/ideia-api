@@ -17,11 +17,11 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long>,
     @Query(value = "SELECT * FROM agendamento " +
             "INNER JOIN agenda a ON agendamento.codigo_agenda = a.codigo " +
             "WHERE dia_agenda = ?1", nativeQuery = true)
-    List<Agendamento> findAllByAgendaDiaAgenda(LocalDate diaAgenda);
+    List<Agendamento> findAllByDate(LocalDate diaAgenda);
 
     @Query(value = "SELECT * FROM agendamento " +
             "INNER JOIN agenda a on agendamento.codigo_agenda = a.codigo " +
             "WHERE ?1 = DATE_PART('month', dia_agenda) " +
             "AND ?2 = DATE_PART('year', dia_agenda)", nativeQuery = true)
-    List<Agendamento> findAllByAgendaDiaAgendaMonthAndAgendaDiaAgendaYear(Integer month, Integer year);
+    List<Agendamento> findAllByMonthAndYear(Integer month, Integer year);
 }

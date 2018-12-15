@@ -1,6 +1,6 @@
 package com.ideiaapi.service;
 
-import static com.ideiaapi.constansts.ErrorsCode.RECURSO_NAO_ENCONTRADO;
+import static com.ideiaapi.constants.ErrorsCode.RECURSO_NAO_ENCONTRADO;
 
 import java.util.Collections;
 import java.util.HashMap;

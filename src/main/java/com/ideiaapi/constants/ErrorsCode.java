@@ -1,4 +1,4 @@
-package com.ideiaapi.constansts;
+package com.ideiaapi.constants;
 
 public class ErrorsCode {
 

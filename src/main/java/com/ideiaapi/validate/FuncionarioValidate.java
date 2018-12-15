@@ -1,6 +1,6 @@
 package com.ideiaapi.validate;
 
-import static com.ideiaapi.constansts.ErrorsCode.CPF_DUPLICADO;
+import static com.ideiaapi.constants.ErrorsCode.CPF_DUPLICADO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

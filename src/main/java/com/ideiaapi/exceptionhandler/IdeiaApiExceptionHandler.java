@@ -1,9 +1,9 @@
 package com.ideiaapi.exceptionhandler;
 
 
-import static com.ideiaapi.constansts.ErrorsCode.MENSAGEM_INVALIDA;
-import static com.ideiaapi.constansts.ErrorsCode.RECURSO_NAO_ENCONTRADO;
-import static com.ideiaapi.constansts.ErrorsCode.RECURSO_OPERACAO_NAO_PERMITIDA;
+import static com.ideiaapi.constants.ErrorsCode.MENSAGEM_INVALIDA;
+import static com.ideiaapi.constants.ErrorsCode.RECURSO_NAO_ENCONTRADO;
+import static com.ideiaapi.constants.ErrorsCode.RECURSO_OPERACAO_NAO_PERMITIDA;
 
 import java.util.ArrayList;
 import java.util.Arrays;
