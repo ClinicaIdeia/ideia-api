@@ -1,7 +1,7 @@
 package com.ideiaapi.service;
 
 import static com.ideiaapi.constants.ErrorsCode.RECURSO_NAO_ENCONTRADO;
-import static com.ideiaapi.constansts.ErrorsCode.SENHAS_DIFERENTES;
+import static com.ideiaapi.constants.ErrorsCode.SENHAS_DIFERENTES;
 
 import java.util.Collections;
 import java.util.HashMap;

@@ -40,6 +40,7 @@ public class UsuarioServiceTest extends BaseTest {
 
         SenhaAlterar senhaAlterar = new SenhaAlterar();
         senhaAlterar.setSenhaNova("new-password");
+        senhaAlterar.setConfirmacao("new-password");
 
         when(usuarioRepository.findOne(anyLong())).thenReturn(usuario);
 
