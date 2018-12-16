@@ -12,6 +12,7 @@ public class ErrorsCode {
     public static String CPF_DUPLICADO = "funcionario.cpf-duplicado";
 
     public static String CPF_INVALIDO = "cpf-invalido";
+    public static String SENHAS_DIFERENTES = "senhas-diferentes";
 
 
 }

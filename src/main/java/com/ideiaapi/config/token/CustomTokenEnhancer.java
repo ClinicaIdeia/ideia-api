@@ -20,6 +20,7 @@ public class CustomTokenEnhancer implements TokenEnhancer {
 
         Map<String, Object> addInfo = new HashMap<>();
         addInfo.put("nome", usuarioSistema.getUsuario().getNome());
+        addInfo.put("cod_usuario", usuarioSistema.getUsuario().getCodigo());
         addInfo.put("empresa", usuarioSistema.getUsuario().getEmpresa().getNome());
         addInfo.put("cod_empresa", usuarioSistema.getUsuario().getEmpresa().getCodigo());
 
