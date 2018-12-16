@@ -1,7 +1,12 @@
 package com.ideiaapi.service;
 
+import java.io.InputStream;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -13,11 +18,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ideiaapi.dto.AgendamentoEstatisticaEmpresa;
 import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Horario;
 import com.ideiaapi.repository.AgendamentoRepository;
 import com.ideiaapi.repository.filter.AgendamentoFilter;
 import com.ideiaapi.repository.projection.ResumoAgendamento;
+
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 
 @Service
@@ -29,8 +40,19 @@ public class AgendamentoService {
     @Autowired
     private HorarioService horarioService;
 
-    public byte[] relatorioPorEmpresa(LocalDate inicio, LocalDate fim) {
-        return null;
+    public byte[] relatorioPorEmpresa(LocalDate inicio, LocalDate fim) throws Exception {
+
+        List<AgendamentoEstatisticaEmpresa> dados = this.agendamentoRepository.agendamentosPorEmpresa(inicio, fim);
+        Map<String, Object> parametros = new HashMap<>();
+        parametros.put("DT_INICIO", Date.valueOf(inicio));
+        parametros.put("DT_FIM", Date.valueOf(fim));
+
+        InputStream inputStream = this.getClass().getResourceAsStream("/relatorios/agendamentos.jasper");
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parametros,
+                new JRBeanCollectionDataSource(dados));
+
+        return JasperExportManager.exportReportToPdf(jasperPrint);
     }
 
     public Page<Agendamento> listaAgendamentos(AgendamentoFilter filter, Pageable pageable) {

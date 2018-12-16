@@ -1,5 +1,6 @@
 package com.ideiaapi.repository.agendamento;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +17,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
-import com.ideiaapi.model.Agendamento_;
+import com.ideiaapi.dto.AgendamentoEstatisticaEmpresa;
+import com.ideiaapi.model.Agenda_;
 import com.ideiaapi.model.Agendamento;
+import com.ideiaapi.model.Agendamento_;
 import com.ideiaapi.repository.filter.AgendamentoFilter;
 import com.ideiaapi.repository.projection.ResumoAgendamento;
 import com.ideiaapi.repository.restricoes.paginacao.RestricoesPaginacao;
@@ -26,6 +29,32 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
 
     @PersistenceContext
     private EntityManager manager;
+
+    @Override
+    public List<AgendamentoEstatisticaEmpresa> agendamentosPorEmpresa(LocalDate inicio, LocalDate fim) {
+
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery<AgendamentoEstatisticaEmpresa> criteria = builder.createQuery(
+                AgendamentoEstatisticaEmpresa.class);
+        Root<Agendamento> root = criteria.from(Agendamento.class);
+
+        criteria.select(builder.construct(
+                AgendamentoEstatisticaEmpresa.class,
+                root.get(Agendamento_.agenda),
+                root.get(Agendamento_.funcionario),
+                root.get(Agendamento_.motivo),
+                root.get(Agendamento_.horaExame)));
+
+        criteria.where(
+                builder.greaterThanOrEqualTo(root.get(Agendamento_.agenda).get(Agenda_.diaAgenda), inicio),
+                builder.lessThanOrEqualTo(root.get(Agendamento_.agenda).get(Agenda_.diaAgenda), fim)
+        );
+
+        TypedQuery<AgendamentoEstatisticaEmpresa> tpQuery = manager.createQuery(criteria);
+
+
+        return tpQuery.getResultList();
+    }
 
     @Override
     public Page<Agendamento> filtrar(AgendamentoFilter agendamentoFilter, Pageable pageable) {

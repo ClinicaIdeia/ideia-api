@@ -1,6 +1,7 @@
 package com.ideiaapi.service;
 
 import static com.ideiaapi.constants.ErrorsCode.RECURSO_NAO_ENCONTRADO;
+import static com.ideiaapi.constants.ErrorsCode.SENHAS_DIFERENTES;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -81,14 +82,19 @@ public class UsuarioService {
         Usuario usuario = this.usuarioRepository.findOne(codigo);
 
         if (usuario != null) {
-            usuario.setSenha(senhaAlterar.getSenhaNova());
+            this.validaSenhasDivergentes(senhaAlterar);
+            usuario.setSenha(new BCryptPasswordEncoder().encode(senhaAlterar.getSenhaNova()));
             this.usuarioRepository.save(usuario);
-            this.envioEmail.enviarEmail("openlinkti@gmail.com", Collections.singletonList(usuario.getEmail()),
-                    "Senha de Acesso ao Sistema Ideia Alterado com sucesso", "email/alterar-senha", null);
             return ResponseEntity.ok(usuario);
 
         } else {
             throw new BusinessException(RECURSO_NAO_ENCONTRADO);
+        }
+    }
+
+    private void validaSenhasDivergentes(SenhaAlterar senhaAlterar) {
+        if (!senhaAlterar.getSenhaNova().equals(senhaAlterar.getConfirmacao())) {
+            throw new BusinessException(SENHAS_DIFERENTES);
         }
     }
 
