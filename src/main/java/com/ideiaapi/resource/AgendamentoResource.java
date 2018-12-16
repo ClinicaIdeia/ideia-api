@@ -1,6 +1,6 @@
 package com.ideiaapi.resource;
 
-import static com.ideiaapi.constansts.ErrorsCode.PESSOA_INEXISTENTE_OU_INATIVA;
+import static com.ideiaapi.constants.ErrorsCode.PESSOA_INEXISTENTE_OU_INATIVA;
 
 import java.util.Arrays;
 import java.util.List;

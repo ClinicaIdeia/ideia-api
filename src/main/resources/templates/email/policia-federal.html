@@ -31,9 +31,9 @@
             armas :</p>
 
         <table>
-            <th:block th:each="item : ${names}">
+            <th:block th:each="name : ${names}">
                 <tr>
-                    <td th:text="${item}"></td>
+                    <td th:text="${name}">Nome do Funcionario</td>
                 </tr>
             </th:block>
         </table>

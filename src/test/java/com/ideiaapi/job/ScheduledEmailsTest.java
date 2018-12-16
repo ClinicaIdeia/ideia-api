@@ -16,6 +16,7 @@ import org.mockito.Mock;
 
 import com.ideiaapi.base.BaseTest;
 import com.ideiaapi.mail.EnvioEmail;
+import com.ideiaapi.model.Agenda;
 import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Contato;
 import com.ideiaapi.model.Empresa;
@@ -47,9 +48,13 @@ public class ScheduledEmailsTest extends BaseTest {
     private Agendamento agendamento = new Agendamento();
     private Empresa empresa = new Empresa();
     private Contato contato = new Contato();
+    private Agenda agenda = new Agenda();
 
     @Before
     public void setUp() throws Exception {
+
+        agenda.setDiaAgenda(LocalDate.now().minusMonths(1));
+
         contato.setEmail("email@empresa");
         contatosList.add(contato);
 
@@ -63,6 +68,7 @@ public class ScheduledEmailsTest extends BaseTest {
         agendamento.setTrabalhoArmado(true);
         agendamento.setFuncionario(funcionario);
         agendamentosList.add(agendamento);
+        agendamento.setAgenda(agenda);
     }
 
     @Test
@@ -95,7 +101,7 @@ public class ScheduledEmailsTest extends BaseTest {
     public void envioExameExpirado() {
 
 
-        when(agendamentoRepository.findAllByAgendaDiaAgenda(any())).thenReturn(agendamentosList);
+        when(agendamentoRepository.findAllByDate(any())).thenReturn(agendamentosList);
 
         scheduledEmails.exameExpirando();
 
@@ -105,7 +111,7 @@ public class ScheduledEmailsTest extends BaseTest {
     @Test
     public void envioPoliciaFederal() {
 
-        when(agendamentoRepository.findAllByAgendaDiaAgenda(any())).thenReturn(agendamentosList);
+        when(agendamentoRepository.findAllByDate(any())).thenReturn(agendamentosList);
 
         scheduledEmails.avisoPoliciaFederal();
 
@@ -114,14 +120,10 @@ public class ScheduledEmailsTest extends BaseTest {
 
     @Test
     public void emailMensalEmpresas() {
-
-        //TODO: Acabar teste depois de enviar o email
-
-        when(agendamentoRepository.findAllByAgendaDiaAgendaMonthAndAgendaDiaAgendaYear(any(), any()))
-                .thenReturn(agendamentosList);
+        when(agendamentoRepository.findAllByMonthAndYear(any(), any())).thenReturn(agendamentosList);
 
         scheduledEmails.emailMensalEmpresas();
 
-        verify(envioEmail, times(0)).enviarEmail(any(), any(), any(), any(), any());
+        verify(envioEmail, times(1)).enviarEmail(any(), any(), any(), any(), any());
     }
 }

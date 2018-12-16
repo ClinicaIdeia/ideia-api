@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 
@@ -24,13 +25,21 @@
 
         <img src="/assets/logo_ideia.png" width="300" height="150"/>
 
-        <h3>Ol&aacute;</h3>
+        <h3>Ol&aacute;,</h3>
 
-        <p class="bg-primary">Esta &eacute; sua nova senha de acesso ao sistema Ideia</p>
-        <p>Senha: <span th:text="${senha}"></span>  </p>
+        <p class="bg-primary">Segue a lista dos exames realizados no m&ecirc;s passado pela <span
+                th:text="${empresa}"></span> : </p>
 
-        <p>Obrigado.</p>
-        <p>Equipe Ideia!</p>
+        <table>
+            <th:block th:each="exame : ${exames}">
+                <tr>
+                    <td th:text="${exame.nomeFuncionario}"> Nome do Funcionario </td>
+                    <td th:text="${exame.dataExame}"> Data do Exame </td>
+                </tr>
+            </th:block>
+        </table>
+
+        <p>Equipe Ideia</p>
 
     </div>
 

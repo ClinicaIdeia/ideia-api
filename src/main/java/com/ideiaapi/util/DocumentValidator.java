@@ -1,6 +1,6 @@
 package com.ideiaapi.util;
 
-import static com.ideiaapi.constansts.ErrorsCode.CPF_INVALIDO;
+import static com.ideiaapi.constants.ErrorsCode.CPF_INVALIDO;
 
 import java.util.InputMismatchException;
 
