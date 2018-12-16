@@ -4,8 +4,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +25,7 @@ import org.hibernate.validator.constraints.Email;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ideiaapi.enums.Conselho;
 import com.ideiaapi.util.datas.LocalDateDeserializer;
 import com.ideiaapi.util.datas.LocalDateSerializer;
 
@@ -32,34 +36,53 @@ public class Funcionario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "funcionario_seq")
+    @Column(name = "CODIGO")
     private Long codigo;
 
     @NotNull
     @Size(min = 3, max = 50)
+    @Column(name = "NOME")
     private String nome;
+
+    @Column(name = "RG")
     private String rg;
 
     @NotNull
     @Size(min = 3, max = 20)
+    @Column(name = "CPF")
     private String cpf;
 
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @NotNull
+    @Column(name = "DATA_NASCIMENTO")
     private LocalDate dataNascimento;
 
+    @Column(name = "SEXO")
     private String sexo;
+
+    @Column(name = "ESTADO_CIVIL")
     private String estadoCivil;
+
+    @Column(name = "ESCOLARIDADE")
     private String escolaridade;
+
+    @Column(name = "NATURALIDADE")
     private String naturalidade;
 
     @Email
+    @Column(name = "EMAIL")
     private String email;
+
+    @Column(name = "MATRICULA")
     private String matricula;
+
+    @Column(name = "CARGO")
     private String cargo;
 
     @NotNull
     @Size(min = 3, max = 20)
+    @Column(name = "TELEFONE")
     private String telefone;
 
     @Embedded
@@ -69,6 +92,16 @@ public class Funcionario {
     @JoinTable(name = "funcionario_empresa", joinColumns = @JoinColumn(name = "codigo_funcionario")
             , inverseJoinColumns = @JoinColumn(name = "codigo_empresa"))
     private List<Empresa> empresas;
+
+    @Column(name = "EXAMINADOR")
+    private Boolean examinador;
+
+    @Column(name = "CONSELHO")
+    @Enumerated(EnumType.STRING)
+    private Conselho conselho;
+
+    @Column(name = "NUMERO_CONSELHO")
+    private String numeroConselho;
 
     public String getSexo() {
         return sexo;
@@ -190,17 +223,62 @@ public class Funcionario {
         this.empresas = empresas;
     }
 
+    public Boolean getExaminador() {
+        return examinador;
+    }
+
+    public void setExaminador(Boolean examinador) {
+        this.examinador = examinador;
+    }
+
+    public Conselho getConselho() {
+        return conselho;
+    }
+
+    public void setConselho(Conselho conselho) {
+        this.conselho = conselho;
+    }
+
+    public String getNumeroConselho() {
+        return numeroConselho;
+    }
+
+    public void setNumeroConselho(String numeroConselho) {
+        this.numeroConselho = numeroConselho;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Funcionario)) return false;
         Funcionario that = (Funcionario) o;
-        return Objects.equals(codigo, that.codigo);
+        return Objects.equals(getCodigo(), that.getCodigo()) &&
+                Objects.equals(getNome(), that.getNome()) &&
+                Objects.equals(getRg(), that.getRg()) &&
+                Objects.equals(getCpf(), that.getCpf()) &&
+                Objects.equals(getDataNascimento(), that.getDataNascimento()) &&
+                Objects.equals(getSexo(), that.getSexo()) &&
+                Objects.equals(getEstadoCivil(), that.getEstadoCivil()) &&
+                Objects.equals(getEscolaridade(), that.getEscolaridade()) &&
+                Objects.equals(getNaturalidade(), that.getNaturalidade()) &&
+                Objects.equals(getEmail(), that.getEmail()) &&
+                Objects.equals(getMatricula(), that.getMatricula()) &&
+                Objects.equals(getCargo(), that.getCargo()) &&
+                Objects.equals(getTelefone(), that.getTelefone()) &&
+                Objects.equals(getEndereco(), that.getEndereco()) &&
+                Objects.equals(getEmpresas(), that.getEmpresas()) &&
+                Objects.equals(getExaminador(), that.getExaminador()) &&
+                getConselho() == that.getConselho() &&
+                Objects.equals(getNumeroConselho(), that.getNumeroConselho());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(codigo);
+
+        return Objects.hash(getCodigo(), getNome(), getRg(), getCpf(), getDataNascimento(), getSexo(), getEstadoCivil(),
+                getEscolaridade(), getNaturalidade(), getEmail(), getMatricula(), getCargo(), getTelefone(),
+                getEndereco(),
+                getEmpresas(), getExaminador(), getConselho(), getNumeroConselho());
     }
 
     @Override
@@ -221,6 +299,9 @@ public class Funcionario {
                 ", telefone='" + telefone + '\'' +
                 ", endereco=" + endereco +
                 ", empresas=" + empresas +
+                ", examinador=" + examinador +
+                ", conselho=" + conselho +
+                ", numeroConselho='" + numeroConselho + '\'' +
                 '}';
     }
 }
