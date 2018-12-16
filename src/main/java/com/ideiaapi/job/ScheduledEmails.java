@@ -32,6 +32,7 @@ public class ScheduledEmails {
     @Autowired
     private EnvioEmail envioEmail;
 
+    //TODO parametrizer e-mails
     private static String emailPoliciaFederal = "psicologos.deleaq.mg@dpf.gov.br";
     private static String emailIdeia = "clinica.ideia@gmail.com";
     private static String emailNilza = "nilzamarquez5@gmail.com";
@@ -147,7 +148,8 @@ public class ScheduledEmails {
                             }
                     );
 
-                    this.enviarRelatorioDosExamesDeMes(empresa.getNome(), listaDosExamesDaEmpresa);
+                    //TODO descomentar quando estiver em PROD, 
+                   // this.enviarRelatorioDosExamesDeMes(empresa.getNome(), listaDosExamesDaEmpresa);
                 }
         );
     }
