@@ -19,18 +19,18 @@ CREATE SEQUENCE IF NOT EXISTS agendamento_seq
     NO MAXVALUE
     CACHE 1;
 
-CREATE TABLE IF NOT EXISTS  agendamento_agenda (
-  codigo_agendamento  BIGINT NOT NULL,
-  codigo_agenda      BIGINT NOT NULL,
+CREATE TABLE IF NOT EXISTS agendamento_agenda (
+  codigo_agendamento    BIGINT NOT NULL,
+  codigo_agenda         BIGINT NOT NULL,
   PRIMARY KEY (codigo_agendamento, codigo_agenda),
   FOREIGN KEY (codigo_agenda) REFERENCES agendamento(codigo),
   FOREIGN KEY (codigo_agendamento) REFERENCES agendamento(codigo)
 );
 
 CREATE TABLE IF NOT EXISTS  agendamento_funcionario (
-  codigo_agendamento      BIGINT NOT NULL,
-  codigo_funcionario  BIGINT NOT NULL,
-   PRIMARY KEY (codigo_agendamento, codigo_funcionario),
+  codigo_agendamento    BIGINT NOT NULL,
+  codigo_funcionario    BIGINT NOT NULL,
+  PRIMARY KEY (codigo_agendamento, codigo_funcionario),
   FOREIGN KEY (codigo_agendamento) REFERENCES agendamento(codigo),
   FOREIGN KEY (codigo_funcionario) REFERENCES funcionario(codigo)
 );
