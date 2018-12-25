@@ -2,6 +2,7 @@ package com.ideiaapi.repository.funcionario;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,8 +17,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import com.ideiaapi.model.Funcionario_;
+import com.ideiaapi.model.Empresa;
 import com.ideiaapi.model.Funcionario;
+import com.ideiaapi.model.Funcionario_;
 import com.ideiaapi.repository.filter.FuncionarioFilter;
 import com.ideiaapi.repository.projection.ResumoFuncionario;
 import com.ideiaapi.repository.restricoes.paginacao.RestricoesPaginacao;
@@ -38,6 +40,24 @@ public class FuncionarioRepositoryImpl extends RestricoesPaginacao implements Fu
 
         TypedQuery<Funcionario> query = manager.createQuery(criteria);
         adicionarRestricoesDePaginacao(query, pageable);
+
+        if (funcionarioFilter.getCodigoEmpresa() != null) {
+            Empresa emp = new Empresa();
+            emp.setCodigo(funcionarioFilter.getCodigoEmpresa());
+            List<Funcionario> collect = new ArrayList<>();
+
+            //TODO fazer conta do total de itens e do pageable
+            query.getResultList().forEach(func -> {
+                func.getEmpresas().forEach(empresa -> {
+                    if(empresa.getCodigo().compareTo(emp.getCodigo()) == 0) {
+                        collect.add(func);
+                        return;
+                    }
+                });
+            });
+
+            return new PageImpl<>(collect, pageable, total(funcionarioFilter));
+        }
 
         return new PageImpl<>(query.getResultList(), pageable, total(funcionarioFilter));
     }
@@ -80,8 +100,7 @@ public class FuncionarioRepositoryImpl extends RestricoesPaginacao implements Fu
         }
 
         if (funcionarioFilter.getTelefone() != null) {
-            predicates.add(builder.like(
-                    builder.lower(root.get(Funcionario_.telefone)),
+            predicates.add(builder.like(builder.lower(root.get(Funcionario_.telefone)),
                     "%" + funcionarioFilter.getTelefone().toLowerCase() + "%"));
         }
 

@@ -24,4 +24,7 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long>,
             "WHERE ?1 = DATE_PART('month', dia_agenda) " +
             "AND ?2 = DATE_PART('year', dia_agenda)", nativeQuery = true)
     List<Agendamento> findAllByMonthAndYear(Integer month, Integer year);
+
+    @Query(value = "SELECT * FROM agendamento WHERE emitiu_laudo = false", nativeQuery = true)
+    List<Agendamento> findAllByAindaNaoEmitiuLaudo();
 }

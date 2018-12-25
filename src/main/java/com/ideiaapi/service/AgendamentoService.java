@@ -119,4 +119,8 @@ public class AgendamentoService {
         return ResponseEntity.ok(agendamentoSalvo);
     }
 
+    public List<Agendamento> agendamentosParaLaudo() {
+        return this.agendamentoRepository.findAllByAindaNaoEmitiuLaudo();
+    }
+
 }

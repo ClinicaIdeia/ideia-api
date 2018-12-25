@@ -6,8 +6,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.ideiaapi.model.Funcionario;
@@ -24,6 +22,11 @@ public class FuncionarioService {
 
     @Autowired
     private FuncionarioValidate funcionarioValidate;
+
+    public Page<Funcionario> filtrar(FuncionarioFilter filter, Pageable pageable) {
+        return this.funcionarioRepository.filtrar(filter, pageable);
+
+    }
 
     public Page<ResumoFuncionario> resumo(FuncionarioFilter filter, Pageable pageable) {
 

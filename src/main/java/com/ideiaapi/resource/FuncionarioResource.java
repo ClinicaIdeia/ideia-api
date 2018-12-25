@@ -46,8 +46,8 @@ public class FuncionarioResource {
 
     @GetMapping
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
-    public Page<ResumoFuncionario> pesquisar(FuncionarioFilter filter, Pageable pageable) {
-        return this.funcionarioService.resumo(filter, pageable);
+    public Page<Funcionario> pesquisar(FuncionarioFilter filter, Pageable pageable) {
+        return this.funcionarioService.filtrar(filter, pageable);
     }
 
     @GetMapping(path = "/todos")

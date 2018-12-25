@@ -14,7 +14,10 @@ public class PermissaoService {
     @Autowired
     private PermissaoRepository permissaoRepository;
 
-    public List<Permissao> listaTodasAsPermissoes() {
-        return this.permissaoRepository.findAll();
+    public List<Permissao> listaTodasAsPermissoes(Long codigo) {
+        if (null == codigo) {
+            codigo = -1L;
+        }
+        return this.permissaoRepository.buscaPermissoesUsuario(codigo);
     }
 }

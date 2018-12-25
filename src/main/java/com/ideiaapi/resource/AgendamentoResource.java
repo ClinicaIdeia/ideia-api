@@ -81,6 +81,14 @@ public class AgendamentoResource {
         return this.agendamentoService.resumo(filter, pageable);
     }
 
+    @GetMapping("/laudos/gerar")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+    public ResponseEntity<List<Agendamento>> agendamentosParaLaudo() {
+        List<Agendamento> agendamentos = this.agendamentoService.agendamentosParaLaudo();
+
+        return ResponseEntity.ok(agendamentos);
+    }
+
     @PostMapping
     @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('write')")
     public ResponseEntity<Agendamento> criar(@RequestBody @Valid Agendamento agendamento,
