@@ -4,11 +4,15 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.ideiaapi.enums.TipoAptidao;
 
 @Entity
 @Table(name = "aptidao")
@@ -20,8 +24,9 @@ public class Aptidao {
     @Column(name = "CODIGO")
     private Long codigo;
 
-    @Column(name = "DESCRICAO")
-    private String descricao;
+    @Column(name = "TIPO_APTIDAO")
+    @Enumerated(EnumType.STRING)
+    private TipoAptidao tipoAptidao;
 
     @Column(name = "APTO")
     private Boolean apto;
@@ -34,14 +39,6 @@ public class Aptidao {
         this.codigo = codigo;
     }
 
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
     public Boolean getApto() {
         return apto;
     }
@@ -50,27 +47,34 @@ public class Aptidao {
         this.apto = apto;
     }
 
+    public TipoAptidao getTipoAptidao() {
+        return tipoAptidao;
+    }
+
+    public void setTipoAptidao(TipoAptidao tipoAptidao) {
+        this.tipoAptidao = tipoAptidao;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Aptidao)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Aptidao aptidao = (Aptidao) o;
-        return Objects.equals(getCodigo(), aptidao.getCodigo()) &&
-                Objects.equals(getDescricao(), aptidao.getDescricao()) &&
-                Objects.equals(getApto(), aptidao.getApto());
+        return Objects.equals(codigo, aptidao.codigo) &&
+                tipoAptidao == aptidao.tipoAptidao &&
+                Objects.equals(apto, aptidao.apto);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(getCodigo(), getDescricao(), getApto());
+        return Objects.hash(codigo, tipoAptidao, apto);
     }
 
     @Override
     public String toString() {
         return "Aptidao{" +
                 "codigo=" + codigo +
-                ", descricao='" + descricao + '\'' +
+                ", tipoAptidao=" + tipoAptidao +
                 ", apto=" + apto +
                 '}';
     }

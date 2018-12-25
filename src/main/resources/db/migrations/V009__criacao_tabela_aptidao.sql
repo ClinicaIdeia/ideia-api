@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS aptidao (
 
-  codigo          BIGINT PRIMARY KEY  NOT NULL,
-  apto        BOOLEAN NOT NULL DEFAULT  FALSE,
-  descricao   VARCHAR(100)
+  codigo            BIGINT PRIMARY KEY  NOT NULL,
+  apto              BOOLEAN NOT NULL DEFAULT  FALSE,
+  tipoAptidao       VARCHAR(255)
 
 );
 

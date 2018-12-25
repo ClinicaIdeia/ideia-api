@@ -46,6 +46,16 @@ public class Agendamento {
     @NotNull
     private Boolean trabalhoArmado;
 
+    private Boolean avulso;
+
+    public Boolean getAvulso() {
+        return avulso;
+    }
+
+    public void setAvulso(Boolean avulso) {
+        this.avulso = avulso;
+    }
+
     public LocalTime getHoraExame() {
         return horaExame;
     }

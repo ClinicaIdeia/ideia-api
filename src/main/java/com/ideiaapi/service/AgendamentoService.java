@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ideiaapi.dto.AgendamentoEstatisticaEmpresa;
+import com.ideiaapi.model.Agenda;
 import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Horario;
 import com.ideiaapi.repository.AgendamentoRepository;
@@ -39,6 +41,9 @@ public class AgendamentoService {
 
     @Autowired
     private HorarioService horarioService;
+
+    @Autowired
+    private AgendaService agendaService;
 
     public byte[] relatorioPorEmpresa(LocalDate inicio, LocalDate fim) throws Exception {
 
@@ -66,11 +71,29 @@ public class AgendamentoService {
     @Transactional
     public Agendamento cadastraAgendamento(Agendamento entity) {
 
-        Horario horario = horarioService.buscaHorario(entity.getCodHorario());
-        LocalTime parse = LocalTime.parse(horario.getHoraExame());
-        entity.setHoraExame(parse);
+        Horario horario = null;
 
-        this.horarioService.queimaHorario(horario);
+        if (!entity.getAvulso()) {
+
+            horario = horarioService.buscaHorario(entity.getCodHorario());
+            this.horarioService.queimaHorario(horario);
+
+        } else {
+
+            Agenda agenda = entity.getAgenda();
+            this.agendaService.cadastraAgenda(agenda);
+            final Optional<Horario> horaAgenda = agenda.getHorarios().stream().filter(Horario::getAvulso).findFirst();
+            if (horaAgenda.isPresent()) {
+                horario = horaAgenda.get();
+            }
+
+        }
+
+        if (null != horario) {
+            LocalTime parse = LocalTime.parse(horario.getHoraExame());
+            entity.setHoraExame(parse);
+        }
+
         return this.agendamentoRepository.save(entity);
     }
 
