@@ -21,9 +21,13 @@ import com.ideiaapi.dto.AgendamentoEstatisticaEmpresa;
 import com.ideiaapi.model.Agenda_;
 import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Agendamento_;
+import com.ideiaapi.model.Permissao;
+import com.ideiaapi.model.Usuario;
 import com.ideiaapi.repository.filter.AgendamentoFilter;
 import com.ideiaapi.repository.projection.ResumoAgendamento;
 import com.ideiaapi.repository.restricoes.paginacao.RestricoesPaginacao;
+import com.ideiaapi.security.UsuarioSessao;
+import com.ideiaapi.security.UsuarioSistema;
 
 public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements AgendamentoRepositoryQuery {
 
@@ -68,17 +72,22 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
         TypedQuery<Agendamento> query = manager.createQuery(criteria);
         adicionarRestricoesDePaginacao(query, pageable);
 
+        final Usuario usuario = UsuarioSessao.getUserLogado();
+
+        final boolean isAdmin = usuario.getPermissoes().stream().anyMatch(permissao -> permissao.getDescricao().equals(
+                "ROLE_ADMIN"));
+
         //TODO alterar total e pageable
-        if (null != agendamentoFilter.getCodigoEmpresa()){
+        if (!isAdmin) {
 
             List<Agendamento> resultList = new ArrayList<>();
-             query.getResultList().forEach(agendamento -> {
-                 agendamento.getFuncionario().getEmpresas().forEach(empresa -> {
-                     if (empresa.getCodigo().compareTo(agendamentoFilter.getCodigoEmpresa()) == 0) {
-                         resultList.add(agendamento);
-                     }
-                 });
-             });
+            query.getResultList().forEach(agendamento -> {
+                agendamento.getFuncionario().getEmpresas().forEach(empresa -> {
+                    if (empresa.getCodigo().compareTo(usuario.getEmpresa().getCodigo()) == 0) {
+                        resultList.add(agendamento);
+                    }
+                });
+            });
 
 
             return new PageImpl<>(resultList, pageable, total(agendamentoFilter));

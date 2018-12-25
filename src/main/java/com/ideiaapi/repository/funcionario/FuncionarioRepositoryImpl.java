@@ -20,9 +20,11 @@ import org.springframework.data.domain.Pageable;
 import com.ideiaapi.model.Empresa;
 import com.ideiaapi.model.Funcionario;
 import com.ideiaapi.model.Funcionario_;
+import com.ideiaapi.model.Usuario;
 import com.ideiaapi.repository.filter.FuncionarioFilter;
 import com.ideiaapi.repository.projection.ResumoFuncionario;
 import com.ideiaapi.repository.restricoes.paginacao.RestricoesPaginacao;
+import com.ideiaapi.security.UsuarioSessao;
 
 public class FuncionarioRepositoryImpl extends RestricoesPaginacao implements FuncionarioRepositoryQuery {
 
@@ -41,15 +43,19 @@ public class FuncionarioRepositoryImpl extends RestricoesPaginacao implements Fu
         TypedQuery<Funcionario> query = manager.createQuery(criteria);
         adicionarRestricoesDePaginacao(query, pageable);
 
-        if (funcionarioFilter.getCodigoEmpresa() != null) {
-            Empresa emp = new Empresa();
-            emp.setCodigo(funcionarioFilter.getCodigoEmpresa());
+        final Usuario usuario = UsuarioSessao.getUserLogado();
+
+        final boolean isAdmin = usuario.getPermissoes().stream().anyMatch(permissao -> permissao.getDescricao().equals(
+                "ROLE_ADMIN"));
+
+        //TODO alterar total e pageable
+        if (!isAdmin) {
             List<Funcionario> collect = new ArrayList<>();
 
             //TODO fazer conta do total de itens e do pageable
             query.getResultList().forEach(func -> {
                 func.getEmpresas().forEach(empresa -> {
-                    if(empresa.getCodigo().compareTo(emp.getCodigo()) == 0) {
+                    if(empresa.getCodigo().compareTo(usuario.getEmpresa().getCodigo()) == 0) {
                         collect.add(func);
                         return;
                     }
