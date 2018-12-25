@@ -14,6 +14,16 @@ public class AgendamentoFilter {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataExameAte;
 
+    private Long codigoEmpresa;
+
+    public Long getCodigoEmpresa() {
+        return codigoEmpresa;
+    }
+
+    public void setCodigoEmpresa(Long codigoEmpresa) {
+        this.codigoEmpresa = codigoEmpresa;
+    }
+
     public String getObservacao() {
         return observacao;
     }

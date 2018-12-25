@@ -68,6 +68,22 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
         TypedQuery<Agendamento> query = manager.createQuery(criteria);
         adicionarRestricoesDePaginacao(query, pageable);
 
+        //TODO alterar total e pageable
+        if (null != agendamentoFilter.getCodigoEmpresa()){
+
+            List<Agendamento> resultList = new ArrayList<>();
+             query.getResultList().forEach(agendamento -> {
+                 agendamento.getFuncionario().getEmpresas().forEach(empresa -> {
+                     if (empresa.getCodigo().compareTo(agendamentoFilter.getCodigoEmpresa()) == 0) {
+                         resultList.add(agendamento);
+                     }
+                 });
+             });
+
+
+            return new PageImpl<>(resultList, pageable, total(agendamentoFilter));
+        }
+
         return new PageImpl<>(query.getResultList(), pageable, total(agendamentoFilter));
     }
 

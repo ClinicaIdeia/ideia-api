@@ -71,6 +71,10 @@ public class AgendamentoService {
     @Transactional
     public Agendamento cadastraAgendamento(Agendamento entity) {
 
+        if (null == entity.getEmitiuLaudo()) {
+            entity.setEmitiuLaudo(false);
+        }
+
         Horario horario = null;
 
         if (!entity.getAvulso()) {
