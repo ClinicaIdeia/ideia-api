@@ -23,6 +23,7 @@ import com.ideiaapi.dto.AgendamentoEstatisticaEmpresa;
 import com.ideiaapi.model.Agenda;
 import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Horario;
+import com.ideiaapi.model.Laudo;
 import com.ideiaapi.repository.AgendamentoRepository;
 import com.ideiaapi.repository.filter.AgendamentoFilter;
 import com.ideiaapi.repository.projection.ResumoAgendamento;
@@ -71,8 +72,8 @@ public class AgendamentoService {
     @Transactional
     public Agendamento cadastraAgendamento(Agendamento entity) {
 
-        if (null == entity.getEmitiuLaudo()) {
-            entity.setEmitiuLaudo(false);
+        if (null == entity.getLaudoGerado()) {
+            entity.setLaudoGerado(false);
         }
 
         Horario horario = null;
@@ -127,4 +128,10 @@ public class AgendamentoService {
         return this.agendamentoRepository.findAllByAindaNaoEmitiuLaudo();
     }
 
+    public void marcarLaudoGerado(Laudo laudo) {
+        Long codAgendamento = laudo.getCodAgendamento();
+        Agendamento agendamento = this.buscaAgendamento(codAgendamento);
+        agendamento.setLaudoGerado(true);
+        this.atualizaAgendamento(codAgendamento, agendamento);
+    }
 }

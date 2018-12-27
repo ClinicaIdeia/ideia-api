@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import com.ideiaapi.dto.AgendamentoEstatisticaEmpresa;
+import com.ideiaapi.model.Agenda;
 import com.ideiaapi.model.Agenda_;
 import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Agendamento_;
@@ -81,13 +82,13 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
         if (!isAdmin) {
 
             List<Agendamento> resultList = new ArrayList<>();
-            query.getResultList().forEach(agendamento -> {
-                agendamento.getFuncionario().getEmpresas().forEach(empresa -> {
-                    if (empresa.getCodigo().compareTo(usuario.getEmpresa().getCodigo()) == 0) {
-                        resultList.add(agendamento);
-                    }
-                });
-            });
+            query.getResultList().forEach(agendamento ->
+                    agendamento.getFuncionario().getEmpresas().forEach(empresa -> {
+                        if (empresa.getCodigo().compareTo(usuario.getEmpresa().getCodigo()) == 0) {
+                            resultList.add(agendamento);
+                        }
+                    })
+            );
 
 
             return new PageImpl<>(resultList, pageable, total(agendamentoFilter));
@@ -106,6 +107,7 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
         criteria.select(builder.construct(ResumoAgendamento.class
                 , root.get(Agendamento_.codigo)
                 , root.get(Agendamento_.observacao)
+                , root.get(Agendamento_.laudoGerado)
         ));
 
         Predicate[] predicates = criarRestricoes(agendamentoFilter, builder, root);
@@ -125,6 +127,15 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
             predicates.add(builder.like(
                     builder.lower(root.get(Agendamento_.observacao)),
                     "%" + agendamentoFilter.getObservacao().toLowerCase() + "%"));
+        }
+
+        if (agendamentoFilter.getLaudoGerado() != null) {
+            if (agendamentoFilter.getLaudoGerado()) {
+                predicates.add(builder.isTrue(root.get(Agendamento_.laudoGerado)));
+
+            } else {
+                predicates.add(builder.isFalse(root.get(Agendamento_.laudoGerado)));
+            }
         }
 
 //        if (agendamentoFilter.getDataExameDe() != null) {

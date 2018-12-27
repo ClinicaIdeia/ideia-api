@@ -22,8 +22,13 @@ public class AptidaoService {
 
     public void cadastrarAptidoes(List<Aptidao> aptidoes) {
         if (!aptidoes.isEmpty()) {
-            aptidoes.forEach(aptidao ->
-                    this.aptidaoRepository.save(aptidao));
+            aptidoes.forEach(aptidao -> {
+                        if (null == aptidao.getApto()) {
+                            aptidao.setApto(false);
+                        }
+                        this.aptidaoRepository.save(aptidao);
+                    }
+            );
         }
     }
 

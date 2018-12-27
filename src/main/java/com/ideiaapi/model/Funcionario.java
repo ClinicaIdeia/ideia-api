@@ -18,6 +18,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -93,6 +94,7 @@ public class Funcionario {
             , inverseJoinColumns = @JoinColumn(name = "codigo_empresa"))
     private List<Empresa> empresas;
 
+    //TODO Levar as informações de examinador, conselho para usuario;
     @Column(name = "EXAMINADOR")
     private Boolean examinador;
 
@@ -102,6 +104,15 @@ public class Funcionario {
 
     @Column(name = "NUMERO_CONSELHO")
     private String numeroConselho;
+
+    @Transient
+    private Integer idade;
+
+    public Integer getIdade() {
+        final int yearNow = LocalDate.now().getYear();
+        final int nascimento = this.dataNascimento.getYear();
+        return yearNow - nascimento;
+    }
 
     public String getSexo() {
         return sexo;

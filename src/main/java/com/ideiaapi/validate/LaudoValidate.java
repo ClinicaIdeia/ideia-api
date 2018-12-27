@@ -1,31 +1,30 @@
 package com.ideiaapi.validate;
 
-import static com.ideiaapi.constants.ErrorsCode.CNPJ_DUPLICADO;
+import java.time.LocalDate;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ideiaapi.exceptions.BusinessException;
 import com.ideiaapi.model.Laudo;
-import com.ideiaapi.repository.LaudoRepository;
 
 @Component
 public class LaudoValidate {
 
-    @Autowired
-    private LaudoRepository repository;
-
     public void fluxoCriacao(Laudo laudo) {
-//        this.validaCnpjUnique(laudo);
+        this.validadeDatas(laudo);
     }
 
-//    private void validaCnpjUnique(Laudo laudo) {
-//
-//        Laudo saved = this.repository.findByCnpj(laudo.getCnpj());
-//
-//        if (null != saved) {
-//            throw new BusinessException(CNPJ_DUPLICADO);
-//        }
-//    }
+    private void validadeDatas(Laudo laudo) {
+
+        laudo.setDataAtualizacao(LocalDate.now());
+        if (null == laudo.getDataCriacao()) {
+            laudo.setDataCriacao(LocalDate.now());
+        }
+        if (null == laudo.getDataEmissao()) {
+            laudo.setDataEmissao(LocalDate.now());
+        }
+        if (null == laudo.getDataExame()) {
+            laudo.setDataExame(LocalDate.now());
+        }
+    }
 
 }

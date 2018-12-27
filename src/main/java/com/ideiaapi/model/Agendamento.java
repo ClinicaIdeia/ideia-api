@@ -48,14 +48,14 @@ public class Agendamento {
 
     private Boolean avulso;
 
-    private Boolean emitiuLaudo;
+    private Boolean laudoGerado;
 
-    public Boolean getEmitiuLaudo() {
-        return emitiuLaudo;
+    public Boolean getLaudoGerado() {
+        return laudoGerado;
     }
 
-    public void setEmitiuLaudo(Boolean emitiuLaudo) {
-        this.emitiuLaudo = emitiuLaudo;
+    public void setLaudoGerado(Boolean laudoGerado) {
+        this.laudoGerado = laudoGerado;
     }
 
     public Boolean getAvulso() {

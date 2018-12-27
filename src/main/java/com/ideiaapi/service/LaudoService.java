@@ -24,6 +24,9 @@ public class LaudoService {
     @Autowired
     private LaudoValidate laudoValidate;
 
+    @Autowired
+    private AgendamentoService agendamentoService;
+
     public Page<Laudo> filtrar(LaudoFilter filter, Pageable pageable) {
         return this.laudoRepository.filtrar(filter, pageable);
     }
@@ -35,13 +38,13 @@ public class LaudoService {
     public Laudo cadastraLaudo(Laudo entity) {
         this.laudoValidate.fluxoCriacao(entity);
 
-//        if (entity.getAtiva() == null) {
-//            entity.setAtiva(true);
-//        }
-
         this.aptidaoService.cadastrarAptidoes(entity.getAptidoes());
 
-        return this.laudoRepository.save(entity);
+        //TODO Marcar agendamento como gerado
+
+        final Laudo save = this.laudoRepository.save(entity);
+        this.agendamentoService.marcarLaudoGerado(save);
+        return save;
     }
 
     public Laudo buscaLaudo(Long codigo) {

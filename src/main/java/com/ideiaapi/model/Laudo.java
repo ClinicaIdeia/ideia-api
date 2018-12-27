@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -53,11 +54,22 @@ public class Laudo {
     @Column(name = "DATA_EMISSAO")
     private LocalDate dataEmissao;
 
-    @Column(name = "DATA_CRICAO")
+    @Column(name = "DATA_CRIACAO")
     private LocalDate dataCriacao;
 
     @Column(name = "DATA_ATUALIZACAO")
     private LocalDate dataAtualizacao;
+
+    @Transient
+    private Long codAgendamento;
+
+    public Long getCodAgendamento() {
+        return codAgendamento;
+    }
+
+    public void setCodAgendamento(Long codAgendamento) {
+        this.codAgendamento = codAgendamento;
+    }
 
     public Long getCodigo() {
         return codigo;

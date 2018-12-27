@@ -14,14 +14,14 @@ public class AgendamentoFilter {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataExameAte;
 
-    private Long codigoEmpresa;
+    private Boolean laudoGerado;
 
-    public Long getCodigoEmpresa() {
-        return codigoEmpresa;
+    public Boolean getLaudoGerado() {
+        return laudoGerado;
     }
 
-    public void setCodigoEmpresa(Long codigoEmpresa) {
-        this.codigoEmpresa = codigoEmpresa;
+    public void setLaudoGerado(Boolean laudoGerado) {
+        this.laudoGerado = laudoGerado;
     }
 
     public String getObservacao() {
