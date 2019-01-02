@@ -18,17 +18,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import com.ideiaapi.dto.AgendamentoEstatisticaEmpresa;
-import com.ideiaapi.model.Agenda;
 import com.ideiaapi.model.Agenda_;
 import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Agendamento_;
-import com.ideiaapi.model.Permissao;
 import com.ideiaapi.model.Usuario;
 import com.ideiaapi.repository.filter.AgendamentoFilter;
 import com.ideiaapi.repository.projection.ResumoAgendamento;
 import com.ideiaapi.repository.restricoes.paginacao.RestricoesPaginacao;
 import com.ideiaapi.security.UsuarioSessao;
-import com.ideiaapi.security.UsuarioSistema;
 
 public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements AgendamentoRepositoryQuery {
 
