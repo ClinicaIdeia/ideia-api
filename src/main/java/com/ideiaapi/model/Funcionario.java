@@ -7,6 +7,7 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -27,9 +28,11 @@ import org.hibernate.validator.constraints.Email;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ideiaapi.enums.Conselho;
+import com.ideiaapi.repository.listener.FuncionarioListener;
 import com.ideiaapi.util.datas.LocalDateDeserializer;
 import com.ideiaapi.util.datas.LocalDateSerializer;
 
+@EntityListeners(FuncionarioListener.class)
 @Entity
 @Table(name = "funcionario")
 @SequenceGenerator(name = "funcionario_seq", sequenceName = "funcionario_seq", allocationSize = 1)
@@ -107,6 +110,27 @@ public class Funcionario {
 
     @Transient
     private Integer idade;
+
+    private String anexo;
+
+    @Transient
+    private String urlAnexo;
+
+    public String getAnexo() {
+        return anexo;
+    }
+
+    public void setAnexo(String anexo) {
+        this.anexo = anexo;
+    }
+
+    public String getUrlAnexo() {
+        return urlAnexo;
+    }
+
+    public void setUrlAnexo(String urlAnexo) {
+        this.urlAnexo = urlAnexo;
+    }
 
     public Integer getIdade() {
         final int yearNow = LocalDate.now().getYear();

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ideiaapi.dto.s3.AnexoS3DTO;
@@ -47,6 +48,9 @@ public class FuncionarioService {
     public Funcionario cadastraFuncionario(Funcionario entity) {
 
         this.funcionarioValidate.fluxoCriacao(entity);
+        if (StringUtils.hasText(entity.getAnexo())) {
+            this.s3.salvar(entity.getAnexo());
+        }
         return this.funcionarioRepository.save(entity);
     }
 
@@ -65,10 +69,17 @@ public class FuncionarioService {
     }
 
     public ResponseEntity<Funcionario> atualizaFuncionario(Long codigo, Funcionario funcionario) {
-        Funcionario funcionarioSalva = this.buscaFuncionario(codigo);
-        BeanUtils.copyProperties(funcionario, funcionarioSalva, "codigo");
+        Funcionario funcionarioSalvo = this.buscaFuncionario(codigo);
 
-        this.funcionarioRepository.save(funcionarioSalva);
-        return ResponseEntity.ok(funcionarioSalva);
+        if (StringUtils.isEmpty(funcionario.getAnexo()) && StringUtils.hasText(funcionarioSalvo.getAnexo())) {
+            this.s3.remover(funcionarioSalvo.getAnexo());
+        } else if (StringUtils.hasText(
+                funcionario.getAnexo()) && !funcionario.getAnexo().equals(funcionarioSalvo.getAnexo())) {
+            this.s3.substituir(funcionarioSalvo.getAnexo(), funcionario.getAnexo());
+        }
+        BeanUtils.copyProperties(funcionario, funcionarioSalvo, "codigo");
+
+        this.funcionarioRepository.save(funcionarioSalvo);
+        return ResponseEntity.ok(funcionarioSalvo);
     }
 }

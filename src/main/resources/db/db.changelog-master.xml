@@ -15,5 +15,6 @@
     <include file="db/migrations/V008__criacao_tabela_configuracao.sql"/>
     <include file="db/migrations/V009__criacao_tabela_aptidao.sql"/>
     <include file="db/migrations/V010__criacao_tabela_laudo.sql"/>
+    <include file="db/migrations/V011__alteracao_tabelas_usuario_funcionario.sql"/>
 
 </databaseChangeLog>
