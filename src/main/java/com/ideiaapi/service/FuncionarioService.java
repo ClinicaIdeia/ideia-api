@@ -7,11 +7,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ideiaapi.dto.s3.AnexoS3DTO;
 import com.ideiaapi.model.Funcionario;
 import com.ideiaapi.repository.FuncionarioRepository;
 import com.ideiaapi.repository.filter.FuncionarioFilter;
 import com.ideiaapi.repository.projection.ResumoFuncionario;
+import com.ideiaapi.storage.S3;
 import com.ideiaapi.validate.FuncionarioValidate;
 
 @Service
@@ -22,6 +25,14 @@ public class FuncionarioService {
 
     @Autowired
     private FuncionarioValidate funcionarioValidate;
+
+    @Autowired
+    private S3 s3;
+
+    public AnexoS3DTO salvarFotoFuncionarioS3(MultipartFile file) {
+        String nome = s3.salvarArquivoS3Temporatimente(file);
+        return new AnexoS3DTO(nome, s3.configuraUrl(nome));
+    }
 
     public Page<Funcionario> filtrar(FuncionarioFilter filter, Pageable pageable) {
         return this.funcionarioRepository.filtrar(filter, pageable);
