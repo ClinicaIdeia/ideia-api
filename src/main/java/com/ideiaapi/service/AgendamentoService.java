@@ -46,9 +46,9 @@ public class AgendamentoService {
     private AgendaService agendaService;
 
     public byte[] relatorioPorEmpresa(LocalDate inicio, LocalDate fim, Long codigo) throws Exception {
-
-        List<Agendamento> allByAgendamentoRelatorioPorEmpresa = this.agendamentoRepository.findAllByAgendamentoRelatorioPorEmpresa(
-                inicio, fim, codigo);
+//
+//        List<Agendamento> allByAgendamentoRelatorioPorEmpresa = this.agendamentoRepository.findAllByAgendamentoRelatorioPorEmpresa(
+//                inicio, fim, codigo);
 
         List<AgendamentoEstatisticaEmpresa> dados = this.agendamentoRepository.agendamentosPorEmpresa(inicio, fim);
 
