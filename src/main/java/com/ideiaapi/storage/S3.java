@@ -69,7 +69,8 @@ public class S3 {
     }
 
     public String configuraUrl(String objeto) {
-        return "\\\\" + this.s3Bucket + ".s3.amazonaws.com/" + objeto;
+//        return "\\\\" + this.s3Bucket + ".s3.amazonaws.com/" + objeto;
+        return "https://" + this.s3Bucket + ".s3.amazonaws.com/" + objeto;
     }
 
     public void remover(String objeto) {
