@@ -77,16 +77,10 @@ public class LaudoService {
         return this.laudoRepository.filtrar(filter, pageable);
     }
 
-//    public Page<ResumoLaudo> resumo(LaudoFilter filter, Pageable pageable) {
-//        return this.laudoRepository.resumir(filter, pageable);
-//    }
-
     public Laudo cadastraLaudo(Laudo entity) {
         this.laudoValidate.fluxoCriacao(entity);
 
         this.aptidaoService.cadastrarAptidoes(entity.getAptidoes());
-
-        //TODO Marcar agendamento como gerado
 
         final Laudo save = this.laudoRepository.save(entity);
         this.agendamentoService.marcarLaudoGerado(save);
