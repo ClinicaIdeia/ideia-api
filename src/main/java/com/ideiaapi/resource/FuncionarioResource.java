@@ -92,7 +92,7 @@ public class FuncionarioResource {
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
     public ResponseEntity<Funcionario> atualiza(@PathVariable Long codigo,
             @RequestBody @Valid Funcionario funcionario) {
-        return this.funcionarioService.atualizaFuncionario(codigo, funcionario);
+         return this.funcionarioService.atualizaFuncionario(codigo, funcionario);
 
     }
 
