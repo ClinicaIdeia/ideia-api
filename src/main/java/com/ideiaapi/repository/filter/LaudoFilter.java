@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-public class AgendamentoFilter {
+public class LaudoFilter {
 
     private String observacao;
 
@@ -13,16 +13,6 @@ public class AgendamentoFilter {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataExameAte;
-
-    private Boolean laudoGerado;
-
-    public Boolean getLaudoGerado() {
-        return laudoGerado;
-    }
-
-    public void setLaudoGerado(Boolean laudoGerado) {
-        this.laudoGerado = laudoGerado;
-    }
 
     public String getObservacao() {
         return observacao;
@@ -47,4 +37,5 @@ public class AgendamentoFilter {
     public void setDataExameAte(LocalDate dataExameAte) {
         this.dataExameAte = dataExameAte;
     }
+
 }

@@ -2,7 +2,6 @@ package com.ideiaapi.resource;
 
 import static com.ideiaapi.constants.ErrorsCode.PESSOA_INEXISTENTE_OU_INATIVA;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,10 +14,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,90 +40,84 @@ import com.ideiaapi.service.AgendamentoService;
 @RequestMapping("/agendamentos")
 public class AgendamentoResource {
 
-    @Autowired
-    private AgendamentoService agendamentoService;
+	@Autowired
+	private AgendamentoService agendamentoService;
 
-    @Autowired
-    private ApplicationEventPublisher publisher;
+	@Autowired
+	private ApplicationEventPublisher publisher;
 
-    @Autowired
-    private MessageSource messageSource;
+	@Autowired
+	private MessageSource messageSource;
 
-    @GetMapping("/relatorios/empresa")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2" +
-            ".hasScope('read')")
-    public ResponseEntity<byte[]> relatorioPorEmpresa(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate inicio,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fim) throws Exception {
+	@GetMapping
+	@PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2"
+			+ ".hasScope('read')")
+	public Page<Agendamento> pesquisar(AgendamentoFilter filter, Pageable pageable) {
+		return this.agendamentoService.listaAgendamentos(filter, pageable);
+	}
 
-        byte[] bytes = this.agendamentoService.relatorioPorEmpresa(inicio, fim);
+	@GetMapping("/resumo")
+	@PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+	public Page<ResumoAgendamento> resumo(AgendamentoFilter filter, Pageable pageable) {
+		return this.agendamentoService.resumo(filter, pageable);
+	}
 
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
-                .body(bytes);
-    }
+	@GetMapping("/laudos/gerar")
+	@PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+	public ResponseEntity<List<Agendamento>> agendamentosParaLaudo() {
+		List<Agendamento> agendamentos = this.agendamentoService.agendamentosParaLaudo();
 
+		return ResponseEntity.ok(agendamentos);
+	}
 
-    @GetMapping
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2" +
-            ".hasScope('read')")
-    public Page<Agendamento> pesquisar(AgendamentoFilter filter, Pageable pageable) {
-        return this.agendamentoService.listaAgendamentos(filter, pageable);
-    }
+	@PostMapping
+	@PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('write')")
+	public ResponseEntity<Agendamento> criar(@RequestBody @Valid Agendamento agendamento,
+			HttpServletResponse response) {
 
-    @GetMapping("/resumo")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
-    public Page<ResumoAgendamento> resumo(AgendamentoFilter filter, Pageable pageable) {
-        return this.agendamentoService.resumo(filter, pageable);
-    }
+		final Agendamento agendamentoSalva = this.agendamentoService.cadastraAgendamento(agendamento);
+		publisher.publishEvent(new RecursoCriadoEvent(this, response, agendamentoSalva.getCodigo()));
+		return ResponseEntity.status(HttpStatus.CREATED).body(agendamentoSalva);
+	}
 
-    @PostMapping
-    @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('write')")
-    public ResponseEntity<Agendamento> criar(@RequestBody @Valid Agendamento agendamento,
-            HttpServletResponse response) {
+	@GetMapping("/{codigo}")
+	@PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+	public ResponseEntity<Agendamento> busca(@PathVariable Long codigo) {
+		Agendamento agendamento = this.agendamentoService.buscaAgendamento(codigo);
 
-        final Agendamento agendamentoSalva = this.agendamentoService.cadastraAgendamento(agendamento);
-        publisher.publishEvent(new RecursoCriadoEvent(this, response, agendamentoSalva.getCodigo()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(agendamentoSalva);
-    }
+		if (null == agendamento)
+			return ResponseEntity.notFound().build();
 
-    @GetMapping("/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
-    public ResponseEntity<Agendamento> busca(@PathVariable Long codigo) {
-        Agendamento agendamento = this.agendamentoService.buscaAgendamento(codigo);
+		return ResponseEntity.ok(agendamento);
+	}
 
-        if (null == agendamento)
-            return ResponseEntity.notFound().build();
+	@DeleteMapping("/{codigo}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize(value = "hasAuthority('ROLE_REMOVER_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('write')")
+	public void deleta(@PathVariable Long codigo) {
+		this.agendamentoService.deletaAgendamento(codigo);
+	}
 
-        return ResponseEntity.ok(agendamento);
-    }
+	@PutMapping("/{codigo}")
+	@PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('write')")
+	public ResponseEntity<Agendamento> atualiza(@PathVariable Long codigo,
+			@RequestBody @Valid Agendamento agendamento) {
+		return this.agendamentoService.atualizaAgendamento(codigo, agendamento);
 
-    @DeleteMapping("/{codigo}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize(value = "hasAuthority('ROLE_REMOVER_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('write')")
-    public void deleta(@PathVariable Long codigo) {
-        this.agendamentoService.deletaAgendamento(codigo);
-    }
+	}
 
-    @PutMapping("/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('write')")
-    public ResponseEntity<Agendamento> atualiza(@PathVariable Long codigo,
-            @RequestBody @Valid Agendamento agendamento) {
-        return this.agendamentoService.atualizaAgendamento(codigo, agendamento);
+	@ExceptionHandler({ EmpesaInexsistenteOuInativaException.class })
+	public ResponseEntity<Object> handleFuncionarioInexitenteOuInativaException(
+			EmpesaInexsistenteOuInativaException ex) {
 
-    }
+		String mensagemUsuario = this.messageSource.getMessage(PESSOA_INEXISTENTE_OU_INATIVA, null,
+				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = ex.toString();
 
-    @ExceptionHandler({EmpesaInexsistenteOuInativaException.class})
-    public ResponseEntity<Object> handleFuncionarioInexitenteOuInativaException(
-            EmpesaInexsistenteOuInativaException ex) {
+		List<IdeiaApiExceptionHandler.Erro> erros = Arrays
+				.asList(new IdeiaApiExceptionHandler.Erro(mensagemUsuario, mensagemDesenvolvedor));
 
-        String mensagemUsuario = this.messageSource.getMessage(PESSOA_INEXISTENTE_OU_INATIVA, null,
-                LocaleContextHolder.getLocale());
-        String mensagemDesenvolvedor = ex.toString();
-
-        List<IdeiaApiExceptionHandler.Erro> erros = Arrays.asList(
-                new IdeiaApiExceptionHandler.Erro(mensagemUsuario, mensagemDesenvolvedor));
-
-        return ResponseEntity.badRequest().body(erros);
-    }
+		return ResponseEntity.badRequest().body(erros);
+	}
 
 }

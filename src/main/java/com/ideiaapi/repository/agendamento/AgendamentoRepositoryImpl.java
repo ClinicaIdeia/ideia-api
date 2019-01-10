@@ -21,9 +21,11 @@ import com.ideiaapi.dto.AgendamentoEstatisticaEmpresa;
 import com.ideiaapi.model.Agenda_;
 import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Agendamento_;
+import com.ideiaapi.model.Usuario;
 import com.ideiaapi.repository.filter.AgendamentoFilter;
 import com.ideiaapi.repository.projection.ResumoAgendamento;
 import com.ideiaapi.repository.restricoes.paginacao.RestricoesPaginacao;
+import com.ideiaapi.security.UsuarioSessao;
 
 public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements AgendamentoRepositoryQuery {
 
@@ -68,6 +70,27 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
         TypedQuery<Agendamento> query = manager.createQuery(criteria);
         adicionarRestricoesDePaginacao(query, pageable);
 
+        final Usuario usuario = UsuarioSessao.getUserLogado();
+
+        final boolean isAdmin = usuario.getPermissoes().stream().anyMatch(permissao -> permissao.getDescricao().equals(
+                "ROLE_ADMIN"));
+
+        //TODO alterar total e pageable
+        if (!isAdmin) {
+
+            List<Agendamento> resultList = new ArrayList<>();
+            query.getResultList().forEach(agendamento ->
+                    agendamento.getFuncionario().getEmpresas().forEach(empresa -> {
+                        if (empresa.getCodigo().compareTo(usuario.getEmpresa().getCodigo()) == 0) {
+                            resultList.add(agendamento);
+                        }
+                    })
+            );
+
+
+            return new PageImpl<>(resultList, pageable, total(agendamentoFilter));
+        }
+
         return new PageImpl<>(query.getResultList(), pageable, total(agendamentoFilter));
     }
 
@@ -81,6 +104,7 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
         criteria.select(builder.construct(ResumoAgendamento.class
                 , root.get(Agendamento_.codigo)
                 , root.get(Agendamento_.observacao)
+                , root.get(Agendamento_.laudoGerado)
         ));
 
         Predicate[] predicates = criarRestricoes(agendamentoFilter, builder, root);
@@ -100,6 +124,15 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
             predicates.add(builder.like(
                     builder.lower(root.get(Agendamento_.observacao)),
                     "%" + agendamentoFilter.getObservacao().toLowerCase() + "%"));
+        }
+
+        if (agendamentoFilter.getLaudoGerado() != null) {
+            if (agendamentoFilter.getLaudoGerado()) {
+                predicates.add(builder.isTrue(root.get(Agendamento_.laudoGerado)));
+
+            } else {
+                predicates.add(builder.isFalse(root.get(Agendamento_.laudoGerado)));
+            }
         }
 
 //        if (agendamentoFilter.getDataExameDe() != null) {

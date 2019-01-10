@@ -7,6 +7,7 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -18,6 +19,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -26,9 +28,11 @@ import org.hibernate.validator.constraints.Email;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ideiaapi.enums.Conselho;
+import com.ideiaapi.repository.listener.FuncionarioListener;
 import com.ideiaapi.util.datas.LocalDateDeserializer;
 import com.ideiaapi.util.datas.LocalDateSerializer;
 
+@EntityListeners(FuncionarioListener.class)
 @Entity
 @Table(name = "funcionario")
 @SequenceGenerator(name = "funcionario_seq", sequenceName = "funcionario_seq", allocationSize = 1)
@@ -93,6 +97,7 @@ public class Funcionario {
             , inverseJoinColumns = @JoinColumn(name = "codigo_empresa"))
     private List<Empresa> empresas;
 
+    //TODO Levar as informações de examinador, conselho para usuario;
     @Column(name = "EXAMINADOR")
     private Boolean examinador;
 
@@ -102,6 +107,36 @@ public class Funcionario {
 
     @Column(name = "NUMERO_CONSELHO")
     private String numeroConselho;
+
+    @Transient
+    private Integer idade;
+
+    private String anexo;
+
+    @Transient
+    private String urlAnexo;
+
+    public String getAnexo() {
+        return anexo;
+    }
+
+    public void setAnexo(String anexo) {
+        this.anexo = anexo;
+    }
+
+    public String getUrlAnexo() {
+        return urlAnexo;
+    }
+
+    public void setUrlAnexo(String urlAnexo) {
+        this.urlAnexo = urlAnexo;
+    }
+
+    public Integer getIdade() {
+        final int yearNow = LocalDate.now().getYear();
+        final int nascimento = this.dataNascimento.getYear();
+        return yearNow - nascimento;
+    }
 
     public String getSexo() {
         return sexo;

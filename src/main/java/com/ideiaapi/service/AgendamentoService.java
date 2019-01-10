@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -19,8 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ideiaapi.dto.AgendamentoEstatisticaEmpresa;
+import com.ideiaapi.model.Agenda;
 import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Horario;
+import com.ideiaapi.model.Laudo;
 import com.ideiaapi.repository.AgendamentoRepository;
 import com.ideiaapi.repository.filter.AgendamentoFilter;
 import com.ideiaapi.repository.projection.ResumoAgendamento;
@@ -29,7 +32,6 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
 
 @Service
 public class AgendamentoService {
@@ -40,9 +42,16 @@ public class AgendamentoService {
     @Autowired
     private HorarioService horarioService;
 
-    public byte[] relatorioPorEmpresa(LocalDate inicio, LocalDate fim) throws Exception {
+    @Autowired
+    private AgendaService agendaService;
+
+    public byte[] relatorioPorEmpresa(LocalDate inicio, LocalDate fim, Long codigo) throws Exception {
+
+        List<Agendamento> allByAgendamentoRelatorioPorEmpresa = this.agendamentoRepository.findAllByAgendamentoRelatorioPorEmpresa(
+                inicio, fim, codigo);
 
         List<AgendamentoEstatisticaEmpresa> dados = this.agendamentoRepository.agendamentosPorEmpresa(inicio, fim);
+
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("DT_INICIO", Date.valueOf(inicio));
         parametros.put("DT_FIM", Date.valueOf(fim));
@@ -66,11 +75,33 @@ public class AgendamentoService {
     @Transactional
     public Agendamento cadastraAgendamento(Agendamento entity) {
 
-        Horario horario = horarioService.buscaHorario(entity.getCodHorario());
-        LocalTime parse = LocalTime.parse(horario.getHoraExame());
-        entity.setHoraExame(parse);
+        if (null == entity.getLaudoGerado()) {
+            entity.setLaudoGerado(false);
+        }
 
-        this.horarioService.queimaHorario(horario);
+        Horario horario = null;
+
+        if (!entity.getAvulso()) {
+
+            horario = horarioService.buscaHorario(entity.getCodHorario());
+            this.horarioService.queimaHorario(horario);
+
+        } else {
+
+            Agenda agenda = entity.getAgenda();
+            this.agendaService.cadastraAgenda(agenda);
+            final Optional<Horario> horaAgenda = agenda.getHorarios().stream().filter(Horario::getAvulso).findFirst();
+            if (horaAgenda.isPresent()) {
+                horario = horaAgenda.get();
+            }
+
+        }
+
+        if (null != horario) {
+            LocalTime parse = LocalTime.parse(horario.getHoraExame());
+            entity.setHoraExame(parse);
+        }
+
         return this.agendamentoRepository.save(entity);
     }
 
@@ -96,4 +127,14 @@ public class AgendamentoService {
         return ResponseEntity.ok(agendamentoSalvo);
     }
 
+    public List<Agendamento> agendamentosParaLaudo() {
+        return this.agendamentoRepository.findAllByAindaNaoEmitiuLaudo();
+    }
+
+    public void marcarLaudoGerado(Laudo laudo) {
+        Long codAgendamento = laudo.getCodAgendamento();
+        Agendamento agendamento = this.buscaAgendamento(codAgendamento);
+        agendamento.setLaudoGerado(true);
+        this.atualizaAgendamento(codAgendamento, agendamento);
+    }
 }

@@ -4,6 +4,7 @@ import com.ideiaapi.model.Agenda;
 import com.ideiaapi.model.Horario;
 import com.ideiaapi.repository.AgendaRepository;
 import com.ideiaapi.repository.HorarioRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,9 +45,21 @@ public class HorarioService {
     }
 
     public Horario cadastraHorario(Horario entity) {
-        entity.setAvulso(false);
-        entity.setRestante(entity.getMaximoPermitido());
-        entity.setDisponivel(true);
+        Integer maximoPermitido = entity.getMaximoPermitido();
+        Integer restante = maximoPermitido;
+        boolean disponivel = true;
+        boolean avulso = false;
+
+        if (null != entity.getAvulso() && entity.getAvulso()) {
+            maximoPermitido = 1;
+            disponivel = false;
+            avulso = true;
+            restante = 0;
+        }
+        entity.setAvulso(avulso);
+        entity.setRestante(restante);
+        entity.setMaximoPermitido(maximoPermitido);
+        entity.setDisponivel(disponivel);
         return this.horarioRepository.save(entity);
     }
 

@@ -6,14 +6,16 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ideiaapi.dto.s3.AnexoS3DTO;
 import com.ideiaapi.model.Funcionario;
 import com.ideiaapi.repository.FuncionarioRepository;
 import com.ideiaapi.repository.filter.FuncionarioFilter;
 import com.ideiaapi.repository.projection.ResumoFuncionario;
+import com.ideiaapi.storage.S3;
 import com.ideiaapi.validate.FuncionarioValidate;
 
 @Service
@@ -25,6 +27,19 @@ public class FuncionarioService {
     @Autowired
     private FuncionarioValidate funcionarioValidate;
 
+    @Autowired
+    private S3 s3;
+
+    public AnexoS3DTO salvarFotoFuncionarioS3(MultipartFile file) {
+        String nome = s3.salvarArquivoS3Temporatimente(file);
+        return new AnexoS3DTO(nome, s3.configuraUrl(nome));
+    }
+
+    public Page<Funcionario> filtrar(FuncionarioFilter filter, Pageable pageable) {
+        return this.funcionarioRepository.filtrar(filter, pageable);
+
+    }
+
     public Page<ResumoFuncionario> resumo(FuncionarioFilter filter, Pageable pageable) {
 
         return this.funcionarioRepository.resumir(filter, pageable);
@@ -33,6 +48,9 @@ public class FuncionarioService {
     public Funcionario cadastraFuncionario(Funcionario entity) {
 
         this.funcionarioValidate.fluxoCriacao(entity);
+        if (StringUtils.hasText(entity.getAnexo())) {
+            this.s3.salvar(entity.getAnexo());
+        }
         return this.funcionarioRepository.save(entity);
     }
 
@@ -51,10 +69,17 @@ public class FuncionarioService {
     }
 
     public ResponseEntity<Funcionario> atualizaFuncionario(Long codigo, Funcionario funcionario) {
-        Funcionario funcionarioSalva = this.buscaFuncionario(codigo);
-        BeanUtils.copyProperties(funcionario, funcionarioSalva, "codigo");
+        Funcionario funcionarioSalvo = this.buscaFuncionario(codigo);
 
-        this.funcionarioRepository.save(funcionarioSalva);
-        return ResponseEntity.ok(funcionarioSalva);
+        if (StringUtils.isEmpty(funcionario.getAnexo()) && StringUtils.hasText(funcionarioSalvo.getAnexo())) {
+            this.s3.remover(funcionarioSalvo.getAnexo());
+        } else if (StringUtils.hasText(
+                funcionario.getAnexo()) && !funcionario.getAnexo().equals(funcionarioSalvo.getAnexo())) {
+            this.s3.substituir(funcionarioSalvo.getAnexo(), funcionario.getAnexo());
+        }
+        BeanUtils.copyProperties(funcionario, funcionarioSalvo, "codigo");
+
+        this.funcionarioRepository.save(funcionarioSalvo);
+        return ResponseEntity.ok(funcionarioSalvo);
     }
 }

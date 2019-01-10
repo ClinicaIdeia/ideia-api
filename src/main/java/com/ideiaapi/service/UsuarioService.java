@@ -17,7 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ideiaapi.dto.s3.AnexoS3DTO;
 import com.ideiaapi.exceptions.BusinessException;
 import com.ideiaapi.mail.EnvioEmail;
 import com.ideiaapi.model.SenhaAlterar;
@@ -25,6 +27,7 @@ import com.ideiaapi.model.SenhaReiniciar;
 import com.ideiaapi.model.Usuario;
 import com.ideiaapi.repository.UsuarioRepository;
 import com.ideiaapi.repository.filter.UsuarioFilter;
+import com.ideiaapi.storage.S3;
 
 @Service
 public class UsuarioService {
@@ -34,6 +37,14 @@ public class UsuarioService {
 
     @Autowired
     private EnvioEmail envioEmail;
+
+    @Autowired
+    private S3 s3;
+
+    public AnexoS3DTO salvarFotoUsaruioS3(MultipartFile file) {
+        String nome = s3.salvarArquivoS3Temporatimente(file);
+        return new AnexoS3DTO(nome, s3.configuraUrl(nome));
+    }
 
     public Page<Usuario> filtrar(UsuarioFilter filter, Pageable pageable) {
         final Page<Usuario> filtrar = this.usuarioRepository.filtrar(filter, pageable);
