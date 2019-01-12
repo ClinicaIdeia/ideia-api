@@ -97,7 +97,7 @@ public class UsuarioResource {
         return this.usuarioService.alterarSenhaUsuario(codigo, senhaAlterar);
     }
 
-    @PostMapping("/senha/reiniciar")
+    @PutMapping("/senha/reiniciar")
     public ResponseEntity reiniciarSenha(@RequestBody @Valid SenhaReiniciar senhaReiniciar) {
         return this.usuarioService.reiniciarSenhaUsuario(senhaReiniciar);
     }

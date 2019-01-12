@@ -28,6 +28,7 @@ import com.ideiaapi.model.Usuario;
 import com.ideiaapi.repository.UsuarioRepository;
 import com.ideiaapi.repository.filter.UsuarioFilter;
 import com.ideiaapi.storage.S3;
+import com.ideiaapi.validate.UsuarioValidate;
 
 @Service
 public class UsuarioService {
@@ -37,6 +38,9 @@ public class UsuarioService {
 
     @Autowired
     private EnvioEmail envioEmail;
+
+    @Autowired
+    private UsuarioValidate validate;
 
     @Autowired
     private S3 s3;
@@ -54,6 +58,7 @@ public class UsuarioService {
     }
 
     public Usuario cadastraUsuario(Usuario entity) {
+        this.validate.validaInsercao(entity);
         Usuario usuarioSalvo = reiniciarSenhaAleatoriamenteParaUsuario(entity);
         usuarioSalvo.setSenha("*******");
         return usuarioSalvo;

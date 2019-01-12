@@ -4,6 +4,10 @@ CREATE TABLE IF NOT EXISTS usuario (
 	nome            VARCHAR(50)   NOT NULL,
 	email           VARCHAR(50)   UNIQUE NOT NULL,
 	senha           VARCHAR(150)  NOT NULL,
+	anexo           VARCHAR(255),
+  examinador      BOOLEAN NOT   NULL DEFAULT  FALSE,
+  conselho        VARCHAR(50),
+  numero_conselho VARCHAR(50),
 	codigo_empresa  BIGINT        NOT NULL,
   FOREIGN KEY (codigo_empresa)  REFERENCES empresa(codigo)
 
