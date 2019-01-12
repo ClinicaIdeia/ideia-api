@@ -272,7 +272,9 @@ public class ScheduledEmails {
 
         List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
 
-        funcionarioList.forEach(this::enviarEmailDiaMulheres);
+        funcionarioList.stream()
+                .filter(funcionario -> "F".equals(funcionario.getSexo()))
+                .forEach(this::enviarEmailDiaMulheres);
     }
 
     private void enviarEmailDiaMulheres(Funcionario funcionario) {

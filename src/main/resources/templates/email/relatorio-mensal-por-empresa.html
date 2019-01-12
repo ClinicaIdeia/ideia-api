@@ -23,20 +23,29 @@
 
     <div style="margin: 10px 0 10px 10px; padding: 50px;">
 
-        <img src="https://oplk-it-ideia-arquivos.s3.amazonaws.com/11ceb45a-851e-4d4a-8155-1de650e578bd__logo_ideia.png" width="300" height="150"/>
+        <img src="https://oplk-it-ideia-arquivos.s3.amazonaws.com/11ceb45a-851e-4d4a-8155-1de650e578bd__logo_ideia.png"
+             width="300" height="150"/>
 
         <h3>Ol&aacute;,</h3>
 
-        <p class="bg-primary">Segue a lista dos exames realizados no m&ecirc;s passado pela <span
-                th:text="${empresa}"></span> : </p>
+        <p class="bg-primary">Segue a lista dos exames realizados no m&ecirc;s passado pela <span th:text="${empresa}"></span> : </p>
 
-        <table>
-            <th:block th:each="exame : ${exames}">
-                <tr>
-                    <td th:text="${exame.nomeFuncionario}"> Nome do Funcionario </td>
-                    <td th:text="${exame.dataExame}"> Data do Exame </td>
-                </tr>
-            </th:block>
+        <table style="width: 100%; border-collapse: collapse;  margin: 20px 0">
+            <thead>
+            <tr>
+                <th>Nome do Funcionario</th>
+                <th>Data do Exame</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr style="border-bottom: 1px solid #ccc; border-top: 1px solid #ccc;"
+                th:each="exame : ${exames}">
+                <td th:text="${exame.nomeFuncionario}"></td>
+                <td th:text="${exame.dataExame}"></td>
+
+            </tr>
+            </tbody>
         </table>
 
         <p>Nilza Marquez - Instituto IDEIA</p>
