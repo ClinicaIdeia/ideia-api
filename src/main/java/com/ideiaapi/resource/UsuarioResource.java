@@ -90,7 +90,7 @@ public class UsuarioResource {
     }
 
     @PostMapping("/senha/mudar/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
+    @PreAuthorize(value = "hasAuthority('ROLE_TROCA_SENHA') and #oauth2.hasScope('write')")
     public ResponseEntity<Usuario> alterarSenha(
             @PathVariable Long codigo,
             @RequestBody @Valid SenhaAlterar senhaAlterar) {
@@ -98,7 +98,6 @@ public class UsuarioResource {
     }
 
     @PutMapping("/senha/reiniciar")
-    @PreAuthorize(value = "hasAuthority('ROLE_TROCA_SENHA') and #oauth2.hasScope('write')")
     public ResponseEntity reiniciarSenha(@RequestBody @Valid SenhaReiniciar senhaReiniciar) {
         return this.usuarioService.reiniciarSenhaUsuario(senhaReiniciar);
     }
