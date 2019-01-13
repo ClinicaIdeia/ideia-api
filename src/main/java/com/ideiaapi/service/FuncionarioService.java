@@ -82,8 +82,8 @@ public class FuncionarioService {
         BeanUtils.copyProperties(funcionario, funcionarioSalvo, "codigo");
 
         this.calculaIdade(funcionarioSalvo);
-        this.funcionarioRepository.save(funcionarioSalvo);
-        return ResponseEntity.ok(funcionarioSalvo);
+        this.funcionarioRepository.save(funcionario);
+        return ResponseEntity.ok(funcionario);
     }
 
     private void calculaIdade(Funcionario funcionario) {
