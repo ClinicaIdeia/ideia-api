@@ -48,7 +48,7 @@ public class FuncionarioService {
 
     public Funcionario cadastraFuncionario(Funcionario entity) {
 
-        this.funcionarioValidate.fluxoCriacao(entity);
+//        this.funcionarioValidate.fluxoCriacao(entity);
         if (StringUtils.hasText(entity.getAnexo())) {
             this.s3.salvar(entity.getAnexo());
         }
