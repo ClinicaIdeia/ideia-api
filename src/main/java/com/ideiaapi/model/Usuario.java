@@ -56,17 +56,6 @@ public class Usuario {
     @Transient
     private String urlAnexo;
 
-//    @Column(name = "EXAMINADOR")
-//    private Boolean examinador;
-//
-//    @Column(name = "CONSELHO")
-//    @Enumerated(EnumType.STRING)
-//    private Conselho conselho;
-//
-//    @Column(name = "NUMERO_CONSELHO")
-//    private String numeroConselho;
-
-
     public String getAnexo() {
         return anexo;
     }

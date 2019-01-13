@@ -43,13 +43,13 @@ public class UsuarioResource {
     private ApplicationEventPublisher publisher;
 
     @PostMapping("/anexo")
-    @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
+    @PreAuthorize(value = "hasAuthority('ROLE_UPLOAD_ARQUIVO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
     public AnexoS3DTO salvarFotoUsuario(@RequestParam MultipartFile anexo) {
         return this.usuarioService.salvarFotoUsaruioS3(anexo);
     }
 
     @GetMapping
-    @PreAuthorize(value = "hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
     public Page<Usuario> pesquisar(UsuarioFilter filter, Pageable pageable) {
         return this.usuarioService.filtrar(filter, pageable);
     }
@@ -98,6 +98,7 @@ public class UsuarioResource {
     }
 
     @PutMapping("/senha/reiniciar")
+    @PreAuthorize(value = "hasAuthority('ROLE_TROCA_SENHA') and #oauth2.hasScope('write')")
     public ResponseEntity reiniciarSenha(@RequestBody @Valid SenhaReiniciar senhaReiniciar) {
         return this.usuarioService.reiniciarSenhaUsuario(senhaReiniciar);
     }

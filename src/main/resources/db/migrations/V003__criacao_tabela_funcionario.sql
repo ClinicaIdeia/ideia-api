@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS funcionario (
   estado_civil      VARCHAR(50),
   escolaridade      VARCHAR(100),
   naturalidade      VARCHAR(100),
+  idade             INTEGER             NOT NULL DEFAULT 0,
   email             VARCHAR(50),
   matricula         VARCHAR(20),
   cargo             VARCHAR(50),

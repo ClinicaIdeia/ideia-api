@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS agendamento (
   codigo_agenda       BIGINT        NOT NULL,
   codigo_funcionario  BIGINT        NOT NULL,
   trabalho_armado     BOOLEAN       NOT NULL,
+  hora_exame          TIME          NOT NULL,
   avulso              BOOLEAN       NOT NULL DEFAULT FALSE,
   laudo_gerado        BOOLEAN       NOT NULL DEFAULT FALSE,
   FOREIGN KEY (codigo_motivo)       REFERENCES motivo(codigo),

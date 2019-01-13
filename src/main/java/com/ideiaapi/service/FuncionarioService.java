@@ -48,7 +48,7 @@ public class FuncionarioService {
 
     public Funcionario cadastraFuncionario(Funcionario entity) {
 
-//        this.funcionarioValidate.fluxoCriacao(entity);
+        this.funcionarioValidate.fluxoCriacao(entity);
         if (StringUtils.hasText(entity.getAnexo())) {
             this.s3.salvar(entity.getAnexo());
         }
@@ -82,8 +82,8 @@ public class FuncionarioService {
         BeanUtils.copyProperties(funcionario, funcionarioSalvo, "codigo");
 
         this.calculaIdade(funcionarioSalvo);
-        this.funcionarioRepository.save(funcionario);
-        return ResponseEntity.ok(funcionario);
+        this.funcionarioRepository.save(funcionarioSalvo);
+        return ResponseEntity.ok(funcionarioSalvo);
     }
 
     private void calculaIdade(Funcionario funcionario) {
