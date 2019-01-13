@@ -309,7 +309,6 @@ public class ScheduledEmails {
                 "email/dia-trabalhador", map);
     }
 
-
     /**
      * NATAL
      */
