@@ -54,7 +54,8 @@ public class FuncionarioResource {
     }
 
     @PostMapping("/anexo")
-    @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN') and #oauth.hasScope('write')")
+    @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN') and #oauth2" +
+            ".hasScope('write')")
     public AnexoS3DTO salvarFotoFuncionario(@RequestParam MultipartFile anexo) {
         return this.funcionarioService.salvarFotoFuncionarioS3(anexo);
     }
