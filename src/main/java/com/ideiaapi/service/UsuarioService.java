@@ -46,7 +46,7 @@ public class UsuarioService {
     private S3 s3;
 
     public AnexoS3DTO salvarFotoUsaruioS3(MultipartFile file) {
-        String nome = s3.salvarArquivoS3Temporatimente(file);
+        String nome = s3.salvarArquivoS3Temporatimente(file, Boolean.TRUE);
         return new AnexoS3DTO(nome, s3.configuraUrl(nome));
     }
 
