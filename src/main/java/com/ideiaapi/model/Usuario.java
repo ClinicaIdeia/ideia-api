@@ -4,10 +4,7 @@ package com.ideiaapi.model;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,8 +20,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
-
-import com.ideiaapi.enums.Conselho;
 
 @Entity
 @Table(name = "usuario")
@@ -61,39 +56,16 @@ public class Usuario {
     @Transient
     private String urlAnexo;
 
-    @Column(name = "EXAMINADOR")
-    private Boolean examinador;
+//    @Column(name = "EXAMINADOR")
+//    private Boolean examinador;
+//
+//    @Column(name = "CONSELHO")
+//    @Enumerated(EnumType.STRING)
+//    private Conselho conselho;
+//
+//    @Column(name = "NUMERO_CONSELHO")
+//    private String numeroConselho;
 
-    @Column(name = "CONSELHO")
-    @Enumerated(EnumType.STRING)
-    private Conselho conselho;
-
-    @Column(name = "NUMERO_CONSELHO")
-    private String numeroConselho;
-
-    public Boolean getExaminador() {
-        return examinador;
-    }
-
-    public void setExaminador(Boolean examinador) {
-        this.examinador = examinador;
-    }
-
-    public Conselho getConselho() {
-        return conselho;
-    }
-
-    public void setConselho(Conselho conselho) {
-        this.conselho = conselho;
-    }
-
-    public String getNumeroConselho() {
-        return numeroConselho;
-    }
-
-    public void setNumeroConselho(String numeroConselho) {
-        this.numeroConselho = numeroConselho;
-    }
 
     public String getAnexo() {
         return anexo;
@@ -172,20 +144,4 @@ public class Usuario {
         return Objects.hash(codigo);
     }
 
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "codigo=" + codigo +
-                ", nome='" + nome + '\'' +
-                ", email='" + email + '\'' +
-                ", senha='" + senha + '\'' +
-                ", empresa=" + empresa +
-                ", permissoes=" + permissoes +
-                ", anexo='" + anexo + '\'' +
-                ", urlAnexo='" + urlAnexo + '\'' +
-                ", examinador=" + examinador +
-                ", conselho=" + conselho +
-                ", numeroConselho='" + numeroConselho + '\'' +
-                '}';
-    }
 }
