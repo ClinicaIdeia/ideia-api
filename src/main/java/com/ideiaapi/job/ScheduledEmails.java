@@ -32,10 +32,13 @@ public class ScheduledEmails {
     @Autowired
     private EnvioEmail envioEmail;
 
-    //TODO parametrizer e-mails
     private static String emailPoliciaFederal = "psicologos.deleaq.mg@dpf.gov.br";
     private static String emailIdeia = "clinica.ideia@gmail.com";
     private static String emailNilza = "nilzamarquez5@gmail.com";
+
+    /**
+     * ANIVERSARIO
+     */
 
     @Scheduled(cron = "0 6 * * * *")
     public void aniversario() {
@@ -48,6 +51,26 @@ public class ScheduledEmails {
                 .filter(funcionario -> this.diaDeAniversarioHoje(funcionario, hoje))
                 .forEach(this::enviarEmailAniversario);
     }
+
+    private Boolean diaDeAniversarioHoje(Funcionario funcionario, LocalDate hoje) {
+
+        LocalDate dataNascimento = funcionario.getDataNascimento();
+
+        return (dataNascimento.getDayOfMonth() == hoje.getDayOfMonth()) && (dataNascimento.getMonth() == hoje.getMonth());
+    }
+
+    private void enviarEmailAniversario(Funcionario funcionario) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", funcionario.getNome());
+
+        this.envioEmail.enviarEmail(emailIdeia,
+                Collections.singletonList(funcionario.getEmail()),
+                "Feliz Aniversário", "email/aniversario", map);
+    }
+
+    /**
+     * EXAME EXPIRANDO
+     */
 
     @Scheduled(cron = "0 6 * * * *")
     public void exameExpirando() {
@@ -64,16 +87,29 @@ public class ScheduledEmails {
             List<Empresa> empresasList = funcionario.getEmpresas();
 
             empresasList.forEach(empresa -> {
-
                 List<Contato> contatosList = empresa.getContatos();
-
-                contatosList.forEach(contato ->
-                        this.enviarEmailExameExpirando(funcionario, contato.getEmail()));
+                contatosList.forEach(
+                        contato -> this.enviarEmailExameExpirando(funcionario, contato.getEmail())
+                );
             });
 
             this.enviarEmailExameExpirando(funcionario, funcionario.getEmail());
         });
     }
+
+    private void enviarEmailExameExpirando(Funcionario funcionario, String emailEmpresa) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", funcionario.getNome());
+
+        this.envioEmail.enviarEmail(emailIdeia,
+                Collections.singletonList(emailEmpresa),
+                "Clinica Ideia - Exame expirando",
+                "email/exame-expirando", map);
+    }
+
+    /**
+     * POLICIA FEDERAL
+     */
 
     @Scheduled(cron = "0 16 * * * *")
     public void avisoPoliciaFederal() {
@@ -89,6 +125,23 @@ public class ScheduledEmails {
 
         this.enviarEmailPoliciaFederal(funcionariosList);
     }
+
+    private void enviarEmailPoliciaFederal(List<Funcionario> funcionariosList) {
+        Map<String, Object> map = new HashMap<>();
+        List<String> nomesFuncionarios = new ArrayList<>();
+
+        funcionariosList.forEach(funcionario -> nomesFuncionarios.add(funcionario.getNome()));
+        map.put("names", nomesFuncionarios);
+
+        this.envioEmail.enviarEmail(emailIdeia,
+                Collections.singletonList(emailPoliciaFederal),
+                "Clinica Ideia - Agendamentos de exames psicologicos para trabalhos armados",
+                "email/policia-federal", map);
+    }
+
+    /**
+     * EMPRESA (MENSAL)
+     */
 
     @Scheduled(cron = "0 1 1 * * *")
     public void emailMensalEmpresas() {
@@ -154,45 +207,6 @@ public class ScheduledEmails {
         );
     }
 
-    private Boolean diaDeAniversarioHoje(Funcionario funcionario, LocalDate hoje) {
-
-        LocalDate dataNascimento = funcionario.getDataNascimento();
-
-        return (dataNascimento.getDayOfMonth() == hoje.getDayOfMonth()) && (dataNascimento.getMonth() == hoje.getMonth());
-    }
-
-    private void enviarEmailAniversario(Funcionario funcionario) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", funcionario.getNome());
-
-        this.envioEmail.enviarEmail(emailIdeia,
-                Collections.singletonList(funcionario.getEmail()),
-                "O Sistema Ideia deseja um feliz aniversário para você", "email/aniversario", map);
-    }
-
-    private void enviarEmailExameExpirando(Funcionario funcionario, String emailEmpresa) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", funcionario.getNome());
-
-        this.envioEmail.enviarEmail(emailIdeia,
-                Collections.singletonList(emailEmpresa),
-                "O Sistema Ideia - Exame expirando",
-                "email/exame-expirando", map);
-    }
-
-    private void enviarEmailPoliciaFederal(List<Funcionario> funcionariosList) {
-        Map<String, Object> map = new HashMap<>();
-        List<String> nomesFuncionarios = new ArrayList<>();
-
-        funcionariosList.forEach(funcionario -> nomesFuncionarios.add(funcionario.getNome()));
-        map.put("names", nomesFuncionarios);
-
-        this.envioEmail.enviarEmail(emailIdeia,
-                Collections.singletonList(emailPoliciaFederal),
-                "Agendamentos de exames psicologicos para trabalhos armados",
-                "email/policia-federal", map);
-    }
-
     private void enviarRelatorioDosExamesDeMes(String empresa, List<Exame> listaDosExamesDaEmpresa) {
         Map<String, Object> map = new HashMap<>();
         map.put("empresa", empresa);
@@ -201,8 +215,119 @@ public class ScheduledEmails {
 
         this.envioEmail.enviarEmail(emailNilza,
                 Collections.singletonList(emailPoliciaFederal),
-                "Relatorio mensal de exames psicologicos",
+                "Clinica Ideia - Relatorio mensal de exames psicologicos",
                 "email/relatorio-mensal-por-empresa", map);
     }
 
+    /**
+     * ANO NOVO
+     */
+
+    @Scheduled(cron = "0 0 6 1 1 *")
+    public void anoNovo() {
+
+        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
+
+        funcionarioList.forEach(this::enviarEmailAnoNovo);
+    }
+
+    private void enviarEmailAnoNovo(Funcionario funcionario) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", funcionario.getNome());
+
+        this.envioEmail.enviarEmail(emailIdeia,
+                Collections.singletonList(funcionario.getEmail()),
+                "Feliz Ano Novo",
+                "email/ano-novo", map);
+    }
+
+    /**
+     * DIA DO AMIGO
+     */
+
+    @Scheduled(cron = "0 0 6 20 7 *")
+    public void diaAmigo() {
+
+        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
+
+        funcionarioList.forEach(this::enviarEmailDiaAmigo);
+    }
+
+    private void enviarEmailDiaAmigo(Funcionario funcionario) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", funcionario.getNome());
+
+        this.envioEmail.enviarEmail(emailIdeia,
+                Collections.singletonList(funcionario.getEmail()),
+                "Feliz Dia do Amigo",
+                "email/dia-amigo", map);
+    }
+
+    /**
+     * DIA DAS MULHERES
+     */
+
+    @Scheduled(cron = "0 0 6 8 3 *")
+    public void diaMulheres() {
+
+        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
+
+        funcionarioList.stream()
+                .filter(funcionario -> "F".equals(funcionario.getSexo()))
+                .forEach(this::enviarEmailDiaMulheres);
+    }
+
+    private void enviarEmailDiaMulheres(Funcionario funcionario) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", funcionario.getNome());
+
+        this.envioEmail.enviarEmail(emailIdeia,
+                Collections.singletonList(funcionario.getEmail()),
+                "Feliz Dia da Mulher",
+                "email/dia-mulheres", map);
+    }
+
+    /**
+     * DIA DO TRABALHADOR
+     */
+
+    @Scheduled(cron = "0 0 6 1 5 *")
+    public void diaTrabalhador() {
+
+        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
+
+        funcionarioList.forEach(this::enviarEmailDiaTrabalhador);
+    }
+
+    private void enviarEmailDiaTrabalhador(Funcionario funcionario) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", funcionario.getNome());
+
+        this.envioEmail.enviarEmail(emailIdeia,
+                Collections.singletonList(funcionario.getEmail()),
+                "Feliz Dia do Trabalhador",
+                "email/dia-trabalhador", map);
+    }
+
+    /**
+     * NATAL
+     */
+
+    @Scheduled(cron = "0 0 6 25 12 *")
+    public void natal() {
+
+        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
+
+        funcionarioList.forEach(this::enviarEmailNatal);
+    }
+
+    private void enviarEmailNatal(Funcionario funcionario) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", funcionario.getNome());
+
+        this.envioEmail.enviarEmail(emailIdeia,
+                Collections.singletonList(funcionario.getEmail()),
+                "Feliz Natal",
+                "email/natal", map);
+    }
 }

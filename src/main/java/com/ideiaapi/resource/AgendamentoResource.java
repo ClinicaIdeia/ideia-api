@@ -75,9 +75,9 @@ public class AgendamentoResource {
 	public ResponseEntity<Agendamento> criar(@RequestBody @Valid Agendamento agendamento,
 			HttpServletResponse response) {
 
-		final Agendamento agendamentoSalva = this.agendamentoService.cadastraAgendamento(agendamento);
-		publisher.publishEvent(new RecursoCriadoEvent(this, response, agendamentoSalva.getCodigo()));
-		return ResponseEntity.status(HttpStatus.CREATED).body(agendamentoSalva);
+		final Agendamento agendamentoSalvo = this.agendamentoService.cadastraAgendamento(agendamento);
+		publisher.publishEvent(new RecursoCriadoEvent(this, response, agendamentoSalvo.getCodigo()));
+		return ResponseEntity.status(HttpStatus.CREATED).body(agendamentoSalvo);
 	}
 
 	@GetMapping("/{codigo}")

@@ -46,7 +46,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         resources.stateless(true);
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

@@ -1,2 +1,0 @@
-ALTER TABLE funcionario ADD COLUMN anexo VARCHAR(255);
-ALTER TABLE usuario ADD COLUMN anexo VARCHAR(255);

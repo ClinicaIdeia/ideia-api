@@ -28,6 +28,7 @@ import com.ideiaapi.model.Usuario;
 import com.ideiaapi.repository.UsuarioRepository;
 import com.ideiaapi.repository.filter.UsuarioFilter;
 import com.ideiaapi.storage.S3;
+import com.ideiaapi.validate.UsuarioValidate;
 
 @Service
 public class UsuarioService {
@@ -39,10 +40,13 @@ public class UsuarioService {
     private EnvioEmail envioEmail;
 
     @Autowired
+    private UsuarioValidate validate;
+
+    @Autowired
     private S3 s3;
 
     public AnexoS3DTO salvarFotoUsaruioS3(MultipartFile file) {
-        String nome = s3.salvarArquivoS3Temporatimente(file);
+        String nome = s3.salvarArquivoS3Temporatimente(file, Boolean.TRUE);
         return new AnexoS3DTO(nome, s3.configuraUrl(nome));
     }
 
@@ -54,6 +58,7 @@ public class UsuarioService {
     }
 
     public Usuario cadastraUsuario(Usuario entity) {
+        this.validate.validaInsercao(entity);
         Usuario usuarioSalvo = reiniciarSenhaAleatoriamenteParaUsuario(entity);
         usuarioSalvo.setSenha("*******");
         return usuarioSalvo;

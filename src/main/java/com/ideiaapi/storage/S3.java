@@ -37,7 +37,7 @@ public class S3 {
     @Value("${ideia.s3.bucket-id}")
     private String s3Bucket;
 
-    public String salvarArquivoS3Temporatimente(MultipartFile file) {
+    public String salvarArquivoS3Temporatimente(MultipartFile file, Boolean expirar) {
 
         AccessControlList acl = new AccessControlList();
         acl.grantPermission(GroupGrantee.AllUsers, Permission.Read);
@@ -52,7 +52,7 @@ public class S3 {
             PutObjectRequest putObjectRequest = new PutObjectRequest(s3Bucket, nomeUnico, file.getInputStream(),
                     obj).withAccessControlList(acl);
 
-            putObjectRequest.setTagging(new ObjectTagging(Arrays.asList(new Tag("expirar", "true"))));
+            putObjectRequest.setTagging(new ObjectTagging(Arrays.asList(new Tag("expirar", expirar.toString()))));
             amazonS3.putObject(putObjectRequest);
 
             if (logger.isDebugEnabled()) {

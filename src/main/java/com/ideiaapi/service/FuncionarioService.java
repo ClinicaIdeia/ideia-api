@@ -1,5 +1,7 @@
 package com.ideiaapi.service;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -31,7 +33,7 @@ public class FuncionarioService {
     private S3 s3;
 
     public AnexoS3DTO salvarFotoFuncionarioS3(MultipartFile file) {
-        String nome = s3.salvarArquivoS3Temporatimente(file);
+        String nome = s3.salvarArquivoS3Temporatimente(file, Boolean.TRUE);
         return new AnexoS3DTO(nome, s3.configuraUrl(nome));
     }
 
@@ -41,16 +43,16 @@ public class FuncionarioService {
     }
 
     public Page<ResumoFuncionario> resumo(FuncionarioFilter filter, Pageable pageable) {
-
         return this.funcionarioRepository.resumir(filter, pageable);
     }
 
     public Funcionario cadastraFuncionario(Funcionario entity) {
 
-        this.funcionarioValidate.fluxoCriacao(entity);
+//        this.funcionarioValidate.fluxoCriacao(entity);
         if (StringUtils.hasText(entity.getAnexo())) {
             this.s3.salvar(entity.getAnexo());
         }
+        this.calculaIdade(entity);
         return this.funcionarioRepository.save(entity);
     }
 
@@ -79,7 +81,14 @@ public class FuncionarioService {
         }
         BeanUtils.copyProperties(funcionario, funcionarioSalvo, "codigo");
 
-        this.funcionarioRepository.save(funcionarioSalvo);
-        return ResponseEntity.ok(funcionarioSalvo);
+        this.calculaIdade(funcionarioSalvo);
+        this.funcionarioRepository.save(funcionario);
+        return ResponseEntity.ok(funcionario);
+    }
+
+    private void calculaIdade(Funcionario funcionario) {
+        final int yearNow = LocalDate.now().getYear();
+        final int nascimento = funcionario.getDataNascimento().getYear();
+        funcionario.setIdade(yearNow - nascimento);
     }
 }

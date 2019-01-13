@@ -127,4 +127,64 @@ public class ScheduledEmailsTest extends BaseTest {
         //TODO voltar para 01 quando estiver em PROD
         verify(envioEmail, times(0)).enviarEmail(any(), any(), any(), any(), any());
     }
+
+    @Test
+    public void envioEmailAnoNovo() {
+
+        funcionarioList.add(funcionario);
+
+        when(funcionarioRepository.findAll()).thenReturn(funcionarioList);
+
+        scheduledEmails.anoNovo();
+
+        verify(envioEmail, times(1)).enviarEmail(any(), any(), any(), any(), any());
+    }
+
+    @Test
+    public void envioEmailNatal() {
+
+        funcionarioList.add(funcionario);
+
+        when(funcionarioRepository.findAll()).thenReturn(funcionarioList);
+
+        scheduledEmails.natal();
+
+        verify(envioEmail, times(1)).enviarEmail(any(), any(), any(), any(), any());
+    }
+
+    @Test
+    public void envioEmailDiaAmigo() {
+
+        funcionarioList.add(funcionario);
+
+        when(funcionarioRepository.findAll()).thenReturn(funcionarioList);
+
+        scheduledEmails.diaAmigo();
+
+        verify(envioEmail, times(1)).enviarEmail(any(), any(), any(), any(), any());
+    }
+
+    @Test
+    public void envioEmailDiaTrabalhador() {
+
+        funcionarioList.add(funcionario);
+
+        when(funcionarioRepository.findAll()).thenReturn(funcionarioList);
+
+        scheduledEmails.diaTrabalhador();
+
+        verify(envioEmail, times(1)).enviarEmail(any(), any(), any(), any(), any());
+    }
+
+    @Test
+    public void envioEmailDiaMulheres() {
+
+//        funcionarioList.add(funcionario);
+//
+//        when(funcionarioRepository.findAll()).thenReturn(funcionarioList);
+//
+//        scheduledEmails.diaMulheres();
+//
+//        verify(envioEmail, times(1)).enviarEmail(any(), any(), any(), any(), any());
+    }
 }
