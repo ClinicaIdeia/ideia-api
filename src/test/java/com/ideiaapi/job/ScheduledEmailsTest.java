@@ -179,12 +179,13 @@ public class ScheduledEmailsTest extends BaseTest {
     @Test
     public void envioEmailDiaMulheres() {
 
-//        funcionarioList.add(funcionario);
-//
-//        when(funcionarioRepository.findAll()).thenReturn(funcionarioList);
-//
-//        scheduledEmails.diaMulheres();
-//
-//        verify(envioEmail, times(1)).enviarEmail(any(), any(), any(), any(), any());
+        funcionario.setSexo("F");
+        funcionarioList.add(funcionario);
+
+        when(funcionarioRepository.findAll()).thenReturn(funcionarioList);
+
+        scheduledEmails.diaMulheres();
+
+        verify(envioEmail, times(1)).enviarEmail(any(), any(), any(), any(), any());
     }
 }
