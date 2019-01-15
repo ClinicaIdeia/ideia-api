@@ -55,7 +55,7 @@ public class FuncionarioRepositoryImpl extends RestricoesPaginacao implements Fu
             //TODO fazer conta do total de itens e do pageable
             query.getResultList().forEach(func -> {
                 func.getEmpresas().forEach(empresa -> {
-                    if(empresa.getCodigo().compareTo(usuario.getEmpresa().getCodigo()) == 0) {
+                    if (empresa.getCodigo().compareTo(usuario.getEmpresa().getCodigo()) == 0) {
                         collect.add(func);
                         return;
                     }
@@ -65,7 +65,15 @@ public class FuncionarioRepositoryImpl extends RestricoesPaginacao implements Fu
             return new PageImpl<>(collect, pageable, total(funcionarioFilter));
         }
 
-        return new PageImpl<>(query.getResultList(), pageable, total(funcionarioFilter));
+        PageImpl<Funcionario> funcionarios = null;
+        try {
+
+            funcionarios = new PageImpl<>(query.getResultList(), pageable, total(funcionarioFilter));
+        } catch (Exception e) {
+            return null;
+        }
+
+        return funcionarios;
     }
 
 

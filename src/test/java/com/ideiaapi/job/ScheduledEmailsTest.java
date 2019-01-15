@@ -179,6 +179,7 @@ public class ScheduledEmailsTest extends BaseTest {
     @Test
     public void envioEmailDiaMulheres() {
 
+        funcionario.setSexo("F");
         funcionarioList.add(funcionario);
 
         when(funcionarioRepository.findAll()).thenReturn(funcionarioList);

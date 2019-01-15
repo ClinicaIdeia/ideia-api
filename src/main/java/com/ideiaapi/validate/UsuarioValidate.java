@@ -30,9 +30,7 @@ public class UsuarioValidate {
     }
 
     private void validaSeExaminador(Usuario usuario) {
-        if (null == usuario.getExaminador()) {
-            usuario.setExaminador(false);
-        }
+
     }
 
 }
