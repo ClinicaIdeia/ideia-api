@@ -3,6 +3,7 @@ package com.ideiaapi.model;
 import java.time.LocalTime;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -38,6 +39,7 @@ public class Agendamento {
     @JoinColumn(name = "codigo_motivo")
     private Motivo motivo;
 
+    @Column( name = "HORA_EXAME")
     private LocalTime horaExame;
 
     @Transient

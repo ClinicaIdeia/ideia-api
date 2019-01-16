@@ -1,5 +1,7 @@
 package com.ideiaapi.service;
 
+import static com.ideiaapi.constants.ErrorsCode.LAUDO_NAO_ENCONTRADO;
+
 import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ideiaapi.dto.AptidaoDTO;
+import com.ideiaapi.exceptions.BusinessException;
 import com.ideiaapi.model.Funcionario;
 import com.ideiaapi.model.Laudo;
 import com.ideiaapi.repository.LaudoRepository;
@@ -44,6 +47,10 @@ public class LaudoService {
     public byte[] laudoPorFuncionario(Long codigo) throws Exception {
 
         Laudo laudo = this.buscaLaudo(codigo);
+
+        if (null == laudo) {
+            throw new BusinessException(LAUDO_NAO_ENCONTRADO);
+        }
 
         Map<String, Object> parametros = new HashMap<>();
 
@@ -97,6 +104,7 @@ public class LaudoService {
     }
 
     public void deletaLaudo(Long codigo) {
+        Laudo laudo = this.buscaLaudo(codigo);
         this.laudoRepository.delete(codigo);
     }
 

@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS usuario (
 	nome            VARCHAR(50)   NOT NULL,
 	email           VARCHAR(50)   UNIQUE NOT NULL,
 	senha           VARCHAR(150)  NOT NULL,
+	anexo           VARCHAR(255),
 	codigo_empresa  BIGINT        NOT NULL,
   FOREIGN KEY (codigo_empresa)  REFERENCES empresa(codigo)
 
@@ -38,9 +39,9 @@ CREATE TABLE IF NOT EXISTS  usuario_permissao (
 	FOREIGN KEY (codigo_permissao) REFERENCES permissao(codigo)
 );
 
+
 INSERT INTO usuario (codigo, nome, email, senha, codigo_empresa) values (nextval('usuario_seq'), 'Administrador',
 'admin@ideia.com', '$2a$10$0SRMSVY60PiIfnDfnN6uGOFSbxPirSmkAwhKVlMEzXf4qCppA/cwi', 1);
-
 
 INSERT INTO permissao (codigo, descricao) values (1, 'ROLE_PESQUISAR_AGENDAMENTO');
 INSERT INTO permissao (codigo, descricao) values (2, 'ROLE_CADASTRAR_AGENDAMENTO');
@@ -66,6 +67,10 @@ INSERT INTO permissao (codigo, descricao) values (16, 'ROLE_REMOVER_LAUDO');
 
 INSERT INTO permissao (codigo, descricao) values (17, 'ROLE_GERAR_RELATORIO');
 INSERT INTO permissao (codigo, descricao) values (18, 'ROLE_GERAR_LAUDO');
+
+INSERT INTO permissao (codigo, descricao) values (19, 'ROLE_TROCA_SENHA');
+INSERT INTO permissao (codigo, descricao) values (20, 'ROLE_UPLOAD_ARQUIVO');
+
 
 -- admin
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 13);

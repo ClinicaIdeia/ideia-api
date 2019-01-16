@@ -26,6 +26,17 @@ public class Aptidao {
     @Column(name = "APTO")
     private Boolean apto;
 
+    @Column(name = "APTIDAO_DINAMICA")
+    private Boolean aptidaoDinamica;
+
+    public Boolean getAptidaoDinamica() {
+        return aptidaoDinamica;
+    }
+
+    public void setAptidaoDinamica(Boolean aptidaoDinamica) {
+        this.aptidaoDinamica = aptidaoDinamica;
+    }
+
     public Long getCodigo() {
         return codigo;
     }
@@ -72,6 +83,7 @@ public class Aptidao {
                 "codigo=" + codigo +
                 ", descricao='" + descricao + '\'' +
                 ", apto=" + apto +
+                ", aptidaoDinamica=" + aptidaoDinamica +
                 '}';
     }
 }

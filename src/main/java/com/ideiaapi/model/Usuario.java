@@ -133,15 +133,4 @@ public class Usuario {
         return Objects.hash(codigo);
     }
 
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "codigo=" + codigo +
-                ", nome='" + nome + '\'' +
-                ", email='" + email + '\'' +
-                ", senha='" + senha + '\'' +
-                ", empresa=" + empresa +
-                ", permissoes=" + permissoes +
-                '}';
-    }
 }

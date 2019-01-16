@@ -41,21 +41,21 @@ public class FuncionarioResource {
     @Autowired
     private ApplicationEventPublisher publisher;
 
-
     @GetMapping
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
     public Page<Funcionario> pesquisar(FuncionarioFilter filter, Pageable pageable) {
         return this.funcionarioService.filtrar(filter, pageable);
     }
 
     @GetMapping(path = "/todos")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO') or  hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
     public Page<ResumoFuncionario> pesquisarTodos(FuncionarioFilter filter, Pageable pageable) {
         return this.funcionarioService.resumo(filter, pageable);
     }
 
     @PostMapping("/anexo")
-    @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
+    @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN') and #oauth2" +
+            ".hasScope('write')")
     public AnexoS3DTO salvarFotoFuncionario(@RequestParam MultipartFile anexo) {
         return this.funcionarioService.salvarFotoFuncionarioS3(anexo);
     }
@@ -92,7 +92,7 @@ public class FuncionarioResource {
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
     public ResponseEntity<Funcionario> atualiza(@PathVariable Long codigo,
             @RequestBody @Valid Funcionario funcionario) {
-         return this.funcionarioService.atualizaFuncionario(codigo, funcionario);
+        return this.funcionarioService.atualizaFuncionario(codigo, funcionario);
 
     }
 

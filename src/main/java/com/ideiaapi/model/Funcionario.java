@@ -8,8 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,7 +25,6 @@ import org.hibernate.validator.constraints.Email;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.ideiaapi.enums.Conselho;
 import com.ideiaapi.repository.listener.FuncionarioListener;
 import com.ideiaapi.util.datas.LocalDateDeserializer;
 import com.ideiaapi.util.datas.LocalDateSerializer;
@@ -97,86 +94,12 @@ public class Funcionario {
             , inverseJoinColumns = @JoinColumn(name = "codigo_empresa"))
     private List<Empresa> empresas;
 
-    //TODO Levar as informações de examinador, conselho para usuario;
-    @Column(name = "EXAMINADOR")
-    private Boolean examinador;
-
-    @Column(name = "CONSELHO")
-    @Enumerated(EnumType.STRING)
-    private Conselho conselho;
-
-    @Column(name = "NUMERO_CONSELHO")
-    private String numeroConselho;
-
-    @Transient
     private Integer idade;
 
     private String anexo;
 
     @Transient
     private String urlAnexo;
-
-    public String getAnexo() {
-        return anexo;
-    }
-
-    public void setAnexo(String anexo) {
-        this.anexo = anexo;
-    }
-
-    public String getUrlAnexo() {
-        return urlAnexo;
-    }
-
-    public void setUrlAnexo(String urlAnexo) {
-        this.urlAnexo = urlAnexo;
-    }
-
-    public Integer getIdade() {
-        final int yearNow = LocalDate.now().getYear();
-        final int nascimento = this.dataNascimento.getYear();
-        return yearNow - nascimento;
-    }
-
-    public String getSexo() {
-        return sexo;
-    }
-
-    public void setSexo(String sexo) {
-        this.sexo = sexo;
-    }
-
-    public String getEstadoCivil() {
-        return estadoCivil;
-    }
-
-    public void setEstadoCivil(String estadoCivil) {
-        this.estadoCivil = estadoCivil;
-    }
-
-    public String getEscolaridade() {
-        return escolaridade;
-    }
-
-    public void setEscolaridade(String escolaridade) {
-        this.escolaridade = escolaridade;
-    }
-
-    public String getNaturalidade() {
-        return naturalidade;
-    }
-
-    public void setNaturalidade(String naturalidade) {
-        this.naturalidade = naturalidade;
-    }
-
-    public String getCargo() {
-        return cargo;
-    }
-
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
-    }
 
     public Long getCodigo() {
         return codigo;
@@ -218,6 +141,38 @@ public class Funcionario {
         this.dataNascimento = dataNascimento;
     }
 
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+    }
+
+    public String getEstadoCivil() {
+        return estadoCivil;
+    }
+
+    public void setEstadoCivil(String estadoCivil) {
+        this.estadoCivil = estadoCivil;
+    }
+
+    public String getEscolaridade() {
+        return escolaridade;
+    }
+
+    public void setEscolaridade(String escolaridade) {
+        this.escolaridade = escolaridade;
+    }
+
+    public String getNaturalidade() {
+        return naturalidade;
+    }
+
+    public void setNaturalidade(String naturalidade) {
+        this.naturalidade = naturalidade;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -232,6 +187,14 @@ public class Funcionario {
 
     public void setMatricula(String matricula) {
         this.matricula = matricula;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
     }
 
     public String getTelefone() {
@@ -258,62 +221,41 @@ public class Funcionario {
         this.empresas = empresas;
     }
 
-    public Boolean getExaminador() {
-        return examinador;
+    public Integer getIdade() {
+        return idade;
     }
 
-    public void setExaminador(Boolean examinador) {
-        this.examinador = examinador;
+    public void setIdade(Integer idade) {
+        this.idade = idade;
     }
 
-    public Conselho getConselho() {
-        return conselho;
+    public String getAnexo() {
+        return anexo;
     }
 
-    public void setConselho(Conselho conselho) {
-        this.conselho = conselho;
+    public void setAnexo(String anexo) {
+        this.anexo = anexo;
     }
 
-    public String getNumeroConselho() {
-        return numeroConselho;
+    public String getUrlAnexo() {
+        return urlAnexo;
     }
 
-    public void setNumeroConselho(String numeroConselho) {
-        this.numeroConselho = numeroConselho;
+    public void setUrlAnexo(String urlAnexo) {
+        this.urlAnexo = urlAnexo;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Funcionario)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Funcionario that = (Funcionario) o;
-        return Objects.equals(getCodigo(), that.getCodigo()) &&
-                Objects.equals(getNome(), that.getNome()) &&
-                Objects.equals(getRg(), that.getRg()) &&
-                Objects.equals(getCpf(), that.getCpf()) &&
-                Objects.equals(getDataNascimento(), that.getDataNascimento()) &&
-                Objects.equals(getSexo(), that.getSexo()) &&
-                Objects.equals(getEstadoCivil(), that.getEstadoCivil()) &&
-                Objects.equals(getEscolaridade(), that.getEscolaridade()) &&
-                Objects.equals(getNaturalidade(), that.getNaturalidade()) &&
-                Objects.equals(getEmail(), that.getEmail()) &&
-                Objects.equals(getMatricula(), that.getMatricula()) &&
-                Objects.equals(getCargo(), that.getCargo()) &&
-                Objects.equals(getTelefone(), that.getTelefone()) &&
-                Objects.equals(getEndereco(), that.getEndereco()) &&
-                Objects.equals(getEmpresas(), that.getEmpresas()) &&
-                Objects.equals(getExaminador(), that.getExaminador()) &&
-                getConselho() == that.getConselho() &&
-                Objects.equals(getNumeroConselho(), that.getNumeroConselho());
+        return Objects.equals(codigo, that.codigo);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(getCodigo(), getNome(), getRg(), getCpf(), getDataNascimento(), getSexo(), getEstadoCivil(),
-                getEscolaridade(), getNaturalidade(), getEmail(), getMatricula(), getCargo(), getTelefone(),
-                getEndereco(),
-                getEmpresas(), getExaminador(), getConselho(), getNumeroConselho());
+        return Objects.hash(codigo);
     }
 
     @Override
@@ -334,9 +276,9 @@ public class Funcionario {
                 ", telefone='" + telefone + '\'' +
                 ", endereco=" + endereco +
                 ", empresas=" + empresas +
-                ", examinador=" + examinador +
-                ", conselho=" + conselho +
-                ", numeroConselho='" + numeroConselho + '\'' +
+                ", idade=" + idade +
+                ", anexo='" + anexo + '\'' +
+                ", urlAnexo='" + urlAnexo + '\'' +
                 '}';
     }
 }
