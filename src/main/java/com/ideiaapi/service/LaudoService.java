@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.ideiaapi.dto.AptidaoDTO;
 import com.ideiaapi.exceptions.BusinessException;
+import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Funcionario;
 import com.ideiaapi.model.Laudo;
 import com.ideiaapi.repository.LaudoRepository;
@@ -105,7 +106,15 @@ public class LaudoService {
 
     public void deletaLaudo(Long codigo) {
         Laudo laudo = this.buscaLaudo(codigo);
+        this.reativaAgendamentoRelacionado(laudo);
         this.laudoRepository.delete(codigo);
+    }
+
+    private void reativaAgendamentoRelacionado(Laudo laudo) {
+        Long codAgendamento = laudo.getCodAgendamento();
+        Agendamento agendamento = agendamentoService.buscaAgendamento(codAgendamento);
+        agendamento.setLaudoGerado(false);
+        agendamentoService.atualizaAgendamento(codAgendamento, agendamento);
     }
 
     public ResponseEntity<Laudo> atualizaLaudo(Long codigo, Laudo laudo) {

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -48,7 +49,9 @@ public class ScheduledEmails {
         LocalDate hoje = LocalDate.now();
 
         funcionarioList.stream()
-                .filter(funcionario -> this.diaDeAniversarioHoje(funcionario, hoje))
+                .filter(funcionario ->
+                        StringUtils.isNotBlank(funcionario.getEmail())
+                                && this.diaDeAniversarioHoje(funcionario, hoje))
                 .forEach(this::enviarEmailAniversario);
     }
 
@@ -93,7 +96,8 @@ public class ScheduledEmails {
                 );
             });
 
-            this.enviarEmailExameExpirando(funcionario, funcionario.getEmail());
+            if (StringUtils.isNotBlank(funcionario.getEmail()))
+                this.enviarEmailExameExpirando(funcionario, funcionario.getEmail());
         });
     }
 
@@ -202,7 +206,7 @@ public class ScheduledEmails {
                     );
 
                     //TODO descomentar quando estiver em PROD, 
-                   // this.enviarRelatorioDosExamesDeMes(empresa.getNome(), listaDosExamesDaEmpresa);
+                    // this.enviarRelatorioDosExamesDeMes(empresa.getNome(), listaDosExamesDaEmpresa);
                 }
         );
     }
@@ -228,7 +232,9 @@ public class ScheduledEmails {
 
         List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
 
-        funcionarioList.forEach(this::enviarEmailAnoNovo);
+        funcionarioList.stream()
+                .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail()))
+                .forEach(this::enviarEmailAnoNovo);
     }
 
     private void enviarEmailAnoNovo(Funcionario funcionario) {
@@ -250,7 +256,9 @@ public class ScheduledEmails {
 
         List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
 
-        funcionarioList.forEach(this::enviarEmailDiaAmigo);
+        funcionarioList.stream()
+                .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail()))
+                .forEach(this::enviarEmailDiaAmigo);
     }
 
     private void enviarEmailDiaAmigo(Funcionario funcionario) {
@@ -273,7 +281,8 @@ public class ScheduledEmails {
         List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
 
         funcionarioList.stream()
-                .filter(funcionario -> "F".equals(funcionario.getSexo()))
+                .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail())
+                        && "F".equals(funcionario.getSexo()))
                 .forEach(this::enviarEmailDiaMulheres);
     }
 
@@ -296,7 +305,9 @@ public class ScheduledEmails {
 
         List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
 
-        funcionarioList.forEach(this::enviarEmailDiaTrabalhador);
+        funcionarioList.stream()
+                .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail()))
+                .forEach(this::enviarEmailDiaTrabalhador);
     }
 
     private void enviarEmailDiaTrabalhador(Funcionario funcionario) {
@@ -318,7 +329,9 @@ public class ScheduledEmails {
 
         List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
 
-        funcionarioList.forEach(this::enviarEmailNatal);
+        funcionarioList.stream()
+                .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail()))
+                .forEach(this::enviarEmailNatal);
     }
 
     private void enviarEmailNatal(Funcionario funcionario) {
