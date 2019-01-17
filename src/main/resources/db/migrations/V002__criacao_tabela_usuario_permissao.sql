@@ -71,6 +71,8 @@ INSERT INTO permissao (codigo, descricao) values (18, 'ROLE_GERAR_LAUDO');
 INSERT INTO permissao (codigo, descricao) values (19, 'ROLE_TROCA_SENHA');
 INSERT INTO permissao (codigo, descricao) values (20, 'ROLE_UPLOAD_ARQUIVO');
 
+INSERT INTO permissao (codigo, descricao) values (21, 'ROLE_DEFAULT');
+
 
 -- admin
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 13);

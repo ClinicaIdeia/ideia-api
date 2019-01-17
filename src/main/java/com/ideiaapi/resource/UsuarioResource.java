@@ -43,7 +43,7 @@ public class UsuarioResource {
     private ApplicationEventPublisher publisher;
 
     @PostMapping("/anexo")
-    @PreAuthorize(value = "hasAuthority('ROLE_UPLOAD_ARQUIVO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
+    @PreAuthorize(value = "hasAuthority('ROLE_UPLOAD_ARQUIVO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
     public AnexoS3DTO salvarFotoUsuario(@RequestParam MultipartFile anexo) {
         return this.usuarioService.salvarFotoUsaruioS3(anexo);
     }
@@ -90,7 +90,7 @@ public class UsuarioResource {
     }
 
     @PostMapping("/senha/mudar/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_TROCA_SENHA') and #oauth2.hasScope('write')")
+    @PreAuthorize(value = "hasAuthority('ROLE_TROCA_SENHA') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
     public ResponseEntity<Usuario> alterarSenha(
             @PathVariable Long codigo,
             @RequestBody @Valid SenhaAlterar senhaAlterar) {
