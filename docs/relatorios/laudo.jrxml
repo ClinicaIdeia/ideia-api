@@ -16,111 +16,155 @@
 	<field name="apto" class="java.lang.String"/>
 	<field name="descricao" class="java.lang.String"/>
 	<title>
-		<band height="92" splitType="Stretch">
+		<band height="220" splitType="Stretch">
 			<rectangle>
-				<reportElement x="170" y="0" width="385" height="90" uuid="386c3374-df4c-459e-973a-9ace2c01d82a"/>
+				<reportElement x="0" y="80" width="555" height="129" uuid="386c3374-df4c-459e-973a-9ace2c01d82a"/>
 				<graphicElement>
 					<pen lineColor="#FFFFFF"/>
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="227" y="2" width="100" height="12" uuid="d7b764fc-aed9-48ed-bb23-7ceff3797264"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Laudo]]></text>
+				<reportElement x="228" y="85" width="100" height="12" uuid="d7b764fc-aed9-48ed-bb23-7ceff3797264"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[LAUDO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="180" y="20" width="368" height="20" uuid="b1b4ed12-bb00-42e0-ab84-b5a61d531d1e"/>
+				<reportElement x="37" y="120" width="368" height="20" uuid="b1b4ed12-bb00-42e0-ab84-b5a61d531d1e"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="8"/>
+					<font size="10" isUnderline="true"/>
 				</textElement>
-				<text><![CDATA[Nome: IDEIA - Instituto de Desenvolvimento Empresarial e Individual Assessorado S/C Ltda]]></text>
+				<text><![CDATA[IDEIA - Instituto de Desenvolvimento Empresarial e Individual Assessorado S/C Ltda]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="180" y="40" width="368" height="20" uuid="558b5e37-e95d-4c79-885a-dfa87b51db73"/>
+				<reportElement x="57" y="140" width="368" height="20" uuid="558b5e37-e95d-4c79-885a-dfa87b51db73"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="8"/>
+					<font size="10" isUnderline="true"/>
 				</textElement>
-				<text><![CDATA[Endereço: Rua Francisco Sales, 1341 Cidade: Uberlândia - CEP: 38400-440 - UF:MG]]></text>
+				<text><![CDATA[Rua Francisco Sales, 1341]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="180" y="60" width="368" height="20" uuid="db53edb6-55a6-4ff7-ada7-dcdb2a094723"/>
+				<reportElement x="43" y="160" width="59" height="20" uuid="db53edb6-55a6-4ff7-ada7-dcdb2a094723"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="8"/>
+					<font isUnderline="true"/>
 				</textElement>
-				<text><![CDATA[Responsável Técnico: Aparecida Nilza Marquez Freitas]]></text>
+				<text><![CDATA[Uberlândia]]></text>
 			</staticText>
 			<image>
-				<reportElement x="10" y="16" width="149" height="60" uuid="eb8f25da-63d8-4bf1-a58b-5e55db214e7c"/>
+				<reportElement x="10" y="35" width="115" height="45" uuid="eb8f25da-63d8-4bf1-a58b-5e55db214e7c"/>
 				<imageExpression><![CDATA["https://oplk-it-ideia-arquivos.s3.amazonaws.com/11ceb45a-851e-4d4a-8155-1de650e578bd__logo_ideia.png"]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="0" y="120" width="35" height="20" uuid="091abb3a-5963-49db-9a41-1bfa5bab01e8"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Nome: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="140" width="54" height="20" uuid="3b23bab3-5045-4c51-89e2-1e9d84ae97f3"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Endereço: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="160" width="40" height="20" uuid="e1cc177b-f597-486b-800f-9727dc7d66cc"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Cidade: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="114" y="180" width="318" height="20" uuid="2249a6a9-a888-4334-9a61-6604cc2d085d"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Aparecida Nilza Marquez Freitas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="180" width="112" height="20" uuid="988a0875-974f-4876-8807-b4aedc14802c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Responsável Técnico: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="100" width="525" height="12" uuid="6d5691b3-69aa-4e45-bedc-ca321f24e376"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[IDENTIFICAÇÃO DA CLÍNICA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="137" y="160" width="35" height="20" uuid="63e333f2-f3b7-404b-8b63-e3cd867d0b6c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[CEP: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="160" width="59" height="20" uuid="aa6ea82d-68c2-4f96-a5fd-7bd434c4eec8"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[38400-440]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="257" y="160" width="20" height="20" uuid="0203dde4-35a6-4a27-8406-bd1ac330fda9"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[UF: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="160" width="59" height="20" uuid="ec40e745-74c6-42f5-8734-6961be99ae04"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[MG]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="120" splitType="Stretch">
+		<band height="90" splitType="Stretch">
 			<textField>
-				<reportElement x="1" y="2" width="268" height="23" uuid="2ec81932-5bdf-4c08-9a74-b3c20b5f8202"/>
+				<reportElement x="1" y="2" width="268" height="20" uuid="2ec81932-5bdf-4c08-9a74-b3c20b5f8202"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["Nome: " + $P{FUNC_NOME}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="280" y="2" width="268" height="23" uuid="41af0ada-49b1-41ac-ad2d-d660af2e7d7f"/>
+				<reportElement x="280" y="2" width="268" height="20" uuid="41af0ada-49b1-41ac-ad2d-d660af2e7d7f"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["Sexo: " + $P{FUNC_SEXO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1" y="31" width="268" height="23" uuid="770a129f-bd4b-4c93-abad-7e425b3801da"/>
+				<reportElement x="1" y="24" width="268" height="20" uuid="770a129f-bd4b-4c93-abad-7e425b3801da"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["Estado civil: " + $P{FUNC_ESTADO_CIVIL}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1" y="61" width="268" height="23" uuid="ef09dde9-0d78-4158-861f-5523a20b71b5"/>
+				<reportElement x="1" y="47" width="268" height="20" uuid="ef09dde9-0d78-4158-861f-5523a20b71b5"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["Idade:  " + $P{FUNC_IDADE}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1" y="94" width="268" height="23" uuid="c97d86bf-afe1-4aea-8c8b-1e9fc778f64e"/>
+				<reportElement x="1" y="70" width="268" height="20" uuid="c97d86bf-afe1-4aea-8c8b-1e9fc778f64e"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["Profissão: " + $P{FUNC_PROFISSAO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="280" y="31" width="268" height="23" uuid="d830d65b-8fbf-484e-9ae4-937bcb12d5d8"/>
+				<reportElement x="280" y="24" width="268" height="20" uuid="d830d65b-8fbf-484e-9ae4-937bcb12d5d8"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["Escolaridade: "  +$P{FUNC_ESCOLARIDADE}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="280" y="61" width="268" height="23" uuid="02aa6b23-1b70-42b4-957b-1a0c5247a315"/>
+				<reportElement x="280" y="47" width="268" height="20" uuid="02aa6b23-1b70-42b4-957b-1a0c5247a315"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["CPF: "  +$P{FUNC_CPF}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="280" y="94" width="268" height="23" uuid="4fd35064-3c48-4de5-8729-c0b3abbc924e"/>
+				<reportElement x="280" y="70" width="268" height="20" uuid="4fd35064-3c48-4de5-8729-c0b3abbc924e"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["Data da Avaliação:  " +  DATEFORMAT( $P{DT_AVALIACAO} , "dd/MM/yyyy")]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="56" splitType="Stretch">
+		<band height="32" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="1" width="555" height="30" uuid="19ae34d2-1324-4fc2-abc4-587a1cf52c60"/>
 				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[O candidato acima relacionado foi ubmetido à avaliação psicológica, sendo considero:]]></text>
-			</staticText>
-			<rectangle>
-				<reportElement x="0" y="32" width="555" height="23" uuid="23b9d745-0003-405e-8382-00ea45dd0e62"/>
-			</rectangle>
-			<line>
-				<reportElement x="80" y="32" width="1" height="22" uuid="7ff9a496-3ff6-4be4-9744-8915a72b8a48"/>
-			</line>
-			<staticText>
-				<reportElement x="1" y="32" width="78" height="23" backcolor="#FFFFFF" uuid="17c32365-2b6a-4ef5-be0d-2080eefd0268"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Apto ?]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="81" y="32" width="474" height="23" backcolor="#F51F1B" uuid="6808f0bc-b02f-459e-9e30-62c3dbbafdb6"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Descrição]]></text>
+				<text><![CDATA[           O candidato acima relacionado foi ubmetido à avaliação psicológica, sendo considero:]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -131,31 +175,19 @@
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0f0639ce-7f0a-4d07-8b19-c347c480ec26"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{apto}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["( " + $F{apto} + " )"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="81" y="0" width="474" height="27" uuid="284f75df-c3c7-497e-b57b-2dc4c510b1bb">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6a808e52-e9e4-4b23-8b6a-38a787828b87"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["( " + $F{descricao} + " )"]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement x="0" y="0" width="1" height="25" uuid="619d783b-7410-4a8e-8e64-e7ee523946af"/>
-			</line>
-			<line>
-				<reportElement x="80" y="0" width="1" height="25" uuid="a046dd43-4c29-4d7d-bbde-b7df734dbe0b"/>
-			</line>
-			<line>
-				<reportElement x="554" y="0" width="1" height="25" uuid="63c601d1-8e0b-4504-b984-f16809b77eb5"/>
-			</line>
-			<line>
-				<reportElement x="0" y="25" width="554" height="1" uuid="3a28693c-e3fe-43d0-808c-6fd8f602437e"/>
-			</line>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="104">
+		<band height="187">
 			<rectangle>
 				<reportElement x="172" y="1" width="211" height="15" uuid="86a76f12-6815-4bfd-a11f-106ffa9e53a1"/>
 				<graphicElement>
@@ -163,8 +195,8 @@
 				</graphicElement>
 			</rectangle>
 			<textField>
-				<reportElement x="173" y="0" width="211" height="14" uuid="9c6fe9b0-6208-43f9-b67e-3612514d3da3"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<reportElement x="0" y="2" width="555" height="14" uuid="9c6fe9b0-6208-43f9-b67e-3612514d3da3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["Uberlândia " +  DATEFORMAT( TODAY( ),  "d ")  + " de " +  DATEFORMAT( TODAY( ),  "MMM") + " de "  + DATEFORMAT( TODAY( ),  "yyyy") + "."]]></textFieldExpression>
 			</textField>
 			<rectangle>
@@ -181,32 +213,39 @@
 				<text><![CDATA[Nome do Psicólogo: Aparecida Nilza Marques Freitas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="41" width="58" height="13" uuid="9f3f8be2-bebd-48f5-be78-433d4831b670"/>
+				<reportElement x="1" y="60" width="58" height="13" uuid="9f3f8be2-bebd-48f5-be78-433d4831b670"/>
 				<textElement>
 					<font isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[Assinatura:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="60" y="41" width="294" height="13" uuid="867f2988-361a-4e0c-89c1-f05ab68663f9"/>
+				<reportElement x="60" y="60" width="294" height="13" uuid="867f2988-361a-4e0c-89c1-f05ab68663f9"/>
 				<textElement>
 					<font isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[__________________________________________________________]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="60" width="48" height="13" uuid="236415e1-8995-4990-8cb8-6cb3ad4436d1"/>
+				<reportElement x="1" y="80" width="48" height="13" uuid="236415e1-8995-4990-8cb8-6cb3ad4436d1"/>
 				<textElement>
 					<font isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[N° CRP:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="54" y="60" width="48" height="13" uuid="17514be1-166b-47f9-821a-6a7b980c13df"/>
+				<reportElement x="54" y="80" width="48" height="13" uuid="17514be1-166b-47f9-821a-6a7b980c13df"/>
 				<textElement>
 					<font isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[10.586]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="150" width="555" height="25" uuid="072ae300-39a3-457c-9972-4c49a8d24659"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[IDEIA: Rua: Francisco Sales, 1341 Bairro Osvaldo 34-3234-1938/99971-0952]]></text>
 			</staticText>
 		</band>
 	</pageFooter>
