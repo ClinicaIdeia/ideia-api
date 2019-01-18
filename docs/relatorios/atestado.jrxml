@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="laudo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d353ecc2-25bb-446f-953a-665af05a5ea0">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="FUNC_NOME" class="java.lang.String"/>
+	<parameter name="FUNC_SEXO" class="java.lang.String"/>
+	<parameter name="FUNC_ESTADO_CIVIL" class="java.lang.String"/>
+	<parameter name="FUNC_IDADE" class="java.lang.String"/>
+	<parameter name="FUNC_ESCOLARIDADE" class="java.lang.String"/>
+	<parameter name="FUNC_CPF" class="java.lang.String"/>
+	<parameter name="FUNC_PROFISSAO" class="java.lang.String"/>
+	<parameter name="DT_AVALIACAO" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="apto" class="java.lang.String"/>
+	<field name="descricao" class="java.lang.String"/>
+	<title>
+		<band height="92" splitType="Stretch">
+			<image>
+				<reportElement x="6" y="10" width="149" height="60" uuid="eb8f25da-63d8-4bf1-a58b-5e55db214e7c"/>
+				<imageExpression><![CDATA["https://oplk-it-ideia-arquivos.s3.amazonaws.com/11ceb45a-851e-4d4a-8155-1de650e578bd__logo_ideia.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="200" splitType="Stretch">
+			<textField>
+				<reportElement x="1" y="72" width="268" height="23" uuid="2ec81932-5bdf-4c08-9a74-b3c20b5f8202"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Nome: " + $P{FUNC_NOME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="97" width="268" height="23" uuid="02aa6b23-1b70-42b4-957b-1a0c5247a315"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Portador do CPF: "  +$P{FUNC_CPF}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="180" y="10" width="170" height="12" uuid="d7b764fc-aed9-48ed-bb23-7ceff3797264"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[ATESTADO PSICOLOGICO]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="1" y="147" width="539" height="23" uuid="4fd35064-3c48-4de5-8729-c0b3abbc924e"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Data de Avaliação:  " +  DATEFORMAT( $P{DT_AVALIACAO} , "dd/MM/yyyy")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="122" width="539" height="23" uuid="feb4b845-79e6-4e61-bc4b-01a687cb36ff"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Data de Nascimento:  " +  DATEFORMAT( $P{DT_AVALIACAO} , "dd/MM/yyyy")]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="120">
+			<textField>
+				<reportElement x="1" y="32" width="514" height="56" uuid="65e217cf-c27f-4170-a5ef-7409c0148722"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Atesto para os devidos fins que o candidato em questão encontra-se nesta data, apto," +
+"do ponto de vista psicológico, para exercer as funções do cargo de : " +$P{FUNC_PROFISSAO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="292">
+			<textField>
+				<reportElement x="172" y="155" width="211" height="14" uuid="9c6fe9b0-6208-43f9-b67e-3612514d3da3"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Uberlândia " +  DATEFORMAT( TODAY( ),  "d ")  + " de " +  DATEFORMAT( TODAY( ),  "MMM") + " de "  + DATEFORMAT( TODAY( ),  "yyyy") + "."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="41" y="70" width="79" height="13" uuid="fab94e57-5b31-4210-87c2-d37ebf6c8ff9"/>
+				<textElement>
+					<font isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Instituo IDEIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="50" width="180" height="13" uuid="867f2988-361a-4e0c-89c1-f05ab68663f9"/>
+				<textElement>
+					<font isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[__________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="134" y="250" width="410" height="13" uuid="59dc61ad-d8b9-49c0-a26f-42297ae1570a"/>
+				<textElement>
+					<font isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[IDEIA : Rua Francisco Sales, 1341, Bairro Oswaldo - (34) 3234-1938 / 99971-0952]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

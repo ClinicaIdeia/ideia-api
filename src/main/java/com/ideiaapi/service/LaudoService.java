@@ -80,6 +80,31 @@ public class LaudoService {
         return JasperExportManager.exportReportToPdf(jasperPrint);
     }
 
+    public byte[] atestadoPorFuncionario(Long codigo) throws Exception {
+
+        Laudo laudo = this.buscaLaudo(codigo);
+
+        if (null == laudo) {
+            throw new BusinessException(LAUDO_NAO_ENCONTRADO);
+        }
+
+        Map<String, Object> parametros = new HashMap<>();
+
+        final Funcionario funcionario = laudo.getFuncionario();
+
+        parametros.put("FUNC_NOME", funcionario.getNome());
+        parametros.put("FUNC_SEXO", funcionario.getDataNascimento());
+        parametros.put("FUNC_CPF", funcionario.getCpf());
+        parametros.put("FUNC_PROFISSAO", funcionario.getCargo());
+        parametros.put("DT_AVALIACAO", Date.valueOf(laudo.getDataExame()));
+
+        InputStream inputStream = this.getClass().getResourceAsStream("/relatorios/atestado.jasper");
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parametros);
+
+        return JasperExportManager.exportReportToPdf(jasperPrint);
+    }
+
 
     public Page<Laudo> filtrar(LaudoFilter filter, Pageable pageable) {
         return this.laudoRepository.filtrar(filter, pageable);
