@@ -38,7 +38,7 @@ public class AgendaResource {
     private ApplicationEventPublisher publisher;
 
     @GetMapping
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2" +
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2" +
             ".hasScope('read')")
     public Page pesquisar(AgendaFilter filter, Pageable pageable) {
        // return this.agendaService.listaAgendamentos(filter, pageable);
@@ -46,7 +46,7 @@ public class AgendaResource {
     }
 
     @GetMapping("/resumo")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
     public Page<ResumoAgendamento> resumo(AgendaFilter filter, Pageable pageable) {
         return this.agendaService.resumo(filter, pageable);
     }
@@ -62,7 +62,7 @@ public class AgendaResource {
     }
 
     @GetMapping("/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
     public ResponseEntity<Agenda> busca(@PathVariable Long codigo) {
         Agenda agenda = this.agendaService.buscaAgendamento(codigo);
 

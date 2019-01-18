@@ -20,7 +20,7 @@ public class MotivoResource {
     private MotivoService motivoService;
 
     @GetMapping
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2" +
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_AGENDAMENTO') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2" +
             ".hasScope('read')")
     public List<Motivo> pesquisar() {
         return this.motivoService.listaTodosMotivos();
