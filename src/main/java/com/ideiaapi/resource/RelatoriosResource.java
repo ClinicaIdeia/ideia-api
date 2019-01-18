@@ -52,4 +52,15 @@ public class RelatoriosResource {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(bytes);
     }
 
+    @GetMapping("/laudo/{codigo}")
+    @PreAuthorize(value = "hasAuthority('ROLE_LAUDO_INFO') or hasAuthority('ROLE_ADMIN')  and #oauth2"
+            + ".hasScope('read')")
+    public ResponseEntity<byte[]> atestadoFunc(@PathVariable
+            ("codigo") Long codigo) throws Exception {
+
+        byte[] bytes = this.laudoService.atestadoPorFuncionario(codigo);
+
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(bytes);
+    }
+
 }

@@ -261,7 +261,7 @@ public class ScheduledEmails {
                 "Feliz Dia do Amigo",
                 "email/dia-amigo", map);
     }
-
+ 
     /**
      * DIA DAS MULHERES
      */
