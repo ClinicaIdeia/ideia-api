@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -36,13 +35,28 @@ public class LaudoRepositoryImpl extends RestricoesPaginacao implements LaudoRep
         Predicate[] predicates = criarRestricoes(laudoFilter, builder, root);
         criteria.where(predicates);
 
-        TypedQuery<Laudo> select_v_from_laudo_v = manager.createQuery("from Laudo l where l.codigo = :codigo",
-                Laudo.class).setParameter("codigo", 1l);
-        select_v_from_laudo_v.getResultList();
-        TypedQuery<Laudo> query = manager.createQuery(criteria);
-        adicionarRestricoesDePaginacao(select_v_from_laudo_v, pageable);
+        StringBuilder sb = new StringBuilder();
+        sb.append("from Laudo l where 1=1");
 
-        return new PageImpl<>(select_v_from_laudo_v.getResultList(), pageable, total(laudoFilter));
+        if (null != laudoFilter.getObservacao()) {
+            sb.append(" and lower(l.observacao) like lower('%");
+            sb.append(laudoFilter.getObservacao());
+            sb.append("%')");
+        }
+
+        if (null != laudoFilter.getDataLaudoDe() && null != laudoFilter.getDataLaudoAte()) {
+            sb.append(" and l.dataEmissao between '").append(laudoFilter.getDataLaudoDe());
+            sb.append("' and '").append(laudoFilter.getDataLaudoAte()).append("'");
+        }
+
+
+        TypedQuery<Laudo> query =
+                manager.createQuery(sb.toString(),
+                        Laudo.class);
+
+        adicionarRestricoesDePaginacao(query, pageable);
+
+        return new PageImpl<>(query.getResultList(), pageable, total(laudoFilter));
     }
 
 
@@ -54,12 +68,6 @@ public class LaudoRepositoryImpl extends RestricoesPaginacao implements LaudoRep
 
         criteria.select(builder.construct(ResumoLaudo.class
                 , root.get(Laudo_.codigo)
-//                , root.get(Laudo_.nome)
-//                , root.get(Laudo_.cnpj)
-//                , root.get("contato")
-//                , root.get("telefone")
-//                , root.get("email")
-//                , root.get(Laudo_.ativa)
         ));
 
         Predicate[] predicates = criarRestricoes(laudoFilter, builder, root);
@@ -74,19 +82,6 @@ public class LaudoRepositoryImpl extends RestricoesPaginacao implements LaudoRep
     private Predicate[] criarRestricoes(LaudoFilter laudoFilter, CriteriaBuilder builder,
             Root<Laudo> root) {
         List<Predicate> predicates = new ArrayList<>();
-
-//        if (!StringUtils.isEmpty(laudoFilter.getNome())) {
-//            predicates.add(builder.like(
-//                    builder.lower(root.get(Laudo_.nome)),
-//                    "%" + laudoFilter.getNome().toLowerCase() + "%"));
-//        }
-//
-//
-//        if (laudoFilter.getCnpj() != null) {
-//            predicates.add(builder.like(
-//                    builder.lower(root.get(Laudo_.cnpj)),
-//                    "%" + laudoFilter.getCnpj().toLowerCase() + "%"));
-//        }
 
         return predicates.toArray(new Predicate[predicates.size()]);
     }

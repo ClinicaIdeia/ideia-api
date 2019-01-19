@@ -171,18 +171,18 @@
 	<detail>
 		<band height="27">
 			<textField>
-				<reportElement x="0" y="0" width="79" height="26" uuid="dd1d5579-5200-4f90-b04f-5330da0392bc">
+				<reportElement x="0" y="0" width="25" height="26" uuid="dd1d5579-5200-4f90-b04f-5330da0392bc">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0f0639ce-7f0a-4d07-8b19-c347c480ec26"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["( " + $F{apto} + " )"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{apto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="81" y="0" width="474" height="27" uuid="284f75df-c3c7-497e-b57b-2dc4c510b1bb">
+				<reportElement x="26" y="0" width="474" height="27" uuid="284f75df-c3c7-497e-b57b-2dc4c510b1bb">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6a808e52-e9e4-4b23-8b6a-38a787828b87"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["( " + $F{descricao} + " )"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -9,10 +9,14 @@ public class LaudoFilter {
     private String observacao;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dataExameDe;
+    private LocalDate dataLaudoDe;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dataExameAte;
+    private LocalDate dataLaudoAte;
+
+    private Long codFuncionario;
+
+    private Long codEmpresa;
 
     public String getObservacao() {
         return observacao;
@@ -22,20 +26,35 @@ public class LaudoFilter {
         this.observacao = observacao;
     }
 
-    public LocalDate getDataExameDe() {
-        return dataExameDe;
+    public LocalDate getDataLaudoDe() {
+        return dataLaudoDe;
     }
 
-    public void setDataExameDe(LocalDate dataExameDe) {
-        this.dataExameDe = dataExameDe;
+    public void setDataLaudoDe(LocalDate dataLaudoDe) {
+        this.dataLaudoDe = dataLaudoDe;
     }
 
-    public LocalDate getDataExameAte() {
-        return dataExameAte;
+    public LocalDate getDataLaudoAte() {
+        return dataLaudoAte;
     }
 
-    public void setDataExameAte(LocalDate dataExameAte) {
-        this.dataExameAte = dataExameAte;
+    public void setDataLaudoAte(LocalDate dataLaudoAte) {
+        this.dataLaudoAte = dataLaudoAte;
     }
 
+    public Long getCodFuncionario() {
+        return codFuncionario;
+    }
+
+    public void setCodFuncionario(Long codFuncionario) {
+        this.codFuncionario = codFuncionario;
+    }
+
+    public Long getCodEmpresa() {
+        return codEmpresa;
+    }
+
+    public void setCodEmpresa(Long codEmpresa) {
+        this.codEmpresa = codEmpresa;
+    }
 }
