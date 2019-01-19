@@ -132,7 +132,7 @@ public class AgendamentoService {
     }
 
     public void marcarLaudoGerado(Laudo laudo) {
-        Long codAgendamento = laudo.getCodAgendamento();
+        Long codAgendamento = laudo.getAgendamento().getCodigo();
         Agendamento agendamento = this.buscaAgendamento(codAgendamento);
         agendamento.setLaudoGerado(true);
         this.atualizaAgendamento(codAgendamento, agendamento);

@@ -8,8 +8,10 @@ CREATE TABLE IF NOT EXISTS laudo (
   data_atualizacao    DATE                NOT NULL,
   codigo_motivo       BIGINT              NOT NULL,
   codigo_funcionario  BIGINT              NOT NULL,
+  codigo_agendamento  BIGINT              NOT NULL,
   FOREIGN KEY (codigo_motivo)       REFERENCES motivo(codigo),
-  FOREIGN KEY (codigo_funcionario)  REFERENCES funcionario(codigo)
+  FOREIGN KEY (codigo_funcionario)  REFERENCES funcionario(codigo),
+  FOREIGN KEY (codigo_agendamento)  REFERENCES agendamento(codigo)
 
 );
 
@@ -35,6 +37,14 @@ CREATE TABLE IF NOT EXISTS laudo_funcionario (
 	PRIMARY KEY (codigo_laudo, codigo_funcionario),
 	FOREIGN KEY (codigo_laudo)   REFERENCES laudo(codigo),
 	FOREIGN KEY (codigo_funcionario)  REFERENCES funcionario(codigo)
+);
+
+CREATE TABLE IF NOT EXISTS laudo_agendamento (
+	codigo_laudo       BIGINT NOT NULL,
+	codigo_agendamento      BIGINT NOT NULL,
+	PRIMARY KEY (codigo_laudo, codigo_agendamento),
+	FOREIGN KEY (codigo_laudo)   REFERENCES laudo(codigo),
+	FOREIGN KEY (codigo_agendamento)  REFERENCES agendamento(codigo)
 );
 
 CREATE TABLE IF NOT EXISTS laudo_motivo (

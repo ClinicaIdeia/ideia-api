@@ -5,6 +5,7 @@ import static com.ideiaapi.constants.ErrorsCode.LAUDO_NAO_ENCONTRADO;
 import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import com.ideiaapi.validate.LaudoValidate;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Service
@@ -45,13 +47,21 @@ public class LaudoService {
     @Autowired
     private AgendamentoService agendamentoService;
 
-    public byte[] laudoPorFuncionario(Long codigo) throws Exception {
-
+    public byte[] imprimeLaudo(Long codigo) throws Exception {
         Laudo laudo = this.buscaLaudo(codigo);
 
         if (null == laudo) {
             throw new BusinessException(LAUDO_NAO_ENCONTRADO);
         }
+
+        if (laudo.getAgendamento().getTrabalhoArmado()) {
+            return this.laudoTrabalhoArmado(laudo);
+        }
+
+        return this.atestadoPorFuncionario(laudo);
+    }
+
+    private byte[] laudoTrabalhoArmado(Laudo laudo) throws Exception {
 
         Map<String, Object> parametros = new HashMap<>();
 
@@ -80,13 +90,7 @@ public class LaudoService {
         return JasperExportManager.exportReportToPdf(jasperPrint);
     }
 
-    public byte[] atestadoPorFuncionario(Long codigo) throws Exception {
-
-        Laudo laudo = this.buscaLaudo(codigo);
-
-        if (null == laudo) {
-            throw new BusinessException(LAUDO_NAO_ENCONTRADO);
-        }
+    private byte[] atestadoPorFuncionario(Laudo laudo) throws Exception {
 
         Map<String, Object> parametros = new HashMap<>();
 
@@ -100,7 +104,11 @@ public class LaudoService {
 
         InputStream inputStream = this.getClass().getResourceAsStream("/relatorios/atestado.jasper");
 
-        JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parametros);
+        //TODO refatorar
+//        JasperReport jasperReport = JasperFillManager.fillReport()
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parametros,
+                new JRBeanCollectionDataSource(Arrays.asList(laudo.getAptidoes().stream().findFirst().get())));
 
         return JasperExportManager.exportReportToPdf(jasperPrint);
     }
@@ -136,10 +144,9 @@ public class LaudoService {
     }
 
     private void reativaAgendamentoRelacionado(Laudo laudo) {
-        Long codAgendamento = laudo.getCodAgendamento();
-        Agendamento agendamento = agendamentoService.buscaAgendamento(codAgendamento);
+        Agendamento agendamento = laudo.getAgendamento();
         agendamento.setLaudoGerado(false);
-        agendamentoService.atualizaAgendamento(codAgendamento, agendamento);
+        agendamentoService.atualizaAgendamento(agendamento.getCodigo(), agendamento);
     }
 
     public ResponseEntity<Laudo> atualizaLaudo(Long codigo, Laudo laudo) {

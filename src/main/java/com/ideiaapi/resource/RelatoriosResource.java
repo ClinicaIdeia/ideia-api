@@ -47,18 +47,7 @@ public class RelatoriosResource {
     public ResponseEntity<byte[]> laudoFunc(@PathVariable
             ("codigo") Long codigo) throws Exception {
 
-        byte[] bytes = this.laudoService.laudoPorFuncionario(codigo);
-
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(bytes);
-    }
-
-    @GetMapping("/atestado/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_LAUDO_INFO') or hasAuthority('ROLE_ADMIN')  and #oauth2"
-            + ".hasScope('read')")
-    public ResponseEntity<byte[]> atestadoFunc(@PathVariable
-            ("codigo") Long codigo) throws Exception {
-
-        byte[] bytes = this.laudoService.atestadoPorFuncionario(codigo);
+        byte[] bytes = this.laudoService.imprimeLaudo(codigo);
 
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(bytes);
     }

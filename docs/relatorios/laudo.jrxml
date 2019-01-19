@@ -75,7 +75,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="10" isUnderline="true"/>
 				</textElement>
-				<text><![CDATA[Aparecida Nilza Marquez Freitas]]></text>
+				<text><![CDATA[Aparecida Nilza Marquez Freitas de Souza]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="180" width="112" height="20" uuid="988a0875-974f-4876-8807-b4aedc14802c"/>
@@ -164,7 +164,7 @@
 			<staticText>
 				<reportElement x="0" y="1" width="555" height="30" uuid="19ae34d2-1324-4fc2-abc4-587a1cf52c60"/>
 				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[           O candidato acima relacionado foi ubmetido à avaliação psicológica, sendo considero:]]></text>
+				<text><![CDATA[           O candidato acima relacionado foi submetido à avaliação psicológica, sendo considerado:]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -210,7 +210,7 @@
 				<textElement>
 					<font isUnderline="false"/>
 				</textElement>
-				<text><![CDATA[Nome do Psicólogo: Aparecida Nilza Marques Freitas]]></text>
+				<text><![CDATA[Nome do Psicólogo: Aparecida Nilza Marquez Freitas de Souza]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="1" y="60" width="58" height="13" uuid="9f3f8be2-bebd-48f5-be78-433d4831b670"/>
