@@ -10,6 +10,7 @@
 	<parameter name="FUNC_CPF" class="java.lang.String"/>
 	<parameter name="FUNC_PROFISSAO" class="java.lang.String"/>
 	<parameter name="DT_AVALIACAO" class="java.util.Date"/>
+	<parameter name="DT_NASCIMENTO" class="java.util.Date"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -48,7 +49,7 @@
 			<textField>
 				<reportElement x="1" y="122" width="539" height="23" uuid="feb4b845-79e6-4e61-bc4b-01a687cb36ff"/>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["Data de Nascimento:  " +  DATEFORMAT( $P{DT_AVALIACAO} , "dd/MM/yyyy")]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Data de Nascimento:  " +  DATEFORMAT( $P{DT_NASCIMENTO} , "dd/MM/yyyy")]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

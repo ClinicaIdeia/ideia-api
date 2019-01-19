@@ -127,6 +127,15 @@ public class AgendamentoService {
         return ResponseEntity.ok(agendamentoSalvo);
     }
 
+    public void removeLaudoGeradoAgendamento(Agendamento agendamento) {
+
+        Agendamento agendamentoSalvo = this.buscaAgendamento(agendamento.getCodigo());
+        agendamentoSalvo.setLaudoGerado(false);
+        BeanUtils.copyProperties(agendamento, agendamentoSalvo, "codigo");
+
+        this.agendamentoRepository.save(agendamentoSalvo);
+    }
+
     public List<Agendamento> agendamentosParaLaudo() {
         return this.agendamentoRepository.findAllByAindaNaoEmitiuLaudo();
     }

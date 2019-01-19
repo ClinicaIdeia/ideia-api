@@ -101,6 +101,7 @@ public class LaudoService {
         parametros.put("FUNC_CPF", funcionario.getCpf());
         parametros.put("FUNC_PROFISSAO", funcionario.getCargo());
         parametros.put("DT_AVALIACAO", Date.valueOf(laudo.getDataExame()));
+        parametros.put("DT_NASCIMENTO", Date.valueOf(funcionario.getDataNascimento()));
 
         InputStream inputStream = this.getClass().getResourceAsStream("/relatorios/atestado.jasper");
 
@@ -144,9 +145,7 @@ public class LaudoService {
     }
 
     private void reativaAgendamentoRelacionado(Laudo laudo) {
-        Agendamento agendamento = laudo.getAgendamento();
-        agendamento.setLaudoGerado(false);
-        agendamentoService.atualizaAgendamento(agendamento.getCodigo(), agendamento);
+        agendamentoService.removeLaudoGeradoAgendamento(laudo.getAgendamento());
     }
 
     public ResponseEntity<Laudo> atualizaLaudo(Long codigo, Laudo laudo) {
