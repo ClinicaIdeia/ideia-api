@@ -26,15 +26,15 @@ public class Aptidao {
     @Column(name = "APTO")
     private Boolean apto;
 
-    @Column(name = "APTIDAO_DINAMICA")
-    private Boolean aptidaoDinamica;
+    @Column(name = "INAPTO")
+    private Boolean inapto;
 
-    public Boolean getAptidaoDinamica() {
-        return aptidaoDinamica;
+    public Boolean getInapto() {
+        return inapto;
     }
 
-    public void setAptidaoDinamica(Boolean aptidaoDinamica) {
-        this.aptidaoDinamica = aptidaoDinamica;
+    public void setInapto(Boolean inapto) {
+        this.inapto = inapto;
     }
 
     public Long getCodigo() {
@@ -76,14 +76,5 @@ public class Aptidao {
 
         return Objects.hash(getCodigo(), getDescricao(), getApto());
     }
-
-    @Override
-    public String toString() {
-        return "Aptidao{" +
-                "codigo=" + codigo +
-                ", descricao='" + descricao + '\'' +
-                ", apto=" + apto +
-                ", aptidaoDinamica=" + aptidaoDinamica +
-                '}';
-    }
+    
 }

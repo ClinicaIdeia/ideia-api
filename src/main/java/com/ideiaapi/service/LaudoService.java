@@ -71,7 +71,7 @@ public class LaudoService {
         List<AptidaoDTO> aptidoes = new ArrayList<>();
 
         laudo.getAptidoes().forEach(aptidao ->
-                aptidoes.add(new AptidaoDTO(aptidao.getApto() ? "SIM" : "NÃO", aptidao.getDescricao()))
+                aptidoes.add(new AptidaoDTO(aptidao.getApto() ? "( X )" : "(   )", aptidao.getDescricao()))
         );
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parametros,

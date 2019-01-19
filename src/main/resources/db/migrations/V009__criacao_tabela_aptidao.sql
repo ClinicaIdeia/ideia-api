@@ -2,8 +2,8 @@ CREATE TABLE IF NOT EXISTS aptidao (
 
   codigo            BIGINT PRIMARY KEY NOT NULL,
   apto              BOOLEAN NOT NULL DEFAULT FALSE,
-  descricao         VARCHAR(100),
-  aptidao_dinamica  BOOLEAN NOT NULL DEFAULT FALSE
+  inapto            BOOLEAN NOT NULL DEFAULT FALSE,
+  descricao         VARCHAR(100)
 
 );
 

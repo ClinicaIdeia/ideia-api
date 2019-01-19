@@ -50,7 +50,7 @@ public class AgendamentoResource {
 	private MessageSource messageSource;
 
 	@GetMapping
-	@PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_AGENDAMENTO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2"
+	@PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_AGENDAMENTO') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2"
 			+ ".hasScope('read')")
 	public Page<Agendamento> pesquisar(AgendamentoFilter filter, Pageable pageable) {
 		return this.agendamentoService.listaAgendamentos(filter, pageable);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -35,10 +36,13 @@ public class LaudoRepositoryImpl extends RestricoesPaginacao implements LaudoRep
         Predicate[] predicates = criarRestricoes(laudoFilter, builder, root);
         criteria.where(predicates);
 
+        TypedQuery<Laudo> select_v_from_laudo_v = manager.createQuery("from Laudo l where l.codigo = :codigo",
+                Laudo.class).setParameter("codigo", 1l);
+        select_v_from_laudo_v.getResultList();
         TypedQuery<Laudo> query = manager.createQuery(criteria);
-        adicionarRestricoesDePaginacao(query, pageable);
+        adicionarRestricoesDePaginacao(select_v_from_laudo_v, pageable);
 
-        return new PageImpl<>(query.getResultList(), pageable, total(laudoFilter));
+        return new PageImpl<>(select_v_from_laudo_v.getResultList(), pageable, total(laudoFilter));
     }
 
 

@@ -79,6 +79,8 @@ public class Funcionario {
     private String matricula;
 
     @Column(name = "CARGO")
+    @NotNull
+    @Size(min = 3)
     private String cargo;
 
     @NotNull

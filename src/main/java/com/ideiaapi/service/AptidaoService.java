@@ -21,10 +21,16 @@ public class AptidaoService {
     }
 
     public void cadastrarAptidoes(List<Aptidao> aptidoes) {
+        //TODO se tiver uma aptidão como Inapto invalidar as outras
+
+
         if (!aptidoes.isEmpty()) {
             aptidoes.forEach(aptidao -> {
                         if (null == aptidao.getApto()) {
                             aptidao.setApto(false);
+                        }
+                        if (null == aptidao.getInapto()) {
+                            aptidao.setInapto(false);
                         }
                         this.aptidaoRepository.save(aptidao);
                     }
