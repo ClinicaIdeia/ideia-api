@@ -138,7 +138,9 @@ public class ScheduledEmails {
         map.put("names", nomesFuncionarios);
 
         this.envioEmail.enviarEmail(emailIdeia,
-                Collections.singletonList(emailPoliciaFederal),
+//                Collections.singletonList(emailPoliciaFederal),
+//                TODO : Colocar de volta quando envoar diretamente para Policia Federal
+                Collections.singletonList(emailNilza),
                 "Clinica Ideia - Agendamentos de exames psicologicos para trabalhos armados",
                 "email/policia-federal", map);
     }
