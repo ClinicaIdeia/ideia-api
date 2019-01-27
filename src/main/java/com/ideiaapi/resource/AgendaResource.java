@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +25,6 @@ import com.ideiaapi.event.RecursoCriadoEvent;
 import com.ideiaapi.model.Agenda;
 import com.ideiaapi.repository.filter.AgendaFilter;
 import com.ideiaapi.repository.projection.ResumoAgendamento;
-import com.ideiaapi.service.AgendaService;
 import com.ideiaapi.service.AgendaService;
 
 @RestController
@@ -40,9 +40,12 @@ public class AgendaResource {
     @GetMapping
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2" +
             ".hasScope('read')")
-    public Page pesquisar(AgendaFilter filter, Pageable pageable) {
-       // return this.agendaService.listaAgendamentos(filter, pageable);
-        return this.agendaService.listaFuturosAgendamentos(); //TODO : Ver com alex
+    public Page pesquisar(@RequestParam(value = "isTrabalhoArmado") Boolean isTrabalhoArmado,
+            AgendaFilter filter,
+            Pageable pageable
+    ) {
+        // return this.agendaService.listaAgendamentos(filter, pageable); //TODO : Ver com alex o uso desse filtro
+        return this.agendaService.listaFuturosAgendamentos(isTrabalhoArmado);
     }
 
     @GetMapping("/resumo")
