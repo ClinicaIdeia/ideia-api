@@ -30,8 +30,14 @@ public class AgendaService {
         return this.agendaRepository.filtrar(filter, pageable);
     }
 
-    public PageImpl<List<Agenda>> listaFuturosAgendamentos() {
-        List<Agenda> agendasList = agendaRepository.findAllByDiaAgendaAfter(LocalDate.now());
+    public PageImpl<List<Agenda>> listaFuturosAgendamentos(Boolean isTrabalhoArmado) {
+        List<Agenda> agendasList;
+
+        if (isTrabalhoArmado)
+            agendasList = agendaRepository.findAllByDiaAgendaAfter(LocalDate.now().plusDays(3L));
+        else
+            agendasList = agendaRepository.findAllByDiaAgendaAfter(LocalDate.now());
+
         return new PageImpl(agendasList);
     }
 
