@@ -58,7 +58,7 @@ public class AgendaServiceTest extends BaseTest {
 
         when(agendaRepository.findAllByDiaAgendaAfter(any())).thenReturn(agendasList);
 
-        PageImpl page = agendaService.listaFuturosAgendamentos();
+        PageImpl page = agendaService.listaFuturosAgendamentos(false);
 
         assertNotNull(page);
         assertTrue(1 == page.getTotalElements());
