@@ -40,11 +40,7 @@ public class AgendaResource {
     @GetMapping
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2" +
             ".hasScope('read')")
-    public Page pesquisar(@RequestParam(value = "isTrabalhoArmado") Boolean isTrabalhoArmado,
-            AgendaFilter filter,
-            Pageable pageable
-    ) {
-        // return this.agendaService.listaAgendamentos(filter, pageable); //TODO : Ver com alex o uso desse filtro
+    public Page pesquisar(@RequestParam(value = "isTrabalhoArmado") Boolean isTrabalhoArmado) {
         return this.agendaService.listaFuturosAgendamentos(isTrabalhoArmado);
     }
 

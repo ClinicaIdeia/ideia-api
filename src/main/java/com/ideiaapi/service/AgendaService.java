@@ -26,10 +26,6 @@ public class AgendaService {
     @Autowired
     private HorarioService horarioService;
 
-    public Page<Agenda> listaAgendamentos(AgendaFilter filter, Pageable pageable) {
-        return this.agendaRepository.filtrar(filter, pageable);
-    }
-
     public PageImpl<List<Agenda>> listaFuturosAgendamentos(Boolean isTrabalhoArmado) {
         List<Agenda> agendasList;
 
