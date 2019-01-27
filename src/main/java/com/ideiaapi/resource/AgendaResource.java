@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ideiaapi.event.RecursoCriadoEvent;
 import com.ideiaapi.model.Agenda;
 import com.ideiaapi.repository.filter.AgendaFilter;
-import com.ideiaapi.repository.projection.ResumoAgendamento;
+import com.ideiaapi.repository.projection.ResumoAgenda;
 import com.ideiaapi.service.AgendaService;
 
 @RestController
@@ -46,7 +46,7 @@ public class AgendaResource {
 
     @GetMapping("/resumo")
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
-    public Page<ResumoAgendamento> resumo(AgendaFilter filter, Pageable pageable) {
+    public Page<ResumoAgenda> resumo(AgendaFilter filter, Pageable pageable) {
         return this.agendaService.resumo(filter, pageable);
     }
 
