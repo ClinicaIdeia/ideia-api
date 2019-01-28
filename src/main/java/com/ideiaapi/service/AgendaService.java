@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.ideiaapi.model.Agenda;
 import com.ideiaapi.repository.AgendaRepository;
 import com.ideiaapi.repository.filter.AgendaFilter;
+import com.ideiaapi.repository.projection.ResumoAgenda;
 import com.ideiaapi.repository.projection.ResumoAgendamento;
 
 @Service
@@ -29,6 +30,10 @@ public class AgendaService {
     public PageImpl<List<Agenda>> listaFuturosAgendamentos(Boolean isTrabalhoArmado) {
         List<Agenda> agendasList;
 
+        if (null == isTrabalhoArmado) {
+            isTrabalhoArmado = false;
+        }
+
         if (isTrabalhoArmado)
             agendasList = agendaRepository.findAllByDiaAgendaAfter(LocalDate.now().plusDays(3L));
         else
@@ -37,7 +42,7 @@ public class AgendaService {
         return new PageImpl(agendasList);
     }
 
-    public Page<ResumoAgendamento> resumo(AgendaFilter filter, Pageable pageable) {
+    public Page<ResumoAgenda> resumo(AgendaFilter filter, Pageable pageable) {
         return this.agendaRepository.resumir(filter, pageable);
     }
 
