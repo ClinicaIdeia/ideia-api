@@ -89,4 +89,10 @@ public class HorarioService {
 
         return horario;
     }
+
+    public void salvaHorarios(List<Horario> horarios) {
+        if (!horarios.isEmpty()) {
+            horarios.forEach(this::cadastraHorario);
+        }
+    }
 }

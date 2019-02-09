@@ -16,7 +16,6 @@ import com.ideiaapi.model.Agenda;
 import com.ideiaapi.repository.AgendaRepository;
 import com.ideiaapi.repository.filter.AgendaFilter;
 import com.ideiaapi.repository.projection.ResumoAgenda;
-import com.ideiaapi.repository.projection.ResumoAgendamento;
 
 @Service
 public class AgendaService {
@@ -46,11 +45,21 @@ public class AgendaService {
         return this.agendaRepository.resumir(filter, pageable);
     }
 
+    public Page<Agenda> filtrar(AgendaFilter filter, Pageable pageable) {
+        return this.agendaRepository.filtrar(filter, pageable);
+    }
+
     public Agenda cadastraAgenda(Agenda entity) {
 
         if (!entity.getHorarios().isEmpty()) {
             entity.getHorarios().forEach(this.horarioService::cadastraHorario);
         }
+        return this.agendaRepository.save(entity);
+    }
+
+    public Agenda copiaAgenda(Agenda entity) {
+
+        //TODO terminar
         return this.agendaRepository.save(entity);
     }
 
@@ -69,6 +78,7 @@ public class AgendaService {
     }
 
     public ResponseEntity<Agenda> atualizaAgendamento(Long codigo, Agenda agenda) {
+        this.horarioService.salvaHorarios(agenda.getHorarios());
         Agenda agendaSalva = this.buscaAgendamento(codigo);
         BeanUtils.copyProperties(agenda, agendaSalva, "codigo");
 

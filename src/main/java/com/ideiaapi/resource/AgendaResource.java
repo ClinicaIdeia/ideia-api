@@ -50,12 +50,28 @@ public class AgendaResource {
         return this.agendaService.resumo(filter, pageable);
     }
 
+    @GetMapping("/filtro")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+    public Page<Agenda> filtro(AgendaFilter filter, Pageable pageable) {
+        return this.agendaService.filtrar(filter, pageable);
+    }
+
     @PostMapping
     @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('write')")
     public ResponseEntity<Agenda> criar(@RequestBody @Valid Agenda agenda,
             HttpServletResponse response) {
 
         final Agenda agendaSalva = this.agendaService.cadastraAgenda(agenda);
+        publisher.publishEvent(new RecursoCriadoEvent(this, response, agendaSalva.getCodigo()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(agendaSalva);
+    }
+
+    @PostMapping("/copia")
+    @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('write')")
+    public ResponseEntity<Agenda> copia(@RequestBody Agenda agenda,
+            HttpServletResponse response) {
+
+        final Agenda agendaSalva = this.agendaService.copiaAgenda(agenda);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, agendaSalva.getCodigo()));
         return ResponseEntity.status(HttpStatus.CREATED).body(agendaSalva);
     }
