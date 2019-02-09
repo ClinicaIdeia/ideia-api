@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS funcionario (
   cargo             VARCHAR(50),
   data_nascimento   DATE                NOT NULL,
   telefone          VARCHAR(20),
+  telefone_fixo     VARCHAR(20),
   anexo             VARCHAR(255),
   logradouro        VARCHAR(100),
   numero            VARCHAR(10),

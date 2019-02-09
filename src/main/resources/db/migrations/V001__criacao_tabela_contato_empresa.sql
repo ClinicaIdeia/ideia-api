@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS contato (
   codigo        BIGINT PRIMARY KEY  NOT NULL,
   nome          VARCHAR(50)         NOT NULL,
   telefone      VARCHAR(20)         NOT NULL,
+  telefone_fixo VARCHAR(20),
   email         VARCHAR(50)
 
 );
