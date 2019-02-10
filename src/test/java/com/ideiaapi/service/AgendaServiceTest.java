@@ -83,11 +83,32 @@ public class AgendaServiceTest extends BaseTest {
     }
 
     @Test
-    public void copiarAgendaParaMaisQueUmDia() {
+    public void copiarAgendaParaMaisQueUmDiaOrdenado() {
 
         LocalDate dia1 = LocalDate.now().plusDays(1L);
         diasCopias.add(dia1);
         LocalDate dia2 = LocalDate.now().plusDays(2L);
+        diasCopias.add(dia2);
+
+        agenda.setDiasCopia(diasCopias);
+
+        List<Agenda> response = agendaService.copiaAgenda(agenda);
+
+        assertTrue(response.size() == 2);
+        assertTrue("obs".equals(response.get(0).getObservacao()));
+        assertTrue(horariosList.equals(response.get(0).getHorarios()));
+        assertTrue(response.get(0).getDiasCopia() == null);
+        assertTrue("obs".equals(response.get(1).getObservacao()));
+        assertTrue(horariosList.equals(response.get(1).getHorarios()));
+        assertTrue(response.get(1).getDiasCopia() == null);
+    }
+
+    @Test
+    public void copiarAgendaParaMaisQueUmDiaDesordenado() {
+
+        LocalDate dia1 = LocalDate.now().plusDays(2L);
+        diasCopias.add(dia1);
+        LocalDate dia2 = LocalDate.now().plusDays(1L);
         diasCopias.add(dia2);
 
         agenda.setDiasCopia(diasCopias);

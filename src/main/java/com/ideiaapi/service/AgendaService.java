@@ -69,10 +69,18 @@ public class AgendaService {
         List<Agenda> agendaCopiadas = new ArrayList<>();
         List<LocalDate> dias = entity.getDiasCopia();
 
-        if (dias != null && !dias.isEmpty() && dias.size() >= 2) {
+        if (dias != null && !dias.isEmpty() && dias.size() == 2) {
 
-            LocalDate menorData = dias.get(0);
-            LocalDate maiorData = dias.get(1);
+            LocalDate menorData;
+            LocalDate maiorData;
+
+            if (dias.get(0).isBefore(dias.get(1))) {
+                menorData = dias.get(0);
+                maiorData = dias.get(1);
+            } else {
+                menorData = dias.get(1);
+                maiorData = dias.get(0);
+            }
 
             List<LocalDate> diasParaCopiar = Stream.iterate(menorData, date -> date.plusDays(1))
                     .limit(ChronoUnit.DAYS.between(menorData, maiorData.plusDays(1)))
