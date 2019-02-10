@@ -20,4 +20,6 @@ public class ErrorsCode {
 
     public static String USUARIO_DUPLICADO = "usuario-duplicado";
 
+    public static String INVALID_DATES = "datas-invalidas";
+
 }

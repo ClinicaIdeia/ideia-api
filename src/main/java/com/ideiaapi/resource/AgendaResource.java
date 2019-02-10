@@ -1,5 +1,7 @@
 package com.ideiaapi.resource;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -68,12 +70,17 @@ public class AgendaResource {
 
     @PostMapping("/copia")
     @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('write')")
-    public ResponseEntity<Agenda> copia(@RequestBody Agenda agenda,
+    public ResponseEntity<List<Agenda>> copia(@RequestBody Agenda agenda,
             HttpServletResponse response) {
 
-        final Agenda agendaSalva = this.agendaService.copiaAgenda(agenda);
-        publisher.publishEvent(new RecursoCriadoEvent(this, response, agendaSalva.getCodigo()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(agendaSalva);
+        final List<Agenda> agendas = this.agendaService.copiaAgenda(agenda);
+        agendas.forEach(
+                agendaCopiada -> publisher.publishEvent(
+                        new RecursoCriadoEvent(this, response, agendaCopiada.getCodigo())
+                )
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(agendas);
     }
 
     @GetMapping("/{codigo}")
