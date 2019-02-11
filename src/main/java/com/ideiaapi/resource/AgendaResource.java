@@ -1,5 +1,7 @@
 package com.ideiaapi.resource;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -50,6 +52,12 @@ public class AgendaResource {
         return this.agendaService.resumo(filter, pageable);
     }
 
+    @GetMapping("/filtro")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+    public Page<Agenda> filtro(AgendaFilter filter, Pageable pageable) {
+        return this.agendaService.filtrar(filter, pageable);
+    }
+
     @PostMapping
     @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('write')")
     public ResponseEntity<Agenda> criar(@RequestBody @Valid Agenda agenda,
@@ -58,6 +66,21 @@ public class AgendaResource {
         final Agenda agendaSalva = this.agendaService.cadastraAgenda(agenda);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, agendaSalva.getCodigo()));
         return ResponseEntity.status(HttpStatus.CREATED).body(agendaSalva);
+    }
+
+    @PostMapping("/copia")
+    @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('write')")
+    public ResponseEntity<List<Agenda>> copia(@RequestBody Agenda agenda,
+            HttpServletResponse response) {
+
+        final List<Agenda> agendas = this.agendaService.copiaAgenda(agenda);
+        agendas.forEach(
+                agendaCopiada -> publisher.publishEvent(
+                        new RecursoCriadoEvent(this, response, agendaCopiada.getCodigo())
+                )
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(agendas);
     }
 
     @GetMapping("/{codigo}")

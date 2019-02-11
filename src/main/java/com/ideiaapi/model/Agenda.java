@@ -14,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -35,6 +36,17 @@ public class Agenda {
     private List<Horario> horarios;
 
     private String observacao;
+
+    @Transient
+    private List<LocalDate> diasCopia;
+
+    public List<LocalDate> getDiasCopia() {
+        return diasCopia;
+    }
+
+    public void setDiasCopia(List<LocalDate> diasCopia) {
+        this.diasCopia = diasCopia;
+    }
 
     public Long getCodigo() {
         return codigo;
