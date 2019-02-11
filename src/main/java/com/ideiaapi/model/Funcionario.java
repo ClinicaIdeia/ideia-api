@@ -88,6 +88,10 @@ public class Funcionario {
     @Column(name = "TELEFONE")
     private String telefone;
 
+    @Size(min = 3, max = 20)
+    @Column(name = "TELEFONE_FIXO")
+    private String telefoneFixo;
+
     @Embedded
     private Endereco endereco;
 
@@ -207,6 +211,14 @@ public class Funcionario {
         this.telefone = telefone;
     }
 
+    public String getTelefoneFixo() {
+        return telefoneFixo;
+    }
+
+    public void setTelefoneFixo(String telefoneFixo) {
+        this.telefoneFixo = telefoneFixo;
+    }
+
     public Endereco getEndereco() {
         return endereco;
     }
@@ -250,14 +262,35 @@ public class Funcionario {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Funcionario)) return false;
         Funcionario that = (Funcionario) o;
-        return Objects.equals(codigo, that.codigo);
+        return Objects.equals(getCodigo(), that.getCodigo()) &&
+                Objects.equals(getNome(), that.getNome()) &&
+                Objects.equals(getRg(), that.getRg()) &&
+                Objects.equals(getCpf(), that.getCpf()) &&
+                Objects.equals(getDataNascimento(), that.getDataNascimento()) &&
+                Objects.equals(getSexo(), that.getSexo()) &&
+                Objects.equals(getEstadoCivil(), that.getEstadoCivil()) &&
+                Objects.equals(getEscolaridade(), that.getEscolaridade()) &&
+                Objects.equals(getNaturalidade(), that.getNaturalidade()) &&
+                Objects.equals(getEmail(), that.getEmail()) &&
+                Objects.equals(getMatricula(), that.getMatricula()) &&
+                Objects.equals(getCargo(), that.getCargo()) &&
+                Objects.equals(getTelefone(), that.getTelefone()) &&
+                Objects.equals(getTelefoneFixo(), that.getTelefoneFixo()) &&
+                Objects.equals(getEndereco(), that.getEndereco()) &&
+                Objects.equals(getEmpresas(), that.getEmpresas()) &&
+                Objects.equals(getIdade(), that.getIdade()) &&
+                Objects.equals(getAnexo(), that.getAnexo()) &&
+                Objects.equals(getUrlAnexo(), that.getUrlAnexo());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(codigo);
+
+        return Objects.hash(getCodigo(), getNome(), getRg(), getCpf(), getDataNascimento(), getSexo(), getEstadoCivil(),
+                getEscolaridade(), getNaturalidade(), getEmail(), getMatricula(), getCargo(), getTelefone(),
+                getTelefoneFixo(), getEndereco(), getEmpresas(), getIdade(), getAnexo(), getUrlAnexo());
     }
 
     @Override
@@ -276,6 +309,7 @@ public class Funcionario {
                 ", matricula='" + matricula + '\'' +
                 ", cargo='" + cargo + '\'' +
                 ", telefone='" + telefone + '\'' +
+                ", telefoneFixo='" + telefoneFixo + '\'' +
                 ", endereco=" + endereco +
                 ", empresas=" + empresas +
                 ", idade=" + idade +

@@ -2,6 +2,7 @@ package com.ideiaapi.model;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +28,9 @@ public class Contato {
     private String nome;
 
     private String telefone;
+
+    @Column(name = "TELEFONE_FIXO")
+    private String telefoneFixo;
 
     @NotNull
     @Email
@@ -57,6 +61,14 @@ public class Contato {
         this.telefone = telefone;
     }
 
+    public String getTelefoneFixo() {
+        return telefoneFixo;
+    }
+
+    public void setTelefoneFixo(String telefoneFixo) {
+        this.telefoneFixo = telefoneFixo;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -68,9 +80,13 @@ public class Contato {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Contato)) return false;
         Contato contato = (Contato) o;
-        return Objects.equals(codigo, contato.codigo);
+        return Objects.equals(getCodigo(), contato.getCodigo()) &&
+                Objects.equals(getNome(), contato.getNome()) &&
+                Objects.equals(getTelefone(), contato.getTelefone()) &&
+                Objects.equals(getTelefoneFixo(), contato.getTelefoneFixo()) &&
+                Objects.equals(getEmail(), contato.getEmail());
     }
 
     @Override
@@ -84,6 +100,7 @@ public class Contato {
                 "codigo=" + codigo +
                 ", nome='" + nome + '\'' +
                 ", telefone='" + telefone + '\'' +
+                ", telefoneFixo='" + telefoneFixo + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }
