@@ -69,7 +69,8 @@ public class AgendaResource {
     }
 
     @PostMapping("/copia")
-    @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('write')")
+    //@PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and " +
+           // "#oauth2.hasScope('write')")
     public ResponseEntity<List<Agenda>> copia(@RequestBody Agenda agenda,
             HttpServletResponse response) {
 
