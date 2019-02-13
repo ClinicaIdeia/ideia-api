@@ -136,6 +136,15 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
         }
 
 
+        if (null != agendamentoFilter.getDataExameDe() && null != agendamentoFilter.getDataExameAte()) {
+
+            predicates.add(builder.greaterThanOrEqualTo(root.get(Agendamento_.agenda).get(Agenda_.diaAgenda),
+                    agendamentoFilter.getDataExameDe()));
+
+            predicates.add(builder.lessThanOrEqualTo(root.get(Agendamento_.agenda).get(Agenda_.diaAgenda),
+                    agendamentoFilter.getDataExameAte()));
+        }
+
         return predicates.toArray(new Predicate[predicates.size()]);
     }
 

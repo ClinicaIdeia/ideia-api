@@ -26,6 +26,9 @@ public class AgendaServiceTest extends BaseTest {
     @Mock
     private AgendaRepository agendaRepository;
 
+    @Mock
+    private HorarioService horarioService;
+
     @InjectMocks
     private AgendaService agendaService;
 
@@ -92,6 +95,8 @@ public class AgendaServiceTest extends BaseTest {
 
         agenda.setDiasCopia(diasCopias);
 
+        when(horarioService.copiarHorarios(horariosList)).thenReturn(horariosList);
+
         List<Agenda> response = agendaService.copiaAgenda(agenda);
 
         assertTrue(response.size() == 2);
@@ -112,6 +117,8 @@ public class AgendaServiceTest extends BaseTest {
         diasCopias.add(dia2);
 
         agenda.setDiasCopia(diasCopias);
+
+        when(horarioService.copiarHorarios(horariosList)).thenReturn(horariosList);
 
         List<Agenda> response = agendaService.copiaAgenda(agenda);
 
