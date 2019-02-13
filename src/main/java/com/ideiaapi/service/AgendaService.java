@@ -89,7 +89,7 @@ public class AgendaService {
             diasParaCopiar.forEach(dia -> {
                 Agenda agendaCopiada = new Agenda();
                 agendaCopiada.setDiaAgenda(dia);
-                agendaCopiada.setHorarios(entity.getHorarios());
+                agendaCopiada.setHorarios(horarioService.copiarHorarios(entity.getHorarios()));
                 agendaCopiada.setObservacao(entity.getObservacao());
                 this.agendaRepository.save(agendaCopiada);
                 agendaCopiadas.add(agendaCopiada);

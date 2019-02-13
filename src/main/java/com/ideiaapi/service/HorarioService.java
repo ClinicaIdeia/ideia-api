@@ -95,4 +95,21 @@ public class HorarioService {
             horarios.forEach(this::cadastraHorario);
         }
     }
+
+    public List<Horario> copiarHorarios(List<Horario> horarios) {
+        List<Horario> novosHorarios = new ArrayList<>();
+        horarios.forEach(horario -> {
+                Horario novoHorario = new Horario();
+                novoHorario.setHoraExame(horario.getHoraExame());
+                novoHorario.setAvulso(horario.getAvulso());
+                novoHorario.setDisponivel(horario.getDisponivel());
+                novoHorario.setMaximoPermitido(horario.getMaximoPermitido());
+                novoHorario.setRestante(horario.getMaximoPermitido());
+                novoHorario.setAvulso(horario.getAvulso());
+                horarioRepository.saveAndFlush(novoHorario);
+                novosHorarios.add(novoHorario);
+        });
+
+        return novosHorarios;
+    }
 }
