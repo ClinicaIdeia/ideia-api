@@ -86,6 +86,13 @@ public class FuncionarioService {
         }
         BeanUtils.copyProperties(funcionario, funcionarioSalvo, "codigo");
 
+        this.removeEmpresasDuplicadas(funcionarioSalvo);
+        this.calculaIdade(funcionarioSalvo);
+        this.funcionarioRepository.save(funcionarioSalvo);
+        return ResponseEntity.ok(funcionarioSalvo);
+    }
+
+    private void removeEmpresasDuplicadas(Funcionario funcionarioSalvo) {
         Map<Long, Empresa> mapEmpresas = new HashMap<>();
         if (null != funcionarioSalvo.getEmpresas() && !funcionarioSalvo.getEmpresas().isEmpty()) {
 
@@ -94,10 +101,6 @@ public class FuncionarioService {
             funcionarioSalvo.setEmpresas(mapEmpresas.values().stream().collect(Collectors.toList()));
 
         }
-
-        this.calculaIdade(funcionarioSalvo);
-        this.funcionarioRepository.save(funcionarioSalvo);
-        return ResponseEntity.ok(funcionarioSalvo);
     }
 
     private void calculaIdade(Funcionario funcionario) {
