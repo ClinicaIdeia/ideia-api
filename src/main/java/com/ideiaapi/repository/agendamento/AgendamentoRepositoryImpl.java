@@ -21,6 +21,9 @@ import com.ideiaapi.dto.AgendamentoEstatisticaEmpresa;
 import com.ideiaapi.model.Agenda_;
 import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Agendamento_;
+import com.ideiaapi.model.Empresa;
+import com.ideiaapi.model.Empresa_;
+import com.ideiaapi.model.Funcionario_;
 import com.ideiaapi.model.Usuario;
 import com.ideiaapi.repository.filter.AgendamentoFilter;
 import com.ideiaapi.repository.projection.ResumoAgendamento;
@@ -33,7 +36,8 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
     private EntityManager manager;
 
     @Override
-    public List<AgendamentoEstatisticaEmpresa> agendamentosPorEmpresa(LocalDate inicio, LocalDate fim) {
+    public List<AgendamentoEstatisticaEmpresa> agendamentosPorEmpresa(LocalDate inicio, LocalDate fim,
+            Long codEmpresa, Long codFuncionario) {
 
         CriteriaBuilder builder = manager.getCriteriaBuilder();
         CriteriaQuery<AgendamentoEstatisticaEmpresa> criteria = builder.createQuery(
@@ -44,6 +48,7 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
                 AgendamentoEstatisticaEmpresa.class,
                 root.get(Agendamento_.agenda),
                 root.get(Agendamento_.funcionario),
+                root.get(Agendamento_.empresa),
                 root.get(Agendamento_.motivo),
                 root.get(Agendamento_.horaExame)));
 
@@ -51,6 +56,18 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
                 builder.greaterThanOrEqualTo(root.get(Agendamento_.agenda).get(Agenda_.diaAgenda), inicio),
                 builder.lessThanOrEqualTo(root.get(Agendamento_.agenda).get(Agenda_.diaAgenda), fim)
         );
+
+        if (codEmpresa.compareTo(0l) > 0) {
+            criteria.where(
+                    builder.equal(root.get(Agendamento_.empresa).get(Empresa_.codigo), codEmpresa)
+            );
+        }
+
+        if (codFuncionario.compareTo(0l) > 0) {
+            criteria.where(
+                    builder.equal(root.get(Agendamento_.funcionario).get(Funcionario_.codigo), codFuncionario)
+            );
+        }
 
         TypedQuery<AgendamentoEstatisticaEmpresa> tpQuery = manager.createQuery(criteria);
 

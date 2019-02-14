@@ -36,6 +36,11 @@ public class Agendamento {
 
     @NotNull
     @OneToOne
+    @JoinColumn(name = "codigo_empresa")
+    private Empresa empresa;
+
+    @NotNull
+    @OneToOne
     @JoinColumn(name = "codigo_motivo")
     private Motivo motivo;
 
@@ -51,6 +56,14 @@ public class Agendamento {
     private Boolean avulso;
 
     private Boolean laudoGerado;
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
 
     public Boolean getLaudoGerado() {
         return laudoGerado;
