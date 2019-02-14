@@ -63,7 +63,7 @@ public class LaudoResource {
     }
 
     @PutMapping("/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_LAUDO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_LAUDO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
     public ResponseEntity<Laudo> atualiza(@PathVariable Long codigo,
             @RequestBody @Valid Laudo laudo) {
         return this.laudoService.atualizaLaudo(codigo, laudo);
@@ -71,7 +71,7 @@ public class LaudoResource {
     }
 
     @DeleteMapping("/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_REMOVER_LAUDO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_REMOVER_LAUDO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('write')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleta(@PathVariable Long codigo) {
         this.laudoService.deletaLaudo(codigo);

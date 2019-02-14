@@ -17,14 +17,10 @@ public class ContatoService {
     @Autowired
     private ContatoRepository contatoRepository;
 
-    public List<Contato> listaTodasContatos() {
-        return this.contatoRepository.findAll();
-    }
-
     public void cadastraContatos(Empresa empresa) {
         List<Contato> contatos = empresa.getContatos();
-        if (!contatos.isEmpty()) {
-            contatos.forEach(contato -> this.cadastraContato(contato));
+        if (null != contatos && !contatos.isEmpty()) {
+            contatos.forEach(this::cadastraContato);
         }
     }
 
@@ -46,10 +42,10 @@ public class ContatoService {
     }
 
     public ResponseEntity<Contato> atualizaContato(Long codigo, Contato contato) {
-        Contato contatoSalva = this.buscaContato(codigo);
-        BeanUtils.copyProperties(contato, contatoSalva, "codigo");
+        Contato contatoSalvo = this.buscaContato(codigo);
+        BeanUtils.copyProperties(contato, contatoSalvo, "codigo");
 
-        this.contatoRepository.save(contatoSalva);
-        return ResponseEntity.ok(contatoSalva);
+        this.contatoRepository.save(contatoSalvo);
+        return ResponseEntity.ok(contatoSalvo);
     }
 }

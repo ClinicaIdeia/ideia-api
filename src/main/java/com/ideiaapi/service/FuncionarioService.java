@@ -1,6 +1,10 @@
 package com.ideiaapi.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ideiaapi.dto.s3.AnexoS3DTO;
+import com.ideiaapi.model.Empresa;
 import com.ideiaapi.model.Funcionario;
 import com.ideiaapi.repository.FuncionarioRepository;
 import com.ideiaapi.repository.filter.FuncionarioFilter;
@@ -81,6 +86,15 @@ public class FuncionarioService {
         }
         BeanUtils.copyProperties(funcionario, funcionarioSalvo, "codigo");
 
+        Map<Long, Empresa> mapEmpresas = new HashMap<>();
+        if (null != funcionarioSalvo.getEmpresas() && !funcionarioSalvo.getEmpresas().isEmpty()) {
+
+            funcionarioSalvo.getEmpresas().forEach(emp -> mapEmpresas.put(emp.getCodigo(), emp));
+            funcionarioSalvo.setEmpresas(new ArrayList<>());
+            funcionarioSalvo.setEmpresas(mapEmpresas.values().stream().collect(Collectors.toList()));
+
+        }
+
         this.calculaIdade(funcionarioSalvo);
         this.funcionarioRepository.save(funcionarioSalvo);
         return ResponseEntity.ok(funcionarioSalvo);
@@ -90,5 +104,9 @@ public class FuncionarioService {
         final int yearNow = LocalDate.now().getYear();
         final int nascimento = funcionario.getDataNascimento().getYear();
         funcionario.setIdade(yearNow - nascimento);
+    }
+
+    public Funcionario buscaFuncionarioPorCpf(String cpf) {
+        return this.funcionarioRepository.findByCpf(cpf);
     }
 }
