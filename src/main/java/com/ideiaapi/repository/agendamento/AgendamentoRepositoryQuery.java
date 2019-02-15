@@ -13,7 +13,8 @@ import com.ideiaapi.repository.projection.ResumoAgendamento;
 
 public interface AgendamentoRepositoryQuery {
 
-    List<AgendamentoEstatisticaEmpresa> agendamentosPorEmpresa(LocalDate inicio, LocalDate fim);
+    List<AgendamentoEstatisticaEmpresa> agendamentosPorEmpresa(LocalDate inicio, LocalDate fim, Long codEmpresa,
+            Long codFuncionario);
 
     Page<Agendamento> filtrar(AgendamentoFilter agendaFilter, Pageable pageable);
 

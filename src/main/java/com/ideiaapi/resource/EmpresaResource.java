@@ -63,7 +63,7 @@ public class EmpresaResource {
     }
 
     @PutMapping("/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_EMPRESA') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_EMPRESA') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
     public ResponseEntity<Empresa> atualiza(@PathVariable Long codigo,
             @RequestBody @Valid Empresa empresa) {
         return this.empresaService.atualizaEmpresa(codigo, empresa);

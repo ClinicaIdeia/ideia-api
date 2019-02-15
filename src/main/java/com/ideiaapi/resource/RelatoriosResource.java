@@ -27,16 +27,18 @@ public class RelatoriosResource {
     @Autowired
     private LaudoService laudoService;
 
-    @GetMapping("/agendamentos/empresa/{codigo}")
+    @GetMapping("/agendamentos/{codEmpresa}/{codFuncionario}")
     @PreAuthorize(value = "hasAuthority('ROLE_RELATORIO_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2"
             + ".hasScope('read')")
 
     public ResponseEntity<byte[]> relatorioPorEmpresa(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate inicio,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fim,
-            @PathVariable Long codigo) throws Exception {
+            @PathVariable Long codEmpresa,
+            @PathVariable Long codFuncionario
+            ) throws Exception {
 
-        byte[] bytes = this.agendamentoService.relatorioPorEmpresa(inicio, fim, codigo);
+        byte[] bytes = this.agendamentoService.relatorioPorEmpresa(inicio, fim, codEmpresa, codFuncionario);
 
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(bytes);
     }

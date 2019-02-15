@@ -69,8 +69,7 @@ public class AgendaResource {
     }
 
     @PostMapping("/copia")
-    //@PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and " +
-           // "#oauth2.hasScope('write')")
+    @PreAuthorize(value = "hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
     public ResponseEntity<List<Agenda>> copia(@RequestBody Agenda agenda,
             HttpServletResponse response) {
 
@@ -85,7 +84,7 @@ public class AgendaResource {
     }
 
     @GetMapping("/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
     public ResponseEntity<Agenda> busca(@PathVariable Long codigo) {
         Agenda agenda = this.agendaService.buscaAgendamento(codigo);
 

@@ -2,6 +2,7 @@ package com.ideiaapi.resource;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -81,15 +82,26 @@ public class FuncionarioResource {
         return ResponseEntity.ok(funcionario);
     }
 
+    @GetMapping("/cpf")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
+    public ResponseEntity<Funcionario> buscaPorCpf(@PathParam("cpf") String cpf) {
+        Funcionario funcionario = this.funcionarioService.buscaFuncionarioPorCpf(cpf);
+
+        if (null == funcionario)
+            return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(funcionario);
+    }
+
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize(value = "hasAuthority('ROLE_REMOVER_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
+    @PreAuthorize(value = "hasAuthority('ROLE_REMOVER_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
     public void deleta(@PathVariable Long codigo) {
         this.funcionarioService.deletaFuncionario(codigo);
     }
 
     @PutMapping("/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
     public ResponseEntity<Funcionario> atualiza(@PathVariable Long codigo,
             @RequestBody @Valid Funcionario funcionario) {
         return this.funcionarioService.atualizaFuncionario(codigo, funcionario);
