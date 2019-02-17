@@ -82,6 +82,12 @@ public class HorarioService {
         this.horarioRepository.save(horario);
     }
 
+    public void devolverHorario(Horario horario) {
+        int restante = horario.getRestante();
+        horario.setRestante(restante + 1);
+        this.horarioRepository.save(horario);
+    }
+
     private Horario getHorarioWithHoraExameCompleta(Agenda agenda, Horario horario) {
 
         horario.setHoraExame(horario.getHoraExame() + " - " + agenda.getDiaAgenda().getDayOfMonth() + " "
