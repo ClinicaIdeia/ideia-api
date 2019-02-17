@@ -115,6 +115,7 @@ public class AgendamentoService {
     }
 
     public void deletaAgendamento(Long codigo) {
+        //TODO quando devolver agendamento devolver o horario para a agenda
         this.agendamentoRepository.delete(codigo);
     }
 

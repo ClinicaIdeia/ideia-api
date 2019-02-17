@@ -45,8 +45,7 @@ public class FuncionarioRepositoryImpl extends RestricoesPaginacao implements Fu
 
         final Usuario usuario = UsuarioSessao.getUserLogado();
 
-        final boolean isAdmin = usuario.getPermissoes().stream().anyMatch(permissao -> permissao.getDescricao().equals(
-                "ROLE_ADMIN"));
+        final boolean isAdmin = UsuarioSessao.isAdmin(usuario);
 
         //TODO alterar total e pageable
         if (!isAdmin) {
