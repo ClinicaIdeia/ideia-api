@@ -99,7 +99,7 @@
 			<textField>
 				<reportElement x="381" y="1" width="174" height="30" uuid="143774ba-06f0-45a2-9aa4-daa331fcd780"/>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{empresa}.getDescricao()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{empresa}.getNome()]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="131" y="1" width="129" height="30" uuid="0f3a14c4-c11b-4dd6-a164-71b47b31fa89"/>
