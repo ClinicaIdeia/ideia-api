@@ -1,31 +1,33 @@
 package com.ideiaapi.validate;
 
-import static com.ideiaapi.constants.ErrorsCode.CNPJ_DUPLICADO;
+import static com.ideiaapi.constants.ErrorsCode.DIA_AGENDA_INFERIOR;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.time.LocalDate;
+
 import org.springframework.stereotype.Component;
 
 import com.ideiaapi.exceptions.BusinessException;
-import com.ideiaapi.model.Empresa;
-import com.ideiaapi.repository.EmpresaRepository;
+import com.ideiaapi.model.Agenda;
 
 @Component
 public class AgendaValidate {
 
-    @Autowired
-    private EmpresaRepository repository;
-
-    public void validate(Empresa empresa) {
-        this.validaCnpjUnique(empresa);
+    public void fluxoCriacao(Agenda entity) {
+        this.validaDiaAgenda(entity);
     }
 
-    private void validaCnpjUnique(Empresa empresa) {
+    public void fluxoAtualizacao(Agenda entity) {
+        this.validaDiaAgenda(entity);
+    }
 
-        Empresa saved = this.repository.findByCnpj(empresa.getCnpj());
-
-        if (null != saved) {
-            throw new BusinessException(CNPJ_DUPLICADO);
+    private void validaDiaAgenda(Agenda entity) {
+        final LocalDate diaAgenda = entity.getDiaAgenda();
+        if (null != diaAgenda) {
+            if (diaAgenda.isBefore(LocalDate.now())) {
+                throw new BusinessException(DIA_AGENDA_INFERIOR);
+            }
         }
+
     }
 
 }

@@ -14,8 +14,8 @@ public class UsuarioSessao {
     private static UsuarioService usuarioService;
 
     @Autowired
-    public UsuarioSessao(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
+    UsuarioSessao(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;//NOSONAR
     }
 
     public static Long getCodUsuario() {
@@ -37,6 +37,13 @@ public class UsuarioSessao {
         }
 
         return null;
+    }
+
+    public static boolean isAdmin(Usuario usuario) {
+
+        return usuario.getPermissoes().stream().anyMatch(permissao -> permissao.getDescricao().equals(
+                "ROLE_ADMIN"));
+
     }
 
     private static Authentication getAuthentication() {

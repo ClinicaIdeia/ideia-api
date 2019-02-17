@@ -115,6 +115,17 @@ public class AgendamentoService {
     }
 
     public void deletaAgendamento(Long codigo) {
+
+        Agendamento agendamento = this.agendamentoRepository.findOne(codigo);
+
+        if (agendamento == null)
+            throw new EmptyResultDataAccessException(1);
+
+        if (!agendamento.getAvulso()) {
+            Horario horario = horarioService.buscaHorario(agendamento.getCodHorario());
+            this.horarioService.devolverHorario(horario);
+        }
+
         this.agendamentoRepository.delete(codigo);
     }
 

@@ -3,8 +3,11 @@ package com.ideiaapi.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +21,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ideiaapi.dto.s3.AnexoS3DTO;
 import com.ideiaapi.model.Empresa;
+import com.ideiaapi.model.FuncCargoEmpresa;
 import com.ideiaapi.model.Funcionario;
+import com.ideiaapi.model.Usuario;
 import com.ideiaapi.repository.FuncionarioRepository;
 import com.ideiaapi.repository.filter.FuncionarioFilter;
 import com.ideiaapi.repository.projection.ResumoFuncionario;
+import com.ideiaapi.security.UsuarioSessao;
 import com.ideiaapi.storage.S3;
 import com.ideiaapi.validate.FuncionarioValidate;
 
@@ -35,6 +41,9 @@ public class FuncionarioService {
     private FuncionarioValidate funcionarioValidate;
 
     @Autowired
+    private FuncCargoEmpresaService funcCargoEmpresaService;
+
+    @Autowired
     private S3 s3;
 
     public AnexoS3DTO salvarFotoFuncionarioS3(MultipartFile file) {
@@ -43,14 +52,23 @@ public class FuncionarioService {
     }
 
     public Page<Funcionario> filtrar(FuncionarioFilter filter, Pageable pageable) {
-        return this.funcionarioRepository.filtrar(filter, pageable);
+        Page<Funcionario> filtrar = this.funcionarioRepository.filtrar(filter, pageable);
+        Usuario usuarioLogado = UsuarioSessao.getUserLogado();
+        if (!UsuarioSessao.isAdmin(
+                usuarioLogado) && (null != filtrar.getContent() && !filtrar.getContent().isEmpty())) {
 
+            filtrar.getContent().forEach(funcionario -> this.deparaCargoFuncionario(funcionario, usuarioLogado));
+
+        }
+
+        return filtrar;
     }
 
     public Page<ResumoFuncionario> resumo(FuncionarioFilter filter, Pageable pageable) {
         return this.funcionarioRepository.resumir(filter, pageable);
     }
 
+    @Transactional
     public Funcionario cadastraFuncionario(Funcionario entity) {
 
         this.funcionarioValidate.fluxoCriacao(entity);
@@ -58,7 +76,9 @@ public class FuncionarioService {
             this.s3.salvar(entity.getAnexo());
         }
         this.calculaIdade(entity);
-        return this.funcionarioRepository.save(entity);
+        Funcionario salvo = this.funcionarioRepository.save(entity);
+        this.funcCargoEmpresaService.insereCargo(salvo);
+        return salvo;
     }
 
     public Funcionario buscaFuncionario(Long codigo) {
@@ -68,7 +88,22 @@ public class FuncionarioService {
             throw new EmptyResultDataAccessException(1);
         }
 
+        Usuario userLogado = UsuarioSessao.getUserLogado();
+        if (!UsuarioSessao.isAdmin(userLogado)) {
+
+            deparaCargoFuncionario(funcionario, userLogado);
+
+        }
+
         return funcionario;
+    }
+
+    private void deparaCargoFuncionario(Funcionario funcionario, Usuario userLogado) {
+        final FuncCargoEmpresa funcCargoEmpresa = this.funcCargoEmpresaService.getByCodFuncionarioAndCodEmpresa(
+                funcionario, userLogado.getEmpresa().getCodigo());
+
+        if (null != funcCargoEmpresa)
+            funcionario.setCargo(funcCargoEmpresa.getCargo());
     }
 
     public void deletaFuncionario(Long codigo) {
@@ -78,6 +113,8 @@ public class FuncionarioService {
     public ResponseEntity<Funcionario> atualizaFuncionario(Long codigo, Funcionario funcionario) {
         Funcionario funcionarioSalvo = this.buscaFuncionario(codigo);
 
+        this.equalizaEmpresas(funcionario, funcionarioSalvo);
+
         if (StringUtils.isEmpty(funcionario.getAnexo()) && StringUtils.hasText(funcionarioSalvo.getAnexo())) {
             this.s3.remover(funcionarioSalvo.getAnexo());
         } else if (StringUtils.hasText(
@@ -86,10 +123,22 @@ public class FuncionarioService {
         }
         BeanUtils.copyProperties(funcionario, funcionarioSalvo, "codigo");
 
+        this.funcionarioValidate.fluxoAtualizacao(funcionarioSalvo);
         this.removeEmpresasDuplicadas(funcionarioSalvo);
         this.calculaIdade(funcionarioSalvo);
         this.funcionarioRepository.save(funcionarioSalvo);
+        this.funcCargoEmpresaService.insereCargo(funcionarioSalvo);
         return ResponseEntity.ok(funcionarioSalvo);
+    }
+
+    private void equalizaEmpresas(Funcionario funcionario, Funcionario funcionarioSalvo) {
+        List<Empresa> empresas = funcionario.getEmpresas();
+
+        if (null != empresas && !empresas.isEmpty() && (null != funcionarioSalvo.getEmpresas() && !funcionarioSalvo.getEmpresas().isEmpty())) {
+
+            funcionarioSalvo.getEmpresas().forEach(empresas::add);
+        }
+
     }
 
     private void removeEmpresasDuplicadas(Funcionario funcionarioSalvo) {

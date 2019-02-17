@@ -23,12 +23,16 @@ import com.ideiaapi.model.Agenda;
 import com.ideiaapi.repository.AgendaRepository;
 import com.ideiaapi.repository.filter.AgendaFilter;
 import com.ideiaapi.repository.projection.ResumoAgenda;
+import com.ideiaapi.validate.AgendaValidate;
 
 @Service
 public class AgendaService {
 
     @Autowired
     private AgendaRepository agendaRepository;
+
+    @Autowired
+    private AgendaValidate agendaValidate;
 
     @Autowired
     private HorarioService horarioService;
@@ -57,6 +61,8 @@ public class AgendaService {
     }
 
     public Agenda cadastraAgenda(Agenda entity) {
+
+        this.agendaValidate.fluxoCriacao(entity);
 
         if (!entity.getHorarios().isEmpty()) {
             entity.getHorarios().forEach(this.horarioService::cadastraHorario);
@@ -130,6 +136,7 @@ public class AgendaService {
         Agenda agendaSalva = this.buscaAgendamento(codigo);
         BeanUtils.copyProperties(agenda, agendaSalva, "codigo");
 
+        this.agendaValidate.fluxoAtualizacao(agendaSalva);
         this.agendaRepository.save(agendaSalva);
         return ResponseEntity.ok(agendaSalva);
     }
