@@ -61,6 +61,7 @@ public class FuncCargoEmpresaService {
 
                 } else if (!cargo.equalsIgnoreCase(funcCargoEmpresa.getCargo())) {
                     funcCargoEmpresa.setCargo(cargo);
+                    funcCargoEmpresa.setDataAtualizacao(LocalDateTime.now());
                     this.atualizar(funcCargoEmpresa);
                 }
             }
