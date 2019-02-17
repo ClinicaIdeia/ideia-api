@@ -22,4 +22,8 @@ public class ErrorsCode {
 
     public static String INVALID_DATES = "datas-invalidas";
 
+    public static String DATA_NASCIMENTO_SUPERIOR = "nascimento-superior";
+
+    public static String DIA_AGENDA_INFERIOR = "agenda-inferior";
+
 }
