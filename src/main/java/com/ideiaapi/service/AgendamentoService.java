@@ -20,8 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ideiaapi.dto.AgendamentoEstatisticaEmpresa;
+import com.ideiaapi.exceptions.BusinessException;
 import com.ideiaapi.model.Agenda;
 import com.ideiaapi.model.Agendamento;
+import com.ideiaapi.model.Empresa;
 import com.ideiaapi.model.Horario;
 import com.ideiaapi.model.Laudo;
 import com.ideiaapi.repository.AgendamentoRepository;
@@ -101,7 +103,22 @@ public class AgendamentoService {
             entity.setHoraExame(parse);
         }
 
+        this.insereEmpresaSeNaoExistir(entity);
+
         return this.agendamentoRepository.save(entity);
+    }
+
+    private void insereEmpresaSeNaoExistir(Agendamento entity) {
+        if (null == entity.getEmpresa() &&
+                (null != entity.getFuncionario().getEmpresas() && !entity.getFuncionario().getEmpresas().isEmpty())
+                || entity.getEmpresa().getCodigo() == null) {
+
+            Optional<Empresa> empresa = entity.getFuncionario().getEmpresas().stream().findFirst();
+            if (!empresa.isPresent()) {
+                throw new BusinessException("ERROR-AGE-ADM");
+            }
+            entity.setEmpresa(empresa.get());
+        }
     }
 
     public Agendamento buscaAgendamento(Long codigo) {
