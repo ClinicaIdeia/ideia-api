@@ -4,6 +4,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalTime;
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -11,6 +14,7 @@ import org.mockito.Mock;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import com.ideiaapi.base.BaseTest;
+import com.ideiaapi.model.Agenda;
 import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Horario;
 import com.ideiaapi.repository.AgendamentoRepository;
@@ -51,6 +55,15 @@ public class AgendamentoServiceTest extends BaseTest {
 
         when(agendamentoRepository.findOne(1L)).thenReturn(agendamento);
         when(horarioService.buscaHorario(agendamento.getCodHorario())).thenReturn(horario);
+
+        Agenda agenda = new Agenda();
+        Horario horario = new Horario();
+        horario.setMaximoPermitido(10);
+        horario.setHoraExame("10:00");
+        horario.setRestante(10);
+        agenda.setHorarios(Arrays.asList(horario));
+        agendamento.setAgenda(agenda);
+        agendamento.setHoraExame(LocalTime.of(10,00));
 
         agendamentoService.deletaAgendamento(1L);
 
