@@ -48,7 +48,7 @@ public class AgendamentoService {
     private AgendaService agendaService;
 
     public byte[] relatorioPorEmpresa(LocalDate inicio, LocalDate fim, Long codEmpresa,
-            Long codFuncionario) throws Exception {
+            Long codFuncionario) throws Exception { //NOSONAR
 
         List<AgendamentoEstatisticaEmpresa> dados = this.agendamentoRepository.agendamentosPorEmpresa(inicio, fim,
                 codEmpresa, codFuncionario);
@@ -138,9 +138,17 @@ public class AgendamentoService {
         if (agendamento == null)
             throw new EmptyResultDataAccessException(1);
 
-        if (!agendamento.getAvulso()) {
-            Horario horario = horarioService.buscaHorario(agendamento.getCodHorario());
-            this.horarioService.devolverHorario(horario);
+        if (!agendamento.getAvulso() && (null != agendamento.getAgenda().getHorarios() &&
+                !agendamento.getAgenda().getHorarios().isEmpty())) {
+
+            agendamento.getAgenda().getHorarios().forEach(horario -> {
+                LocalTime parse = LocalTime.parse(horario.getHoraExame());
+                if (parse.equals(agendamento.getHoraExame())) {
+                    this.horarioService.devolverHorario(horario);
+                    return;
+                }
+            });
+
         }
 
         this.agendamentoRepository.delete(codigo);
