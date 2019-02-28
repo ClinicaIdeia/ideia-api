@@ -84,11 +84,9 @@ public class Funcionario {
     private String cargo;
 
     @NotNull
-    @Size(min = 3, max = 20)
     @Column(name = "TELEFONE")
     private String telefone;
 
-    @Size(min = 3, max = 20)
     @Column(name = "TELEFONE_FIXO")
     private String telefoneFixo;
 

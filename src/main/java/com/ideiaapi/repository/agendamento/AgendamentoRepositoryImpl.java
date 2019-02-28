@@ -2,6 +2,7 @@ package com.ideiaapi.repository.agendamento;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import com.ideiaapi.dto.AgendamentoEstatisticaEmpresa;
+import com.ideiaapi.model.Agenda;
 import com.ideiaapi.model.Agenda_;
 import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Agendamento_;
@@ -80,6 +82,7 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
         CriteriaBuilder builder = manager.getCriteriaBuilder();
         CriteriaQuery<Agendamento> criteria = builder.createQuery(Agendamento.class);
         Root<Agendamento> root = criteria.from(Agendamento.class);
+        criteria.orderBy(builder.desc(root.get(Agendamento_.agenda).get(Agenda_.diaAgenda)));
 
         Predicate[] predicates = criarRestricoes(agendamentoFilter, builder, root);
         criteria.where(predicates);
