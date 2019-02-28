@@ -20,7 +20,6 @@ import com.ideiaapi.model.Agenda;
 import com.ideiaapi.model.Agenda_;
 import com.ideiaapi.repository.filter.AgendaFilter;
 import com.ideiaapi.repository.projection.ResumoAgenda;
-import com.ideiaapi.repository.projection.ResumoAgendamento;
 import com.ideiaapi.repository.restricoes.paginacao.RestricoesPaginacao;
 
 public class AgendaRepositoryImpl extends RestricoesPaginacao implements AgendaRepositoryQuery {
@@ -33,6 +32,7 @@ public class AgendaRepositoryImpl extends RestricoesPaginacao implements AgendaR
         CriteriaBuilder builder = manager.getCriteriaBuilder();
         CriteriaQuery<Agenda> criteria = builder.createQuery(Agenda.class);
         Root<Agenda> root = criteria.from(Agenda.class);
+        criteria.orderBy(builder.desc(root.get(Agenda_.diaAgenda)));
 
         Predicate[] predicates = criarRestricoes(agendaFilter, builder, root);
         criteria.where(predicates);
