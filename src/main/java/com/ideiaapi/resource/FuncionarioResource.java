@@ -1,5 +1,7 @@
 package com.ideiaapi.resource;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
@@ -48,10 +50,17 @@ public class FuncionarioResource {
         return this.funcionarioService.filtrar(filter, pageable);
     }
 
+    @GetMapping(path = "/resumo")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
+    public Page<ResumoFuncionario> resumo(FuncionarioFilter filter, Pageable pageable) {
+        return this.funcionarioService.resumo(filter, pageable);
+    }
+
     @GetMapping(path = "/todos")
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
-    public Page<ResumoFuncionario> pesquisarTodos(FuncionarioFilter filter, Pageable pageable) {
-        return this.funcionarioService.resumo(filter, pageable);
+    public ResponseEntity<List<Funcionario>> pesquisarTodos() {
+        final List<Funcionario> todos = this.funcionarioService.todos();
+        return ResponseEntity.ok(todos);
     }
 
     @PostMapping("/anexo")

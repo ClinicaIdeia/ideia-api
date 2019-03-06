@@ -40,6 +40,7 @@ public class FuncionarioRepositoryImpl extends RestricoesPaginacao implements Fu
         Predicate[] predicates = criarRestricoes(funcionarioFilter, builder, root);
         criteria.where(predicates);
 
+        criteria.orderBy(builder.asc(root.get("nome")));
         TypedQuery<Funcionario> query = manager.createQuery(criteria);
         adicionarRestricoesDePaginacao(query, pageable);
 
