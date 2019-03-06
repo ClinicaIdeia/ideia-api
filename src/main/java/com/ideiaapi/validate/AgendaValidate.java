@@ -22,10 +22,9 @@ public class AgendaValidate {
 
     private void validaDiaAgenda(Agenda entity) {
         final LocalDate diaAgenda = entity.getDiaAgenda();
-        if (null != diaAgenda) {
-            if (diaAgenda.isBefore(LocalDate.now())) {
-                throw new BusinessException(DIA_AGENDA_INFERIOR);
-            }
+        if (null != diaAgenda && diaAgenda.isBefore(LocalDate.now())) {
+
+            throw new BusinessException(DIA_AGENDA_INFERIOR);
         }
 
     }
