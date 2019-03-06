@@ -87,6 +87,7 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
         Predicate[] predicates = criarRestricoes(agendamentoFilter, builder, root);
         criteria.where(predicates);
 
+        criteria.orderBy(builder.desc(root.get("codigo")));
         TypedQuery<Agendamento> query = manager.createQuery(criteria);
         adicionarRestricoesDePaginacao(query, pageable);
 

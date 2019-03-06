@@ -1,22 +1,31 @@
 package com.ideiaapi.job;
 
-import com.ideiaapi.mail.EnvioEmail;
-import com.ideiaapi.model.*;
-import com.ideiaapi.repository.AgendamentoRepository;
-import com.ideiaapi.repository.FuncionarioRepository;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.util.*;
+import com.ideiaapi.mail.EnvioEmail;
+import com.ideiaapi.model.Agendamento;
+import com.ideiaapi.model.Contato;
+import com.ideiaapi.model.Empresa;
+import com.ideiaapi.model.Exame;
+import com.ideiaapi.model.Funcionario;
+import com.ideiaapi.repository.AgendamentoRepository;
+import com.ideiaapi.service.FuncionarioService;
 
 @Component
 public class ScheduledEmails {
 
     @Autowired
-    private FuncionarioRepository funcionarioRepository;
+    private FuncionarioService funcionarioService;
 
     @Autowired
     private AgendamentoRepository agendamentoRepository;
@@ -35,7 +44,7 @@ public class ScheduledEmails {
     @Scheduled(cron = "0 6 * * * *")
     public void aniversario() {
 
-        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
+        List<Funcionario> funcionarioList = this.funcionarioService.listarTodos();
 
         LocalDate hoje = LocalDate.now();
 
@@ -223,7 +232,7 @@ public class ScheduledEmails {
     @Scheduled(cron = "0 0 6 1 1 *")
     public void anoNovo() {
 
-        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
+        List<Funcionario> funcionarioList = this.funcionarioService.listarTodos();
 
         funcionarioList.stream()
                 .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail()))
@@ -247,7 +256,7 @@ public class ScheduledEmails {
     @Scheduled(cron = "0 0 6 20 7 *")
     public void diaAmigo() {
 
-        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
+        List<Funcionario> funcionarioList = this.funcionarioService.listarTodos();
 
         funcionarioList.stream()
                 .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail()))
@@ -263,7 +272,7 @@ public class ScheduledEmails {
                 "Feliz Dia do Amigo",
                 "email/dia-amigo", map);
     }
- 
+
     /**
      * DIA DAS MULHERES
      */
@@ -271,7 +280,7 @@ public class ScheduledEmails {
     @Scheduled(cron = "0 0 6 8 3 *")
     public void diaMulheres() {
 
-        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
+        List<Funcionario> funcionarioList = this.funcionarioService.listarTodos();
 
         funcionarioList.stream()
                 .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail())
@@ -297,7 +306,7 @@ public class ScheduledEmails {
     @Scheduled(cron = "0 0 6 1 5 *")
     public void diaTrabalhador() {
 
-        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
+        List<Funcionario> funcionarioList = this.funcionarioService.listarTodos();
 
         funcionarioList.stream()
                 .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail()))
@@ -321,7 +330,7 @@ public class ScheduledEmails {
     @Scheduled(cron = "0 0 6 25 12 *")
     public void natal() {
 
-        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
+        List<Funcionario> funcionarioList = this.funcionarioService.listarTodos();
 
         funcionarioList.stream()
                 .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail()))

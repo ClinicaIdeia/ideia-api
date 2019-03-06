@@ -162,13 +162,16 @@ public class FuncionarioService {
         return this.funcionarioRepository.findByCpf(cpf);
     }
 
+    public List<Funcionario> listarTodos() {
+        return this.funcionarioRepository.findAll();
+    }
+
     public List<Funcionario> todos() {
-        //TODO filtro por usuario Logado
         Usuario userLogado = UsuarioSessao.getUserLogado();
         if (!UsuarioSessao.isAdmin(userLogado)) {
-            List<Funcionario> all = this.funcionarioRepository.findAll();
 
-            return all;
+            return this.funcionarioRepository.findAllByEmpresas(
+                    userLogado.getEmpresa().getCodigo());
 
         }
         return this.funcionarioRepository.findAll();

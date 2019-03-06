@@ -36,6 +36,7 @@ public class EmpresaRepositoryImpl extends RestricoesPaginacao implements Empres
         Predicate[] predicates = criarRestricoes(empresaFilter, builder, root);
         criteria.where(predicates);
 
+        criteria.orderBy(builder.asc(root.get("nome")));
         TypedQuery<Empresa> query = manager.createQuery(criteria);
         adicionarRestricoesDePaginacao(query, pageable);
 
