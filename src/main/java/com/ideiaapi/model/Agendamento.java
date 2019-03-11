@@ -3,6 +3,7 @@ package com.ideiaapi.model;
 import java.time.LocalTime;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -35,9 +36,15 @@ public class Agendamento {
 
     @NotNull
     @OneToOne
+    @JoinColumn(name = "codigo_empresa")
+    private Empresa empresa;
+
+    @NotNull
+    @OneToOne
     @JoinColumn(name = "codigo_motivo")
     private Motivo motivo;
 
+    @Column( name = "HORA_EXAME")
     private LocalTime horaExame;
 
     @Transient
@@ -45,6 +52,34 @@ public class Agendamento {
 
     @NotNull
     private Boolean trabalhoArmado;
+
+    private Boolean avulso;
+
+    private Boolean laudoGerado;
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
+    public Boolean getLaudoGerado() {
+        return laudoGerado;
+    }
+
+    public void setLaudoGerado(Boolean laudoGerado) {
+        this.laudoGerado = laudoGerado;
+    }
+
+    public Boolean getAvulso() {
+        return avulso;
+    }
+
+    public void setAvulso(Boolean avulso) {
+        this.avulso = avulso;
+    }
 
     public LocalTime getHoraExame() {
         return horaExame;

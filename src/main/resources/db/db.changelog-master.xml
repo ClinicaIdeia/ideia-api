@@ -13,5 +13,8 @@
     <include file="db/migrations/V006__criacao_tabela_motivos.sql"/>
     <include file="db/migrations/V007__criacao_tabela_agendamento.sql"/>
     <include file="db/migrations/V008__criacao_tabela_configuracao.sql"/>
+    <include file="db/migrations/V009__criacao_tabela_aptidao.sql"/>
+    <include file="db/migrations/V010__criacao_tabela_laudo.sql"/>
+    <include file="db/migrations/V011__criacao_tabela_func_cargo_empresa.sql"/>
 
 </databaseChangeLog>

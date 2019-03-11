@@ -13,4 +13,5 @@ public interface FuncionarioRepositoryQuery {
 
     Page<ResumoFuncionario> resumir(FuncionarioFilter funcionarioFilter, Pageable pageable);
 
+
 }

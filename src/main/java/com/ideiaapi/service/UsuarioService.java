@@ -1,6 +1,7 @@
 package com.ideiaapi.service;
 
-import static com.ideiaapi.constansts.ErrorsCode.RECURSO_NAO_ENCONTRADO;
+import static com.ideiaapi.constants.ErrorsCode.RECURSO_NAO_ENCONTRADO;
+import static com.ideiaapi.constants.ErrorsCode.SENHAS_DIFERENTES;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,7 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ideiaapi.dto.s3.AnexoS3DTO;
 import com.ideiaapi.exceptions.BusinessException;
 import com.ideiaapi.mail.EnvioEmail;
 import com.ideiaapi.model.SenhaAlterar;
@@ -24,6 +27,8 @@ import com.ideiaapi.model.SenhaReiniciar;
 import com.ideiaapi.model.Usuario;
 import com.ideiaapi.repository.UsuarioRepository;
 import com.ideiaapi.repository.filter.UsuarioFilter;
+import com.ideiaapi.storage.S3;
+import com.ideiaapi.validate.UsuarioValidate;
 
 @Service
 public class UsuarioService {
@@ -34,6 +39,17 @@ public class UsuarioService {
     @Autowired
     private EnvioEmail envioEmail;
 
+    @Autowired
+    private UsuarioValidate validate;
+
+    @Autowired
+    private S3 s3;
+
+    public AnexoS3DTO salvarFotoUsaruioS3(MultipartFile file) {
+        String nome = s3.salvarArquivoS3Temporatimente(file, Boolean.TRUE);
+        return new AnexoS3DTO(nome, s3.configuraUrl(nome));
+    }
+
     public Page<Usuario> filtrar(UsuarioFilter filter, Pageable pageable) {
         final Page<Usuario> filtrar = this.usuarioRepository.filtrar(filter, pageable);
         filtrar.iterator().forEachRemaining(usuario -> usuario.setSenha("*******"));
@@ -42,6 +58,7 @@ public class UsuarioService {
     }
 
     public Usuario cadastraUsuario(Usuario entity) {
+        this.validate.validaInsercao(entity);
         Usuario usuarioSalvo = reiniciarSenhaAleatoriamenteParaUsuario(entity);
         usuarioSalvo.setSenha("*******");
         return usuarioSalvo;
@@ -81,14 +98,19 @@ public class UsuarioService {
         Usuario usuario = this.usuarioRepository.findOne(codigo);
 
         if (usuario != null) {
-            usuario.setSenha(senhaAlterar.getSenhaNova());
+            this.validaSenhasDivergentes(senhaAlterar);
+            usuario.setSenha(new BCryptPasswordEncoder().encode(senhaAlterar.getSenhaNova()));
             this.usuarioRepository.save(usuario);
-            this.envioEmail.enviarEmail("openlinkti@gmail.com", Collections.singletonList(usuario.getEmail()),
-                    "Senha de Acesso ao Sistema Ideia Alterado com sucesso", "email/alterar-senha", null);
             return ResponseEntity.ok(usuario);
 
         } else {
             throw new BusinessException(RECURSO_NAO_ENCONTRADO);
+        }
+    }
+
+    private void validaSenhasDivergentes(SenhaAlterar senhaAlterar) {
+        if (!senhaAlterar.getSenhaNova().equals(senhaAlterar.getConfirmacao())) {
+            throw new BusinessException(SENHAS_DIFERENTES);
         }
     }
 

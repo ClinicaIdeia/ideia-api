@@ -22,18 +22,6 @@ public class EnvioEmail {
 
     @Autowired
     private TemplateEngine thymeleaf;
-//
-//    @EventListener
-//    private void testeEmail(ApplicationReadyEvent event) {
-//
-//        String template = "email/envio-senha";
-//
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("senha", 123456);
-//
-//        this.enviarEmail("openlinkti@gmail.com", Arrays.asList("alvesdesouzaalex@gmail.com"), "teste", template, map);
-//
-//    }
 
     public void enviarEmail(String remetente, List<String> destinatarios, String assunto, String template,
             Map<String, Object> variaveis) {
@@ -45,7 +33,6 @@ public class EnvioEmail {
 
         String mensagem = this.thymeleaf.process(template, context);
         this.enviarEmail(remetente, destinatarios, assunto, mensagem);
-
     }
 
     private void enviarEmail(String remetente, List<String> destinatarios, String assunto, String mensagem) {
@@ -60,6 +47,7 @@ public class EnvioEmail {
             helper.setText(mensagem, true);
 
             this.javaMailSender.send(mimeMessage);
+
         } catch (MessagingException e) {
             throw new RuntimeException("Erro ao enviar email");
         }

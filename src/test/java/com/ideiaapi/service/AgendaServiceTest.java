@@ -1,6 +1,7 @@
 package com.ideiaapi.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import org.springframework.data.domain.PageImpl;
 
 import com.ideiaapi.base.BaseTest;
+import com.ideiaapi.exceptions.BusinessException;
 import com.ideiaapi.model.Agenda;
 import com.ideiaapi.model.Horario;
 import com.ideiaapi.repository.AgendaRepository;
@@ -24,6 +26,9 @@ public class AgendaServiceTest extends BaseTest {
     @Mock
     private AgendaRepository agendaRepository;
 
+    @Mock
+    private HorarioService horarioService;
+
     @InjectMocks
     private AgendaService agendaService;
 
@@ -32,6 +37,7 @@ public class AgendaServiceTest extends BaseTest {
 
     private Agenda agenda = new Agenda();
     private Horario horario = new Horario();
+    private List<LocalDate> diasCopias = new ArrayList<>();
 
     @Before
     public void setUp() throws Exception {
@@ -49,6 +55,7 @@ public class AgendaServiceTest extends BaseTest {
         agenda.setCodigo(1L);
         agenda.setObservacao("obs");
         agenda.setHorarios(horariosList);
+        agenda.setDiasCopia(diasCopias);
 
         agendasList.add(agenda);
     }
@@ -58,9 +65,77 @@ public class AgendaServiceTest extends BaseTest {
 
         when(agendaRepository.findAllByDiaAgendaAfter(any())).thenReturn(agendasList);
 
-        PageImpl page = agendaService.listaFuturosAgendamentos();
+        PageImpl page = agendaService.listaFuturosAgendamentos(false);
 
         assertNotNull(page);
         assertTrue(1 == page.getTotalElements());
+    }
+
+    @Test
+    public void copiarAgendaParaUmDia() {
+
+        LocalDate dia1 = LocalDate.now().plusDays(1L);
+        diasCopias.add(dia1);
+
+        List<Agenda> response = agendaService.copiaAgenda(agenda);
+
+        assertTrue(response.size() == 1);
+        assertTrue("obs".equals(response.get(0).getObservacao()));
+        assertTrue(horariosList.equals(response.get(0).getHorarios()));
+        assertTrue(response.get(0).getDiasCopia() == null);
+    }
+
+    @Test
+    public void copiarAgendaParaMaisQueUmDiaOrdenado() {
+
+        LocalDate dia1 = LocalDate.now().plusDays(1L);
+        diasCopias.add(dia1);
+        LocalDate dia2 = LocalDate.now().plusDays(2L);
+        diasCopias.add(dia2);
+
+        agenda.setDiasCopia(diasCopias);
+
+        when(horarioService.copiarHorarios(horariosList)).thenReturn(horariosList);
+
+        List<Agenda> response = agendaService.copiaAgenda(agenda);
+
+        assertTrue(response.size() == 2);
+        assertTrue("obs".equals(response.get(0).getObservacao()));
+        assertTrue(horariosList.equals(response.get(0).getHorarios()));
+        assertTrue(response.get(0).getDiasCopia() == null);
+        assertTrue("obs".equals(response.get(1).getObservacao()));
+        assertTrue(horariosList.equals(response.get(1).getHorarios()));
+        assertTrue(response.get(1).getDiasCopia() == null);
+    }
+
+    @Test
+    public void copiarAgendaParaMaisQueUmDiaDesordenado() {
+
+        LocalDate dia1 = LocalDate.now().plusDays(2L);
+        diasCopias.add(dia1);
+        LocalDate dia2 = LocalDate.now().plusDays(1L);
+        diasCopias.add(dia2);
+
+        agenda.setDiasCopia(diasCopias);
+
+        when(horarioService.copiarHorarios(horariosList)).thenReturn(horariosList);
+
+        List<Agenda> response = agendaService.copiaAgenda(agenda);
+
+        assertTrue(response.size() == 2);
+        assertTrue("obs".equals(response.get(0).getObservacao()));
+        assertTrue(horariosList.equals(response.get(0).getHorarios()));
+        assertTrue(response.get(0).getDiasCopia() == null);
+        assertTrue("obs".equals(response.get(1).getObservacao()));
+        assertTrue(horariosList.equals(response.get(1).getHorarios()));
+        assertTrue(response.get(1).getDiasCopia() == null);
+    }
+
+    @Test(expected = BusinessException.class)
+    public void copiarAgendaError() {
+
+        agenda.setDiasCopia(diasCopias);
+
+        agendaService.copiaAgenda(agenda);
     }
 }

@@ -35,7 +35,7 @@ public class HorarioResource {
     private ApplicationEventPublisher publisher;
 
     @GetMapping("/motivos")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
     public List<Horario> listar(@RequestParam(value = "trabalhoArmado") Boolean trabalhoArmado) {
         return this.horarioService.listaHorarios(trabalhoArmado);
     }
@@ -50,7 +50,7 @@ public class HorarioResource {
     }
 
     @GetMapping("/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
     public ResponseEntity<Horario> busca(@PathVariable Long codigo) {
         Horario horario = this.horarioService.buscaHorario(codigo);
 

@@ -23,22 +23,29 @@
 
     <div style="margin: 10px 0 10px 10px; padding: 50px;">
 
-        <img src="/assets/logo_ideia.png" width="300" height="150"/>
+        <img src="https://oplk-it-ideia-arquivos.s3.amazonaws.com/11ceb45a-851e-4d4a-8155-1de650e578bd__logo_ideia.png" width="300" height="150"/>
 
         <h3>Ol&aacute;,</h3>
 
-        <p class="bg-primary">Segue a lista dos agendamentos daqui 3 dias para exames psicologicos para trabalho com
-            armas :</p>
+        <p class="bg-primary">Segue a lista dos agendamentos daqui 3 dias para exames psicologicos para trabalho com armas :</p>
 
-        <table>
-            <th:block th:each="item : ${names}">
-                <tr>
-                    <td th:text="${item}"></td>
-                </tr>
-            </th:block>
+        <table style="width: 100%; border-collapse: collapse;  margin: 20px 0">
+            <thead>
+            <tr>
+                <th>Nome do Funcionario</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr style="border-bottom: 1px solid #ccc; border-top: 1px solid #ccc;"
+                th:each="name: ${names}">
+                <td th:text="${name}"></td>
+
+            </tr>
+            </tbody>
         </table>
 
-        <p>Equipe Ideia</p>
+        <p>Nilza Marquez - Instituto IDEIA</p>
 
     </div>
 

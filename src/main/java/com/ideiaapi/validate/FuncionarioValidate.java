@@ -1,6 +1,9 @@
 package com.ideiaapi.validate;
 
-import static com.ideiaapi.constansts.ErrorsCode.CPF_DUPLICADO;
+import static com.ideiaapi.constants.ErrorsCode.CPF_DUPLICADO;
+import static com.ideiaapi.constants.ErrorsCode.DATA_NASCIMENTO_SUPERIOR;
+
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,6 +20,21 @@ public class FuncionarioValidate {
 
     public void fluxoCriacao(Funcionario entity) {
         this.validaCpfUnique(entity);
+        this.validaDataAniversario(entity);
+    }
+
+    public void fluxoAtualizacao(Funcionario entity) {
+        this.validaDataAniversario(entity);
+    }
+
+    private void validaDataAniversario(Funcionario entity) {
+        final LocalDate dataNascimento = entity.getDataNascimento();
+        if (null != dataNascimento) {
+            if (dataNascimento.isAfter(LocalDate.now())) {
+                throw new BusinessException(DATA_NASCIMENTO_SUPERIOR);
+            }
+        }
+
     }
 
     private void validaCpfUnique(Funcionario funcionario) {

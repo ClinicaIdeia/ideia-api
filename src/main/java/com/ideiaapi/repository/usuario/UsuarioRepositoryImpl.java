@@ -37,6 +37,7 @@ public class UsuarioRepositoryImpl extends RestricoesPaginacao implements Usuari
         Predicate[] predicates = criarRestricoes(usuarioFilter, builder, root);
         criteria.where(predicates);
 
+        criteria.orderBy(builder.asc(root.get("nome")));
         TypedQuery<Usuario> query = manager.createQuery(criteria);
         super.adicionarRestricoesDePaginacao(query, pageable);
 

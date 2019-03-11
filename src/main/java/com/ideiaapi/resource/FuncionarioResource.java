@@ -1,11 +1,10 @@
 package com.ideiaapi.resource;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -27,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ideiaapi.dto.s3.AnexoS3DTO;
 import com.ideiaapi.event.RecursoCriadoEvent;
 import com.ideiaapi.model.Funcionario;
 import com.ideiaapi.repository.filter.FuncionarioFilter;
@@ -45,31 +45,33 @@ public class FuncionarioResource {
     private ApplicationEventPublisher publisher;
 
     @GetMapping
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
-    public Page<ResumoFuncionario> pesquisar(FuncionarioFilter filter, Pageable pageable) {
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
+    public Page<Funcionario> pesquisar(FuncionarioFilter filter, Pageable pageable) {
+        return this.funcionarioService.filtrar(filter, pageable);
+    }
+
+    @GetMapping(path = "/resumo")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
+    public Page<ResumoFuncionario> resumo(FuncionarioFilter filter, Pageable pageable) {
         return this.funcionarioService.resumo(filter, pageable);
     }
 
     @GetMapping(path = "/todos")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
-    public Page<ResumoFuncionario> pesquisarTodos(FuncionarioFilter filter, Pageable pageable) {
-        return this.funcionarioService.resumo(filter, pageable);
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
+    public ResponseEntity<List<Funcionario>> pesquisarTodos() {
+        final List<Funcionario> todos = this.funcionarioService.todos();
+        return ResponseEntity.ok(todos);
     }
 
     @PostMapping("/anexo")
-    @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
-    public String carregaAnexo(@RequestParam MultipartFile anexo) throws IOException {
-
-        OutputStream out =
-                new FileOutputStream("/home/alexalvesdesouza/Pictures/anexo--" + anexo.getOriginalFilename());
-        out.write(anexo.getBytes());
-        out.close();
-
-        return "OK";
+    @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2" +
+            ".hasScope('write')")
+    public AnexoS3DTO salvarFotoFuncionario(@RequestParam MultipartFile anexo) {
+        return this.funcionarioService.salvarFotoFuncionarioS3(anexo);
     }
 
     @PostMapping
-    @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
+    @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
     public ResponseEntity<Funcionario> criar(@RequestBody @Valid Funcionario funcionario,
             HttpServletResponse response) {
 
@@ -79,7 +81,7 @@ public class FuncionarioResource {
     }
 
     @GetMapping("/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
     public ResponseEntity<Funcionario> busca(@PathVariable Long codigo) {
         Funcionario funcionario = this.funcionarioService.buscaFuncionario(codigo);
 
@@ -89,15 +91,26 @@ public class FuncionarioResource {
         return ResponseEntity.ok(funcionario);
     }
 
+    @GetMapping("/cpf")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
+    public ResponseEntity<Funcionario> buscaPorCpf(@PathParam("cpf") String cpf) {
+        Funcionario funcionario = this.funcionarioService.buscaFuncionarioPorCpf(cpf);
+
+        if (null == funcionario)
+            return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(funcionario);
+    }
+
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize(value = "hasAuthority('ROLE_REMOVER_FUNCIONARIO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
+    @PreAuthorize(value = "hasAuthority('ROLE_REMOVER_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
     public void deleta(@PathVariable Long codigo) {
         this.funcionarioService.deletaFuncionario(codigo);
     }
 
     @PutMapping("/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
     public ResponseEntity<Funcionario> atualiza(@PathVariable Long codigo,
             @RequestBody @Valid Funcionario funcionario) {
         return this.funcionarioService.atualizaFuncionario(codigo, funcionario);

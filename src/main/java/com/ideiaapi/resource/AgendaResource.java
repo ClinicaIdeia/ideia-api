@@ -1,5 +1,7 @@
 package com.ideiaapi.resource;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -17,14 +19,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ideiaapi.event.RecursoCriadoEvent;
 import com.ideiaapi.model.Agenda;
 import com.ideiaapi.repository.filter.AgendaFilter;
-import com.ideiaapi.repository.projection.ResumoAgendamento;
-import com.ideiaapi.service.AgendaService;
+import com.ideiaapi.repository.projection.ResumoAgenda;
 import com.ideiaapi.service.AgendaService;
 
 @RestController
@@ -38,17 +40,22 @@ public class AgendaResource {
     private ApplicationEventPublisher publisher;
 
     @GetMapping
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2" +
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2" +
             ".hasScope('read')")
-    public Page pesquisar(AgendaFilter filter, Pageable pageable) {
-       // return this.agendaService.listaAgendamentos(filter, pageable);
-        return this.agendaService.listaFuturosAgendamentos(); //TODO : Ver com alex
+    public Page pesquisar(@RequestParam(value = "isTrabalhoArmado") Boolean isTrabalhoArmado) {
+        return this.agendaService.listaFuturosAgendamentos(isTrabalhoArmado);
     }
 
     @GetMapping("/resumo")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
-    public Page<ResumoAgendamento> resumo(AgendaFilter filter, Pageable pageable) {
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+    public Page<ResumoAgenda> resumo(AgendaFilter filter, Pageable pageable) {
         return this.agendaService.resumo(filter, pageable);
+    }
+
+    @GetMapping("/filtro")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+    public Page<Agenda> filtro(AgendaFilter filter, Pageable pageable) {
+        return this.agendaService.filtrar(filter, pageable);
     }
 
     @PostMapping
@@ -61,8 +68,23 @@ public class AgendaResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(agendaSalva);
     }
 
+    @PostMapping("/copia")
+    @PreAuthorize(value = "hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
+    public ResponseEntity<List<Agenda>> copia(@RequestBody Agenda agenda,
+            HttpServletResponse response) {
+
+        final List<Agenda> agendas = this.agendaService.copiaAgenda(agenda);
+        agendas.forEach(
+                agendaCopiada -> publisher.publishEvent(
+                        new RecursoCriadoEvent(this, response, agendaCopiada.getCodigo())
+                )
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(agendas);
+    }
+
     @GetMapping("/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_HORARIO') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
     public ResponseEntity<Agenda> busca(@PathVariable Long codigo) {
         Agenda agenda = this.agendaService.buscaAgendamento(codigo);
 

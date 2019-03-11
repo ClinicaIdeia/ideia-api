@@ -29,6 +29,14 @@ public class Permissao {
         this.descricao = descricao;
     }
 
+    public Permissao() {
+        super();
+    }
+
+    public Permissao(String descricao) {
+        this.descricao = descricao;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

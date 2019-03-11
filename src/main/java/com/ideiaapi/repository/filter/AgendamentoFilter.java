@@ -14,6 +14,16 @@ public class AgendamentoFilter {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataExameAte;
 
+    private Boolean laudoGerado;
+
+    public Boolean getLaudoGerado() {
+        return laudoGerado;
+    }
+
+    public void setLaudoGerado(Boolean laudoGerado) {
+        this.laudoGerado = laudoGerado;
+    }
+
     public String getObservacao() {
         return observacao;
     }

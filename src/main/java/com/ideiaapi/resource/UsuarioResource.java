@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ideiaapi.dto.s3.AnexoS3DTO;
 import com.ideiaapi.event.RecursoCriadoEvent;
 import com.ideiaapi.model.SenhaAlterar;
 import com.ideiaapi.model.SenhaReiniciar;
@@ -39,8 +42,14 @@ public class UsuarioResource {
     @Autowired
     private ApplicationEventPublisher publisher;
 
+    @PostMapping("/anexo")
+    @PreAuthorize(value = "hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
+    public AnexoS3DTO salvarFotoUsuario(@RequestParam MultipartFile anexo) {
+        return this.usuarioService.salvarFotoUsaruioS3(anexo);
+    }
+
     @GetMapping
-    @PreAuthorize(value = "hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+    @PreAuthorize(value = "hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
     public Page<Usuario> pesquisar(UsuarioFilter filter, Pageable pageable) {
         return this.usuarioService.filtrar(filter, pageable);
     }
@@ -81,14 +90,14 @@ public class UsuarioResource {
     }
 
     @PostMapping("/senha/mudar/{codigo}")
-    @PreAuthorize(value = "hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
+    @PreAuthorize(value = "hasAuthority('ROLE_TROCA_SENHA') or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
     public ResponseEntity<Usuario> alterarSenha(
             @PathVariable Long codigo,
             @RequestBody @Valid SenhaAlterar senhaAlterar) {
         return this.usuarioService.alterarSenhaUsuario(codigo, senhaAlterar);
     }
 
-    @PostMapping("/senha/reiniciar")
+    @PutMapping("/senha/reiniciar")
     public ResponseEntity reiniciarSenha(@RequestBody @Valid SenhaReiniciar senhaReiniciar) {
         return this.usuarioService.reiniciarSenhaUsuario(senhaReiniciar);
     }

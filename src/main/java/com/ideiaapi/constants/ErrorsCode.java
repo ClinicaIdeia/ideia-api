@@ -1,4 +1,4 @@
-package com.ideiaapi.constansts;
+package com.ideiaapi.constants;
 
 public class ErrorsCode {
 
@@ -12,6 +12,18 @@ public class ErrorsCode {
     public static String CPF_DUPLICADO = "funcionario.cpf-duplicado";
 
     public static String CPF_INVALIDO = "cpf-invalido";
+    public static String SENHAS_DIFERENTES = "senhas-diferentes";
 
+    public static String ERRO_ENVIAR_ARQUIVO_S3 = "erro-envio-s3";
+
+    public static String LAUDO_NAO_ENCONTRADO = "laudo-nao-encontrado";
+
+    public static String USUARIO_DUPLICADO = "usuario-duplicado";
+
+    public static String INVALID_DATES = "datas-invalidas";
+
+    public static String DATA_NASCIMENTO_SUPERIOR = "nascimento-superior";
+
+    public static String DIA_AGENDA_INFERIOR = "agenda-inferior";
 
 }

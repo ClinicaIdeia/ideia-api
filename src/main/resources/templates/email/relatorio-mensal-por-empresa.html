@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+          crossorigin="anonymous">
+</head>
+
+<body style="font-family: Arial; font-size: 14px;" class="container">
+
+<div class="bg-primary">
+
+    <div style="margin: 10px 0 10px 10px; padding: 50px;">
+
+        <img src="https://oplk-it-ideia-arquivos.s3.amazonaws.com/11ceb45a-851e-4d4a-8155-1de650e578bd__logo_ideia.png"
+             width="300" height="150"/>
+
+        <h3>Ol&aacute;,</h3>
+
+        <p class="bg-primary">Segue a lista dos exames realizados no m&ecirc;s passado pela <span th:text="${empresa}"></span> : </p>
+
+        <table style="width: 100%; border-collapse: collapse;  margin: 20px 0">
+            <thead>
+            <tr>
+                <th>Nome do Funcionario</th>
+                <th>Data do Exame</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr style="border-bottom: 1px solid #ccc; border-top: 1px solid #ccc;"
+                th:each="exame : ${exames}">
+                <td th:text="${exame.nomeFuncionario}"></td>
+                <td th:text="${exame.dataExame}"></td>
+
+            </tr>
+            </tbody>
+        </table>
+
+        <p>Nilza Marquez - Instituto IDEIA</p>
+
+    </div>
+
+</div>
+</body>
+
+</html>

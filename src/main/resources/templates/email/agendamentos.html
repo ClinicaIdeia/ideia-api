@@ -4,7 +4,9 @@
 
 <body style="font-family: Arial; font-size: 14px;">
 
-<p>Olá!</p>
+<img src="https://oplk-it-ideia-arquivos.s3.amazonaws.com/11ceb45a-851e-4d4a-8155-1de650e578bd__logo_ideia.png" width="300" height="150"/>
+
+<p>Ol&aacute;!</p>
 
 <p>Existem receitas ou despesas vencidas ou vencendo hoje. Veja:</p>
 
@@ -14,7 +16,7 @@
     <tr>
         <th>Tipo</th>
         <th>Pessoa</th>
-        <th>Descrição</th>
+        <th>Descri&ccedil;&atilde;o</th>
         <th>Vencimento</th>
         <th>Valor</th>
     </tr>
@@ -25,8 +27,8 @@
         th:each="lancamento: ${lancamentos}"
         th:styleappend="${lancamento.receita} ? 'color: blue;' : 'color: red;'">
         <td th:text="${lancamento.tipo.descricao}">Receita</td>
-        <td th:text="${lancamento.pessoa.nome}">João Silva</td>
-        <td th:text="${lancamento.descricao}">Salário mensal</td>
+        <td th:text="${lancamento.pessoa.nome}">Jo&atilde;o Silva</td>
+        <td th:text="${lancamento.descricao}">Sal&aacute;rio mensal</td>
         <td th:text="${#temporals.format(lancamento.dataVencimento, 'dd/MM/yyyy')}"
             style="text-align: center">10/06/2017
         </td>
@@ -39,7 +41,7 @@
 </p>
 
 <p>Obrigado.</p>
-<p>Equipe Algamoney!</p>
+<p>Nilza Marquez - Instituto IDEIA</p>
 
 </body>
 </html>

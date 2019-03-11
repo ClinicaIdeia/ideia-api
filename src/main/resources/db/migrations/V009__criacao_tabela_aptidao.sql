@@ -1,0 +1,15 @@
+CREATE TABLE IF NOT EXISTS aptidao (
+
+  codigo            BIGINT PRIMARY KEY NOT NULL,
+  apto              BOOLEAN NOT NULL DEFAULT FALSE,
+  inapto            BOOLEAN NOT NULL DEFAULT FALSE,
+  descricao         VARCHAR(100)
+
+);
+
+CREATE SEQUENCE IF NOT EXISTS aptidao_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;

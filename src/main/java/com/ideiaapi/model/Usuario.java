@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -49,6 +50,27 @@ public class Usuario {
     @JoinTable(name = "usuario_permissao", joinColumns = @JoinColumn(name = "codigo_usuario")
             , inverseJoinColumns = @JoinColumn(name = "codigo_permissao"))
     private List<Permissao> permissoes;
+
+    private String anexo;
+
+    @Transient
+    private String urlAnexo;
+
+    public String getAnexo() {
+        return anexo;
+    }
+
+    public void setAnexo(String anexo) {
+        this.anexo = anexo;
+    }
+
+    public String getUrlAnexo() {
+        return urlAnexo;
+    }
+
+    public void setUrlAnexo(String urlAnexo) {
+        this.urlAnexo = urlAnexo;
+    }
 
     public Long getCodigo() {
         return codigo;
@@ -111,15 +133,4 @@ public class Usuario {
         return Objects.hash(codigo);
     }
 
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "codigo=" + codigo +
-                ", nome='" + nome + '\'' +
-                ", email='" + email + '\'' +
-                ", senha='" + senha + '\'' +
-                ", empresa=" + empresa +
-                ", permissoes=" + permissoes +
-                '}';
-    }
 }
