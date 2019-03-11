@@ -1,23 +1,11 @@
 package com.ideiaapi.repository;
 
-<<<<<<< HEAD
 import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.repository.agendamento.AgendamentoRepositoryQuery;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
-=======
-import java.time.LocalDate;
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import com.ideiaapi.model.Agendamento;
-import com.ideiaapi.repository.agendamento.AgendamentoRepositoryQuery;
->>>>>>> 9f0c188a5ed62007b52e8a078edc8aa554a9eb8a
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,7 +16,6 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long>,
     @Query(value = "SELECT * FROM agendamento " +
             "INNER JOIN agenda a ON agendamento.codigo_agenda = a.codigo " +
             "WHERE dia_agenda = ?1", nativeQuery = true)
-<<<<<<< HEAD
     List<Agendamento> findAllByAgendaDiaAgenda(LocalDate diaAgenda);
 
     @Query(value = "SELECT * FROM agendamento " +
@@ -36,7 +23,7 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long>,
             "WHERE ?1 = DATE_PART('month', dia_agenda) " +
             "AND ?2 = DATE_PART('year', dia_agenda)", nativeQuery = true)
     List<Agendamento> findAllByAgendaDiaAgendaMonthAndAgendaDiaAgendaYear(Integer month, Integer year);
-=======
+
     List<Agendamento> findAllByDate(LocalDate diaAgenda);
 
     @Query(value = "SELECT * FROM agendamento " +
@@ -62,5 +49,4 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long>,
     List<Agendamento> findAllByAgendamentoRelatorioPorEmpresaAdmin(
             @Param(value = "inicio") LocalDate inicio,
             @Param(value = "fim") LocalDate fim);
->>>>>>> 9f0c188a5ed62007b52e8a078edc8aa554a9eb8a
 }

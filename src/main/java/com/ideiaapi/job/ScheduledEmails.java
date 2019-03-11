@@ -146,11 +146,7 @@ public class ScheduledEmails {
         LocalDate hoje = LocalDate.now();
         LocalDate earlier = hoje.minusMonths(1); // 01-11-2018
 
-<<<<<<< HEAD
         Integer lastMonth = earlier.getMonth().getValue(); // java.time.Month = 11
-=======
-        Integer lastMonth = earlier.getMonth().getValue(); // 11
->>>>>>> 9f0c188a5ed62007b52e8a078edc8aa554a9eb8a
         Integer year = earlier.getYear(); // 2018
 
         List<Agendamento> agendamentosList = this.agendamentoRepository.findAllByMonthAndYear(lastMonth, year);
