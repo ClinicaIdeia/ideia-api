@@ -198,9 +198,10 @@ public class FuncionarioService {
         parametros.put("FUNC_ESCOLARIDADE", funcionario.getEscolaridade());
         parametros.put("FUNC_CPF", funcionario.getCpf());
         parametros.put("FUNC_PROFISSAO", funcionario.getCargo());
-        parametros.put("NUM_CADASTRO", funcionario.getNumeroCadastro());
+        parametros.put("NUM_CADASTRO", String.valueOf(funcionario.getNumeroCadastro()));
         parametros.put("FUNC_NATURALIDADE", null != funcionario.getNaturalidade() ? funcionario.getNaturalidade() : "");
-        parametros.put("FUNC_NASCIMENTO", funcionario.getDataNascimento());
+        parametros.put("FUNC_NASCIMENTO", null != funcionario.getDataNascimento() ?
+                funcionario.getDataNascimento().toString() : "");
         parametros.put("EMP_NOME", "");
         parametros.put("FUNC_EMAIL", funcionario.getEmail());
         parametros.put("FUNC_TELEFONE", funcionario.getTelefone());
