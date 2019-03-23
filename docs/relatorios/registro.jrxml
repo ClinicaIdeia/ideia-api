@@ -5,7 +5,6 @@
 	<parameter name="FUNC_NOME" class="java.lang.String"/>
 	<parameter name="FUNC_SEXO" class="java.lang.String"/>
 	<parameter name="FUNC_ESTADO_CIVIL" class="java.lang.String"/>
-	<parameter name="FUNC_IDADE" class="java.lang.String"/>
 	<parameter name="FUNC_ESCOLARIDADE" class="java.lang.String"/>
 	<parameter name="FUNC_CPF" class="java.lang.String"/>
 	<parameter name="FUNC_PROFISSAO" class="java.lang.String"/>
@@ -21,8 +20,8 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="apto" class="java.lang.String"/>
-	<field name="descricao" class="java.lang.String"/>
+	<field name="nome" class="java.lang.String"/>
+	<field name="ativa" class="java.lang.String"/>
 	<pageHeader>
 		<band height="75" splitType="Stretch">
 			<image>

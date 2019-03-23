@@ -201,7 +201,7 @@ public class FuncionarioService {
         parametros.put("NUM_CADASTRO", funcionario.getNumeroCadastro());
         parametros.put("FUNC_NATURALIDADE", null != funcionario.getNaturalidade() ? funcionario.getNaturalidade() : "");
         parametros.put("FUNC_NASCIMENTO", funcionario.getDataNascimento());
-        parametros.put("EMP_NOME", funcionario.getDataNascimento());
+        parametros.put("EMP_NOME", "");
         parametros.put("FUNC_EMAIL", funcionario.getEmail());
         parametros.put("FUNC_TELEFONE", funcionario.getTelefone());
 
