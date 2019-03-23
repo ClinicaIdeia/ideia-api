@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="laudo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d353ecc2-25bb-446f-953a-665af05a5ea0">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="FUNC_NOME" class="java.lang.String"/>
+	<parameter name="FUNC_SEXO" class="java.lang.String"/>
+	<parameter name="FUNC_ESTADO_CIVIL" class="java.lang.String"/>
+	<parameter name="FUNC_IDADE" class="java.lang.String"/>
+	<parameter name="FUNC_ESCOLARIDADE" class="java.lang.String"/>
+	<parameter name="FUNC_CPF" class="java.lang.String"/>
+	<parameter name="FUNC_PROFISSAO" class="java.lang.String"/>
+	<parameter name="NUM_CADASTRO" class="java.lang.String"/>
+	<parameter name="FUNC_NATURALIDADE" class="java.lang.String"/>
+	<parameter name="FUNC_NASCIMENTO" class="java.lang.String"/>
+	<parameter name="EMP_NOME" class="java.lang.String"/>
+	<parameter name="END_BAIRRO" class="java.lang.String"/>
+	<parameter name="END_LOGRADOURO" class="java.lang.String"/>
+	<parameter name="FUNC_EMAIL" class="java.lang.String"/>
+	<parameter name="FUNC_TELEFONE" class="java.lang.String"/>
+	<parameter name="DT_EXAME" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="apto" class="java.lang.String"/>
+	<field name="descricao" class="java.lang.String"/>
+	<pageHeader>
+		<band height="75" splitType="Stretch">
+			<image>
+				<reportElement x="10" y="0" width="115" height="45" uuid="eb8f25da-63d8-4bf1-a58b-5e55db214e7c"/>
+				<imageExpression><![CDATA["https://oplk-it-ideia-arquivos.s3.amazonaws.com/11ceb45a-851e-4d4a-8155-1de650e578bd__logo_ideia.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="320" y="0" width="231" height="20" uuid="4e0efef2-5e45-474c-8dd5-dded75253362"/>
+				<textFieldExpression><![CDATA["Número de Cadastro " + $P{NUM_CADASTRO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="320" y="46" width="225" height="1" uuid="bd1dc636-8d10-4a9e-b0da-6eaf3ffb39d9"/>
+			</line>
+			<staticText>
+				<reportElement x="320" y="48" width="225" height="15" uuid="ea3b9934-47b3-4097-a07f-6f5ada3d5be4"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[(Empresa que encaminhou)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="320" y="20" width="231" height="20" uuid="a37558e5-a9b2-4031-8a69-516984ffc521"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$P{EMP_NOME}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="177">
+			<textField>
+				<reportElement x="0" y="1" width="350" height="20" uuid="7fe3ca03-825a-4957-980f-851267ed811e"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nome:" + $P{FUNC_NOME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="1" width="205" height="20" uuid="b55f6d57-b8ab-4df1-b997-1aabd122f557"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CPF/RG:" + $P{FUNC_CPF}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="250" height="20" uuid="5f4e149f-42ba-4b00-96b9-262eef31387d"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Data de nascimento: " + $P{FUNC_NASCIMENTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="40" width="555" height="20" uuid="a3b3c0bd-7494-42ae-ae65-9d688d8a2153"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Natural de: " + $P{FUNC_NATURALIDADE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="355" y="20" width="200" height="20" uuid="93a91ba8-f691-46db-b9b4-bd56f64a623c"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Sexo: " + $P{FUNC_SEXO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="60" width="150" height="20" uuid="0543421f-7cf6-4406-af6e-0724df4bb98d"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Estado Civil: " + $P{FUNC_ESTADO_CIVIL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="60" width="150" height="20" uuid="947d5b9b-6881-4a76-bc0a-fcc9d39ad9e7"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Instrução: " + $P{FUNC_ESCOLARIDADE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="60" width="255" height="20" uuid="cd8fa38c-ed23-4668-8fd6-7f50c5eba7a2"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Profissão: " + $P{FUNC_PROFISSAO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="80" width="140" height="20" uuid="9d05e214-f2a1-4e5c-bd2a-6bf695c5eeb2"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Mão Dominante: (   )D (   )E]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="80" width="210" height="20" uuid="2206417c-d7b3-4d3a-a229-d5927c3f482d"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Já fez o teste aqui antes?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="80" width="205" height="20" uuid="17222b97-bd6a-45a4-969c-e67a48e13a10"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Para que?]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="100" width="355" height="20" uuid="1342d7e6-389f-42b8-92f5-57c55d293082"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Endereço: " + $P{END_LOGRADOURO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="100" width="255" height="20" uuid="5778d742-b64f-4611-ab56-234b0146417f"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Bairro: " + $P{END_BAIRRO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="120" width="255" height="20" uuid="4b12389d-9c53-4579-999e-412a66b00dc0"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fone: " + $P{FUNC_TELEFONE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="120" width="300" height="20" uuid="437836f0-ce44-4e29-b7c0-cbd39912417a"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["E-mail " + $P{FUNC_EMAIL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="140" width="150" height="20" uuid="07521676-d8ec-41c5-8b16-982d2730078f"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="10" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Data do exame: " + $P{DT_EXAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="150" y="140" width="260" height="20" uuid="4568dea8-d4dd-4b5d-8f48-1adf149c7650"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[Aplicador:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="140" width="145" height="20" uuid="6bbd38f7-a1ed-4dce-bc64-2d189d88ad50"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom"/>
+				<text><![CDATA[(   ) APTO (   ) INAPTO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="200" y="160" width="205" height="1" uuid="36b4de39-90dc-46b5-953c-bf7ed2206b30"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="550">
+			<staticText>
+				<reportElement x="227" y="10" width="100" height="15" uuid="20603642-ce54-42a0-9ae3-7658f2f12a8d"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Entrevista]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="50" width="555" height="15" uuid="15da1d07-1bd9-4f40-b587-61e63b12082f"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Motivo da Avaliação Psicológica:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="80" width="555" height="1" uuid="25a1f464-a791-4f5c-a911-a713fc7f6f23"/>
+			</line>
+			<line>
+				<reportElement x="0" y="105" width="555" height="1" uuid="b09b9f43-b648-4b74-96ca-5a6b345b1bdf"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="135" width="555" height="15" uuid="fdd090dd-d214-4d3a-98e4-814e1e940750"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Histórico escolar/priofissional:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="170" width="555" height="1" uuid="14cae52f-789d-4120-b2b5-06c91c8a7f1d"/>
+			</line>
+			<line>
+				<reportElement x="0" y="195" width="555" height="1" uuid="77be6711-e742-4c91-8e8a-2270bc4b0da4"/>
+			</line>
+			<line>
+				<reportElement x="0" y="225" width="555" height="1" uuid="43ba494c-dad6-4acf-bd19-933a079d08ea"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="255" width="555" height="15" uuid="6b420317-13ad-4bb0-bb9a-24fe8f4dc827"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Histórico Familiar]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="290" width="555" height="1" uuid="3e70191d-ce9f-4a48-8230-5ffefab687ad"/>
+			</line>
+			<line>
+				<reportElement x="0" y="315" width="555" height="1" uuid="45d3151b-7f3b-4078-913d-8666f4c162c2"/>
+			</line>
+			<line>
+				<reportElement x="0" y="340" width="555" height="1" uuid="150f81d9-9133-4726-91c1-84ce8ee47ee3"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="365" width="555" height="15" uuid="f22a5309-6dea-4c0e-93e3-a1c75afbb030"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Histórico de Saúde]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="400" width="555" height="1" uuid="961b0c15-0b8d-4eb7-b6db-9cf881e5a1e9"/>
+			</line>
+			<line>
+				<reportElement x="0" y="425" width="555" height="1" uuid="176edfde-2d7f-4617-9917-d8dad20d6564"/>
+			</line>
+			<line>
+				<reportElement x="0" y="450" width="555" height="1" uuid="5d96a001-39ed-4561-8743-ba7330ad5b54"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="470" width="555" height="15" uuid="f5b63762-6195-44e5-8596-c248e8288aee"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Conduta Social]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="495" width="555" height="1" uuid="7449876c-abb6-4661-8f09-1cd5b5dc1de1"/>
+			</line>
+			<line>
+				<reportElement x="0" y="520" width="555" height="1" uuid="e0d3eddc-0336-412c-b437-38a56c16e61c"/>
+			</line>
+			<line>
+				<reportElement x="0" y="545" width="555" height="1" uuid="b153cb7c-6610-4406-a408-24c42f57dbba"/>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

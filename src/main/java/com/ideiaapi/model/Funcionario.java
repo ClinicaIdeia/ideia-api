@@ -105,6 +105,17 @@ public class Funcionario {
     @Transient
     private String urlAnexo;
 
+    @Column(name = "numero_cadastro")
+    private Long numeroCadastro;
+
+    public Long getNumeroCadastro() {
+        return numeroCadastro;
+    }
+
+    public void setNumeroCadastro(Long numeroCadastro) {
+        this.numeroCadastro = numeroCadastro;
+    }
+
     public Long getCodigo() {
         return codigo;
     }

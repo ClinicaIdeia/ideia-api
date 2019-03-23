@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ideiaapi.service.AgendamentoService;
+import com.ideiaapi.service.FuncionarioService;
 import com.ideiaapi.service.LaudoService;
 
 @RestController
@@ -26,6 +27,9 @@ public class RelatoriosResource {
 
     @Autowired
     private LaudoService laudoService;
+
+    @Autowired
+    private FuncionarioService funcionarioService;
 
     @GetMapping("/agendamentos/{codEmpresa}/{codFuncionario}")
     @PreAuthorize(value = "hasAuthority('ROLE_RELATORIO_AGENDAMENTO') or hasAuthority('ROLE_ADMIN')  and #oauth2"
@@ -50,6 +54,17 @@ public class RelatoriosResource {
             ("codigo") Long codigo) throws Exception {
 
         byte[] bytes = this.laudoService.imprimeLaudo(codigo);
+
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(bytes);
+    }
+
+
+    @GetMapping("/funcionario/{codigo}")
+    @PreAuthorize(value = "hasAuthority('ROLE_LAUDO_INFO') or hasAuthority('ROLE_ADMIN')  and #oauth2"
+            + ".hasScope('read')")
+    public ResponseEntity<byte[]> registroFunc(@PathVariable("codigo") Long codigo) throws Exception {
+
+        byte[] bytes = this.funcionarioService.folhaDeRegistro(codigo);
 
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(bytes);
     }

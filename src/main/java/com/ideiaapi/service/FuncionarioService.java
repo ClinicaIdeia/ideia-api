@@ -1,5 +1,7 @@
 package com.ideiaapi.service;
 
+import java.io.InputStream;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ideiaapi.dto.AptidaoDTO;
 import com.ideiaapi.dto.s3.AnexoS3DTO;
 import com.ideiaapi.model.Empresa;
 import com.ideiaapi.model.FuncCargoEmpresa;
@@ -30,6 +33,11 @@ import com.ideiaapi.repository.projection.ResumoFuncionario;
 import com.ideiaapi.security.UsuarioSessao;
 import com.ideiaapi.storage.S3;
 import com.ideiaapi.validate.FuncionarioValidate;
+
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Service
 public class FuncionarioService {
@@ -176,4 +184,45 @@ public class FuncionarioService {
         }
         return this.funcionarioRepository.findAll();
     }
+
+
+    public byte[] folhaDeRegistro(Long codigo) throws Exception {
+
+        Funcionario funcionario = this.buscaFuncionario(codigo);
+
+        Map<String, Object> parametros = new HashMap<>();
+
+        parametros.put("FUNC_NOME", funcionario.getNome());
+        parametros.put("FUNC_SEXO", funcionario.getSexo());
+        parametros.put("FUNC_ESTADO_CIVIL", funcionario.getEstadoCivil());
+        parametros.put("FUNC_ESCOLARIDADE", funcionario.getEscolaridade());
+        parametros.put("FUNC_CPF", funcionario.getCpf());
+        parametros.put("FUNC_PROFISSAO", funcionario.getCargo());
+        parametros.put("NUM_CADASTRO", funcionario.getNumeroCadastro());
+        parametros.put("FUNC_NATURALIDADE", null != funcionario.getNaturalidade() ? funcionario.getNaturalidade() : "");
+        parametros.put("FUNC_NASCIMENTO", funcionario.getDataNascimento());
+        parametros.put("EMP_NOME", funcionario.getDataNascimento());
+        parametros.put("FUNC_EMAIL", funcionario.getEmail());
+        parametros.put("FUNC_TELEFONE", funcionario.getTelefone());
+
+        String endereco = funcionario.getEndereco().getLogradouro() + " N°" + funcionario.getEndereco().getNumero();
+
+        parametros.put("END_LOGRADOURO", endereco);//RUA, NUMERO
+        parametros.put("END_BAIRRO", funcionario.getEndereco().getBairro());
+
+        LocalDate now = LocalDate.now();
+        String dtExame = now.getDayOfMonth() + "/" + now.getMonthValue() + "/" + now.getYear();
+        parametros.put("DT_EXAME", dtExame);
+
+        InputStream inputStream = this.getClass().getResourceAsStream("/relatorios/registro.jasper");
+
+        final List<Empresa> empresas = funcionario.getEmpresas();
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parametros,
+                new JRBeanCollectionDataSource(empresas));
+
+        return JasperExportManager.exportReportToPdf(jasperPrint);
+    }
+
+
 }

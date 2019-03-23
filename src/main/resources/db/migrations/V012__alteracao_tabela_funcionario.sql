@@ -1,0 +1,1 @@
+ALTER TABLE funcionario ADD COLUMN numero_cadastro BIGINT;
