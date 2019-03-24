@@ -17,4 +17,7 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long>,
             "  inner join funcionario_empresa fe on func.codigo = fe.codigo_funcionario\n" +
             "where fe.codigo_empresa = :codigo", nativeQuery = true)
     List<Funcionario> findAllByEmpresas(@Param(value = "codigo") Long codigo);
+
+    @Query(value = "select max(numero_cadastro) + 1 as next from funcionario", nativeQuery = true)
+    Long getProximoNumeroCadastroDisponivel();
 }

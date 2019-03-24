@@ -84,9 +84,20 @@ public class FuncionarioService {
             this.s3.salvar(entity.getAnexo());
         }
         this.calculaIdade(entity);
+        this.geraNumeroCadastro(entity);
         Funcionario salvo = this.funcionarioRepository.save(entity);
         this.funcCargoEmpresaService.insereCargo(salvo);
         return salvo;
+    }
+
+    private void geraNumeroCadastro(Funcionario entity) {
+        if (null == entity.getNumeroCadastro()) {
+            Long next = this.funcionarioRepository.getProximoNumeroCadastroDisponivel();
+            if (null == next) {
+                next = 1L;
+            }
+            entity.setNumeroCadastro(next);
+        }
     }
 
     public Funcionario buscaFuncionario(Long codigo) {
@@ -134,6 +145,7 @@ public class FuncionarioService {
         this.funcionarioValidate.fluxoAtualizacao(funcionarioSalvo);
         this.removeEmpresasDuplicadas(funcionarioSalvo);
         this.calculaIdade(funcionarioSalvo);
+        this.geraNumeroCadastro(funcionarioSalvo);
         this.funcionarioRepository.save(funcionarioSalvo);
         this.funcCargoEmpresaService.insereCargo(funcionarioSalvo);
         return ResponseEntity.ok(funcionarioSalvo);
@@ -193,23 +205,42 @@ public class FuncionarioService {
         Map<String, Object> parametros = new HashMap<>();
 
         parametros.put("FUNC_NOME", funcionario.getNome());
-        parametros.put("FUNC_SEXO", funcionario.getSexo());
-        parametros.put("FUNC_ESTADO_CIVIL", funcionario.getEstadoCivil());
-        parametros.put("FUNC_ESCOLARIDADE", funcionario.getEscolaridade());
-        parametros.put("FUNC_CPF", funcionario.getCpf());
-        parametros.put("FUNC_PROFISSAO", funcionario.getCargo());
+
+        String sexo = "( 1 )F ( 2 )M";
+        String sx = funcionario.getSexo();
+        if (null != sx && !"".equals(sx)) {
+            if (sx.equals("FEMININO")) {
+                sexo = sexo.replace("1", "X").replace("2", " ");
+            } else if (sx.equals("MASCULINO")) {
+                sexo = sexo.replace("1", " ").replace("2", "X");
+            } else {
+                sexo = sexo.replace("1", " ").replace("2", " ");
+            }
+        }
+
+        parametros.put("FUNC_SEXO", sexo);
+        parametros.put("FUNC_ESTADO_CIVIL", null != funcionario.getEstadoCivil() ? funcionario.getEstadoCivil() : "");
+        parametros.put("FUNC_ESCOLARIDADE", null != funcionario.getEscolaridade() ? funcionario.getEscolaridade() : "");
+        parametros.put("FUNC_CPF", null != funcionario.getCpf() ? funcionario.getCpf() : "");
+        parametros.put("FUNC_PROFISSAO", null != funcionario.getCargo() ? funcionario.getCargo() : "");
         parametros.put("NUM_CADASTRO", String.valueOf(funcionario.getNumeroCadastro()));
         parametros.put("FUNC_NATURALIDADE", null != funcionario.getNaturalidade() ? funcionario.getNaturalidade() : "");
         parametros.put("FUNC_NASCIMENTO", null != funcionario.getDataNascimento() ?
                 funcionario.getDataNascimento().toString() : "");
         parametros.put("EMP_NOME", "");
-        parametros.put("FUNC_EMAIL", funcionario.getEmail());
-        parametros.put("FUNC_TELEFONE", funcionario.getTelefone());
+        parametros.put("FUNC_EMAIL", null != funcionario.getEmail() ? funcionario.getEmail() : "");
+        parametros.put("FUNC_TELEFONE", null != funcionario.getTelefone() ? funcionario.getTelefone() : "");
 
-        String endereco = funcionario.getEndereco().getLogradouro() + " N°" + funcionario.getEndereco().getNumero();
+        String endereco = null;
+        String bairro = null;
+        if (null != funcionario.getEndereco()) {
+            endereco = funcionario.getEndereco().getLogradouro() + " N°" + funcionario.getEndereco().getNumero();
+            bairro = funcionario.getEndereco().getBairro();
 
-        parametros.put("END_LOGRADOURO", endereco);//RUA, NUMERO
-        parametros.put("END_BAIRRO", funcionario.getEndereco().getBairro());
+        }
+
+        parametros.put("END_LOGRADOURO", null != endereco ? endereco : "");//RUA, NUMERO
+        parametros.put("END_BAIRRO", null != bairro ? bairro : "");
 
         LocalDate now = LocalDate.now();
         String dtExame = now.getDayOfMonth() + "/" + now.getMonthValue() + "/" + now.getYear();
