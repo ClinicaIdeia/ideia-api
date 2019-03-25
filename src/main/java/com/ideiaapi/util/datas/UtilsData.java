@@ -122,4 +122,12 @@ public abstract class UtilsData {
     return formattFinal;
   }
 
+  public static String getDataConvertida(LocalDate data, String pattern) {
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+
+    return data.format(formatter);
+
+  }
+
 }

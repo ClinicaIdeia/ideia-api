@@ -42,6 +42,7 @@ import com.ideiaapi.repository.filter.FuncionarioFilter;
 import com.ideiaapi.repository.projection.ResumoFuncionario;
 import com.ideiaapi.security.UsuarioSessao;
 import com.ideiaapi.storage.S3;
+import com.ideiaapi.util.datas.UtilsData;
 import com.ideiaapi.validate.FuncionarioValidate;
 
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -248,7 +249,7 @@ public class FuncionarioService {
         parametros.put("NUM_CADASTRO", String.valueOf(funcionario.getNumeroCadastro()));
         parametros.put("FUNC_NATURALIDADE", null != funcionario.getNaturalidade() ? funcionario.getNaturalidade() : "");
         parametros.put("FUNC_NASCIMENTO", null != funcionario.getDataNascimento() ?
-                funcionario.getDataNascimento().toString() : "");
+                UtilsData.getDataConvertida(funcionario.getDataNascimento(), "dd/MM/yyyy") : "");
         parametros.put("EMP_NOME", "");
         parametros.put("FUNC_EMAIL", null != funcionario.getEmail() ? funcionario.getEmail() : "");
         parametros.put("FUNC_TELEFONE", null != funcionario.getTelefone() ? funcionario.getTelefone() : "");
