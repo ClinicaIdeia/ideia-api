@@ -26,11 +26,11 @@ public class Empresa {
     private Long codigo;
 
     @NotNull
-    @Size(min = 3, max = 100)
+    @Size(min = 1, max = 100)
     private String nome;
 
     @NotNull
-    @Size(min = 3, max = 20)
+    @Size(min = 14, max = 20)
     private String cnpj;
 
     @ManyToMany

@@ -49,7 +49,7 @@ public class Funcionario {
     private String rg;
 
     @NotNull
-    @Size(min = 3, max = 20)
+    @Size(min = 11, max = 20)
     @Column(name = "CPF")
     private String cpf;
 

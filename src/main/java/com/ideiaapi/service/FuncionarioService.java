@@ -110,7 +110,7 @@ public class FuncionarioService {
 
     @Transactional
     public void insereEmBatch(List<Funcionario> funcionarios) {
-       this.funcionarioRepository.save(funcionarios);
+        this.funcionarioRepository.save(funcionarios);
     }
 
     private void geraNumeroCadastro(Funcionario entity) {
@@ -316,13 +316,21 @@ public class FuncionarioService {
 
                 Cell cellCadastro = row.getCell(0);
                 if (null == cellCadastro) {
-                    erros.put(linha, "Erro no Numero de cadastro " + linha);
+                    erros.put(linha, "Erro no Numero de cadastro na linha: " + linha);
                     continue;
                 }
                 Number numeroCadastro = cellCadastro.getNumericCellValue();
 
                 Cell cellNome = row.getCell(1);
+                if (null == cellNome) {
+                    erros.put(linha, "Erro no Nome do funcionario na linha: " + linha);
+                    continue;
+                }
                 String nome = cellNome.getStringCellValue().toUpperCase().trim();
+                if ("".equals(nome) || nome.length() < 3) {
+                    erros.put(linha, "Erro no Nome do funcionario na linha: " + linha);
+                    continue;
+                }
 
                 Date input;
                 LocalDate dataNascimento;
@@ -331,7 +339,6 @@ public class FuncionarioService {
                     input = cellNascimento.getDateCellValue();
                     dataNascimento = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 } catch (Exception e) {
-                    erros.put(linha, "Erro no campo de data de nascimento linha: " + linha);
                     dataNascimento = LocalDate.now().minusYears(18);
                 }
 
@@ -356,29 +363,44 @@ public class FuncionarioService {
                     final boolean matches = cpf.matches("[0-9]*");
                     if (!matches) {
                         rg = cpf;
-                        cpf = "IMPORTACAO";
+                        cpf = "000.000.000-00";
                     }
                 } else {
                     rg = cpf;
-                    cpf = "IMPORTACAO";
+                    cpf = "000.000.000-00";
                 }
 
                 Cell cellNomeEmpresa = row.getCell(6);
                 String nomeEmpresa = cellNomeEmpresa.getStringCellValue().trim();
+                if ("".equals(nomeEmpresa)) {
+                    erros.put(linha, "Erro no nome da empresa na linha " + linha);
+                    continue;
+                }
 
                 Cell cellCnpj = row.getCell(7);
                 if (null == cellCnpj) {
-                    erros.put(linha, "Erro no CNPJ " + linha);
+                    erros.put(linha, "Erro no CNPJ na linha " + linha);
                     continue;
                 }
-                String cnpj = cellCnpj.getStringCellValue().trim();
 
-                Empresa empresa;
+                String cnpj = cellCnpj.getStringCellValue().trim();
+                cnpj = cnpj.replace(" ", "").replace(".", "").replace("-", "").replace("/", "");
+                cnpj = cnpj.trim();
+                if (cnpj.length() < 14) {
+                    erros.put(linha, "Erro no CNPJ na linha " + linha);
+                    continue;
+                }
+
+                Empresa empresa = null;
                 if (empresaMap.containsKey(cnpj)) {
                     empresa = empresaMap.get(cnpj);
                 } else {
-                    empresa = this.empresaService.cadastraEmpresa(new Empresa(nomeEmpresa, cnpj));
-                    empresaMap.put(empresa.getCnpj(), empresa);
+                    try {
+                        empresa = this.empresaService.cadastraEmpresa(new Empresa(nomeEmpresa, cnpj));
+                        empresaMap.put(empresa.getCnpj(), empresa);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
 
                 Funcionario func = new Funcionario(nome, rg, cpf, dataNascimento, "IMPORTAÇÃO", "IMPORTAÇÃO",
