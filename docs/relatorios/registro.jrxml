@@ -30,7 +30,7 @@
 			</image>
 			<textField>
 				<reportElement x="320" y="0" width="231" height="20" uuid="4e0efef2-5e45-474c-8dd5-dded75253362"/>
-				<textFieldExpression><![CDATA["Número de Cadastro " + $P{NUM_CADASTRO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Número de Cadastro: " + $P{NUM_CADASTRO}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="320" y="46" width="225" height="1" uuid="bd1dc636-8d10-4a9e-b0da-6eaf3ffb39d9"/>
@@ -173,6 +173,51 @@
 			</staticText>
 			<line>
 				<reportElement x="200" y="160" width="205" height="1" uuid="36b4de39-90dc-46b5-953c-bf7ed2206b30"/>
+			</line>
+			<line>
+				<reportElement x="33" y="20" width="312" height="1" uuid="bf247fe9-5eb7-4006-afb8-48e36b63207a"/>
+			</line>
+			<line>
+				<reportElement x="390" y="20" width="165" height="1" uuid="dab15f71-ee11-4dd1-b76e-fee500ea0269"/>
+			</line>
+			<line>
+				<reportElement x="95" y="40" width="250" height="1" uuid="0e0a35c4-4794-4a4a-a934-bfd07d64c126"/>
+			</line>
+			<line>
+				<reportElement x="385" y="40" width="170" height="1" uuid="5f817e66-6055-4821-b698-76388c978bc1"/>
+			</line>
+			<line>
+				<reportElement x="51" y="60" width="505" height="1" uuid="54edda45-e859-4799-9d6e-19d89c2c705f"/>
+			</line>
+			<line>
+				<reportElement x="57" y="80" width="85" height="1" uuid="043869c7-d2ba-40dc-95b5-026c66e5dd66"/>
+			</line>
+			<line>
+				<reportElement x="198" y="80" width="100" height="1" uuid="d078c7ad-61ae-4656-b814-0323e1be3d94"/>
+			</line>
+			<line>
+				<reportElement x="348" y="80" width="209" height="1" uuid="9d7f6683-17ee-4872-ba10-cdcdaefcb061"/>
+			</line>
+			<line>
+				<reportElement x="260" y="100" width="83" height="1" uuid="46fad0b9-4889-4c53-a832-118a7699fff6"/>
+			</line>
+			<line>
+				<reportElement x="400" y="100" width="156" height="1" uuid="bdcb11fd-b922-42d3-abfb-903797fe75a0"/>
+			</line>
+			<line>
+				<reportElement x="47" y="120" width="249" height="1" uuid="d306db50-c0aa-4eb4-9d66-537663a83902"/>
+			</line>
+			<line>
+				<reportElement x="332" y="120" width="223" height="1" uuid="de018437-74b4-48db-93b8-cd485bfd9e5a"/>
+			</line>
+			<line>
+				<reportElement x="30" y="140" width="265" height="1" uuid="07ec230a-baf5-42f1-b73b-f6072a92b37f"/>
+			</line>
+			<line>
+				<reportElement x="329" y="140" width="228" height="1" uuid="e26ae7cb-33c5-47d7-8662-e97a635e2cc5"/>
+			</line>
+			<line>
+				<reportElement x="72" y="160" width="75" height="1" uuid="37590bca-f02b-4fac-9851-08027b563fcf"/>
 			</line>
 		</band>
 	</columnHeader>
