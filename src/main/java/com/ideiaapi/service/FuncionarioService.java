@@ -108,6 +108,11 @@ public class FuncionarioService {
         return salvo;
     }
 
+    @Transactional
+    public void insereEmBatch(List<Funcionario> funcionarios) {
+       this.funcionarioRepository.save(funcionarios);
+    }
+
     private void geraNumeroCadastro(Funcionario entity) {
         if (null == entity.getNumeroCadastro()) {
             Long next = this.funcionarioRepository.getProximoNumeroCadastroDisponivel();
@@ -288,7 +293,7 @@ public class FuncionarioService {
         rowsImportDTO.setFalhas(values);
     }
 
-
+    @Transactional
     public RowsImportDTO importaFuncionarios(MultipartFile reapExcelDataFile) {
 
         Map<Integer, String> erros = new HashMap<>();
@@ -327,7 +332,7 @@ public class FuncionarioService {
                     dataNascimento = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 } catch (Exception e) {
                     erros.put(linha, "Erro no campo de data de nascimento linha: " + linha);
-                    dataNascimento = LocalDate.now();
+                    dataNascimento = LocalDate.now().minusYears(18);
                 }
 
                 Cell cellCpf = row.getCell(5);
@@ -379,8 +384,7 @@ public class FuncionarioService {
                 Funcionario func = new Funcionario(nome, rg, cpf, dataNascimento, "IMPORTAÇÃO", "IMPORTAÇÃO",
                         numeroCadastro.longValue());
                 func.setEmpresas(Arrays.asList(empresa));
-
-                if (funcionarioMap.containsKey(func.getCpf()))
+                this.calculaIdade(func);
 
                 funcionarios.add(func);
 
@@ -399,6 +403,10 @@ public class FuncionarioService {
         if (!erros.isEmpty()) {
             rowsImport.setTotalFalhas(erros.size());
             this.registraLinhasComErro(erros, rowsImport);
+        }
+
+        if (null != funcionarios && !funcionarios.isEmpty()) {
+            this.insereEmBatch(funcionarios);
         }
 
         return rowsImport;
