@@ -146,7 +146,7 @@ public class ScheduledEmails {
         LocalDate hoje = LocalDate.now();
         LocalDate earlier = hoje.minusMonths(1); // 01-11-2018
 
-        Integer lastMonth = earlier.getMonth().getValue(); // 11
+        Integer lastMonth = earlier.getMonth().getValue(); // java.time.Month = 11
         Integer year = earlier.getYear(); // 2018
 
         List<Agendamento> agendamentosList = this.agendamentoRepository.findAllByMonthAndYear(lastMonth, year);
@@ -198,8 +198,7 @@ public class ScheduledEmails {
                             }
                     );
 
-                    //TODO descomentar quando estiver em PROD, 
-                    // this.enviarRelatorioDosExamesDeMes(empresa.getNome(), listaDosExamesDaEmpresa);
+                    this.enviarRelatorioDosExamesDeMes(empresa.getNome(), listaDosExamesDaEmpresa);
                 }
         );
     }
