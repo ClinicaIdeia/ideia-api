@@ -11,12 +11,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -33,7 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ideiaapi.dto.AptidaoDTO;
 import com.ideiaapi.dto.RowsImportDTO;
 import com.ideiaapi.dto.s3.AnexoS3DTO;
 import com.ideiaapi.model.Empresa;
@@ -221,7 +218,7 @@ public class FuncionarioService {
     }
 
 
-    public byte[] folhaDeRegistro(Long codigo) throws Exception {
+    public byte[] folhaDeRegistro(Long codigo) throws Exception { //NOSONAR
 
         Funcionario funcionario = this.buscaFuncionario(codigo);
 
@@ -239,6 +236,8 @@ public class FuncionarioService {
             } else {
                 sexo = sexo.replace("1", " ").replace("2", " ");
             }
+        } else if (null == sx) {
+            sexo = sexo.replace("1", " ").replace("2", " ");
         }
 
         parametros.put("FUNC_SEXO", sexo);
@@ -294,11 +293,10 @@ public class FuncionarioService {
     }
 
     @Transactional
-    public RowsImportDTO importaFuncionarios(MultipartFile reapExcelDataFile) {
+    public RowsImportDTO importaFuncionarios(MultipartFile reapExcelDataFile) {//NOSONAR
 
         Map<Integer, String> erros = new HashMap<>();
         Map<String, Empresa> empresaMap = this.empresaService.loadEmpresas();
-        Map<String, Funcionario> funcionarioMap = this.loadFuncionarios();
         List<Funcionario> funcionarios = new ArrayList<>();
 
         RowsImportDTO rowsImport = new RowsImportDTO();
@@ -310,7 +308,7 @@ public class FuncionarioService {
 
             Iterator<Row> rowIterator = sheetAtletas.iterator();
 
-            while (rowIterator.hasNext()) {
+            while (rowIterator.hasNext()) { //NOSONAR
 
                 Row row = rowIterator.next();
 
@@ -332,31 +330,14 @@ public class FuncionarioService {
                     continue;
                 }
 
-                Date input;
                 LocalDate dataNascimento;
-                try {
-                    Cell cellNascimento = row.getCell(2);
-                    input = cellNascimento.getDateCellValue();
-                    dataNascimento = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                } catch (Exception e) {
-                    dataNascimento = LocalDate.now().minusYears(18);
-                }
+                dataNascimento = this.calculaDataNascimento(row);
 
                 Cell cellCpf = row.getCell(5);
                 String cpf;
                 String rg;
 
-                try {
-                    cpf = cellCpf.getStringCellValue();
-
-                } catch (IllegalStateException e) {
-                    Number val = cellCpf.getNumericCellValue();
-                    cpf = String.valueOf(val.longValue());
-                } catch (Exception e) {
-                    cpf = "CPF-ilegivel";
-                }
-                cpf = cpf.replace(".", "")
-                        .replace(":", "").replace("-", "").trim();
+                cpf = validaCPF(cellCpf);
 
                 if (null != cpf && cpf.length() == 11) {
                     rg = "";
@@ -391,17 +372,7 @@ public class FuncionarioService {
                     continue;
                 }
 
-                Empresa empresa = null;
-                if (empresaMap.containsKey(cnpj)) {
-                    empresa = empresaMap.get(cnpj);
-                } else {
-                    try {
-                        empresa = this.empresaService.cadastraEmpresa(new Empresa(nomeEmpresa, cnpj));
-                        empresaMap.put(empresa.getCnpj(), empresa);
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
+                Empresa empresa = getEmpresa(empresaMap, nomeEmpresa, cnpj);
 
                 Funcionario func = new Funcionario(nome, rg, cpf, dataNascimento, "IMPORTAÇÃO", "IMPORTAÇÃO",
                         numeroCadastro.longValue());
@@ -414,11 +385,11 @@ public class FuncionarioService {
             }
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             log.info("Arquivo Excel não encontrado!");
         } catch (Exception e) {
             erros.put(linha, e.getMessage());
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         rowsImport.setTotalImportado(linha - 1);
@@ -427,7 +398,7 @@ public class FuncionarioService {
             this.registraLinhasComErro(erros, rowsImport);
         }
 
-        if (null != funcionarios && !funcionarios.isEmpty()) {
+        if (!funcionarios.isEmpty()) {
             this.insereEmBatch(funcionarios);
         }
 
@@ -435,14 +406,48 @@ public class FuncionarioService {
 
     }
 
-    private Map<String, Funcionario> loadFuncionarios() {
-        Map<String, Funcionario> funcionarioMap = new HashMap<>();
+    private Empresa getEmpresa(Map<String, Empresa> empresaMap, String nomeEmpresa, String cnpj) {
+        Empresa empresa = null;
+        if (empresaMap.containsKey(cnpj)) {
+            empresa = empresaMap.get(cnpj);
+        } else {
+            try {
+                empresa = this.empresaService.cadastraEmpresa(new Empresa(nomeEmpresa, cnpj));
+                empresaMap.put(empresa.getCnpj(), empresa);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+        }
+        return empresa;
+    }
 
-        this.funcionarioRepository.findAll().forEach(func -> {
-            funcionarioMap.put(func.getCpf(), func);
-        });
+    private String validaCPF(Cell cellCpf) {
+        String cpf;
+        try {
+            cpf = cellCpf.getStringCellValue();
 
-        return funcionarioMap;
+        } catch (IllegalStateException e) {
+            Number val = cellCpf.getNumericCellValue();
+            cpf = String.valueOf(val.longValue());
+        } catch (Exception e) {
+            cpf = "CPF-ilegivel";
+        }
+        cpf = cpf.replace(".", "")
+                .replace(":", "").replace("-", "").trim();
+        return cpf;
+    }
+
+    private LocalDate calculaDataNascimento(Row row) {
+        Date input;
+        LocalDate dataNascimento;
+        try {
+            Cell cellNascimento = row.getCell(2);
+            input = cellNascimento.getDateCellValue();
+            dataNascimento = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        } catch (Exception e) {
+            dataNascimento = LocalDate.now().minusYears(18);
+        }
+        return dataNascimento;
     }
 
 }
