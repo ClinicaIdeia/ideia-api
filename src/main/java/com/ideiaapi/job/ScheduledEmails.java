@@ -209,10 +209,10 @@ public class ScheduledEmails {
         map.put("exames", listaDosExamesDaEmpresa);
 
 
-        this.envioEmail.enviarEmail(emailNilza,
-                Collections.singletonList(emailPoliciaFederal),
-                "Clinica Ideia - Relatorio mensal de exames psicologicos",
-                "email/relatorio-mensal-por-empresa", map);
+//        this.envioEmail.enviarEmail(emailNilza,
+//                Collections.singletonList(emailPoliciaFederal),
+//                "Clinica Ideia - Relatorio mensal de exames psicologicos",
+//                "email/relatorio-mensal-por-empresa", map);
     }
 
     /**
