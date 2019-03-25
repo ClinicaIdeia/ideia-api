@@ -1,5 +1,8 @@
 package com.ideiaapi.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -63,5 +66,14 @@ public class EmpresaService {
 
         this.empresaRepository.save(empresaSalva);
         return ResponseEntity.ok(empresaSalva);
+    }
+
+    public Map<String, Empresa> loadEmpresas() {
+        Map<String, Empresa> empresaMap = new HashMap<>();
+
+        this.empresaRepository.findAll().forEach(emp -> {
+            empresaMap.put(emp.getCnpj(), emp);
+        });
+        return empresaMap;
     }
 }

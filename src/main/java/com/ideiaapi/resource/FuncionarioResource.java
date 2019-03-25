@@ -1,5 +1,6 @@
 package com.ideiaapi.resource;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ideiaapi.dto.RowsImportDTO;
 import com.ideiaapi.dto.s3.AnexoS3DTO;
 import com.ideiaapi.event.RecursoCriadoEvent;
 import com.ideiaapi.model.Funcionario;
@@ -115,6 +117,13 @@ public class FuncionarioResource {
             @RequestBody @Valid Funcionario funcionario) {
         return this.funcionarioService.atualizaFuncionario(codigo, funcionario);
 
+    }
+
+    @PostMapping("/import")
+    @PreAuthorize(value = "hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
+    public RowsImportDTO mapReapExcelDatatoDB(
+            @RequestParam("file") MultipartFile reapExcelDataFile) throws IOException {
+        return this.funcionarioService.importaFuncionarios(reapExcelDataFile);
     }
 
 }

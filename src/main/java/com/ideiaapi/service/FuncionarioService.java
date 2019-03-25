@@ -1,16 +1,28 @@
 package com.ideiaapi.service;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.collections.map.HashedMap;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -22,6 +34,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ideiaapi.dto.AptidaoDTO;
+import com.ideiaapi.dto.RowsImportDTO;
 import com.ideiaapi.dto.s3.AnexoS3DTO;
 import com.ideiaapi.model.Empresa;
 import com.ideiaapi.model.FuncCargoEmpresa;
@@ -42,6 +55,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @Service
 public class FuncionarioService {
 
+    private static final Logger log = LoggerFactory.getLogger(FuncionarioService.class);
+
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
@@ -50,6 +65,9 @@ public class FuncionarioService {
 
     @Autowired
     private FuncCargoEmpresaService funcCargoEmpresaService;
+
+    @Autowired
+    private EmpresaService empresaService;
 
     @Autowired
     private S3 s3;
@@ -256,5 +274,145 @@ public class FuncionarioService {
         return JasperExportManager.exportReportToPdf(jasperPrint);
     }
 
+    private void registraLinhasComErro(Map<Integer, String> linhasComErro, RowsImportDTO rowsImportDTO) {
+
+        int cont = 1;
+        List<String> values = new ArrayList<>();
+        for (String item : linhasComErro.values()) {
+            String msg = "{{ Erro ao importar a linha[ " + cont + " - " + item + " ] }}";
+            values.add(msg);
+            log.error(msg);
+            cont++;
+        }
+
+        rowsImportDTO.setFalhas(values);
+    }
+
+
+    public RowsImportDTO importaFuncionarios(MultipartFile reapExcelDataFile) {
+
+        Map<Integer, String> erros = new HashMap<>();
+        Map<String, Empresa> empresaMap = this.empresaService.loadEmpresas();
+        Map<String, Funcionario> funcionarioMap = this.loadFuncionarios();
+        List<Funcionario> funcionarios = new ArrayList<>();
+
+        RowsImportDTO rowsImport = new RowsImportDTO();
+        int linha = 1;
+        try {
+
+            HSSFWorkbook workbook = new HSSFWorkbook(reapExcelDataFile.getInputStream());
+            HSSFSheet sheetAtletas = workbook.getSheetAt(0);
+
+            Iterator<Row> rowIterator = sheetAtletas.iterator();
+
+            while (rowIterator.hasNext()) {
+
+                Row row = rowIterator.next();
+
+                Cell cellCadastro = row.getCell(0);
+                if (null == cellCadastro) {
+                    erros.put(linha, "Erro no Numero de cadastro " + linha);
+                    continue;
+                }
+                Number numeroCadastro = cellCadastro.getNumericCellValue();
+
+                Cell cellNome = row.getCell(1);
+                String nome = cellNome.getStringCellValue().toUpperCase().trim();
+
+                Date input;
+                LocalDate dataNascimento;
+                try {
+                    Cell cellNascimento = row.getCell(2);
+                    input = cellNascimento.getDateCellValue();
+                    dataNascimento = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                } catch (Exception e) {
+                    erros.put(linha, "Erro no campo de data de nascimento linha: " + linha);
+                    dataNascimento = LocalDate.now();
+                }
+
+                Cell cellCpf = row.getCell(5);
+                String cpf;
+                String rg;
+
+                try {
+                    cpf = cellCpf.getStringCellValue();
+
+                } catch (IllegalStateException e) {
+                    Number val = cellCpf.getNumericCellValue();
+                    cpf = String.valueOf(val.longValue());
+                } catch (Exception e) {
+                    cpf = "CPF-ilegivel";
+                }
+                cpf = cpf.replace(".", "")
+                        .replace(":", "").replace("-", "").trim();
+
+                if (null != cpf && cpf.length() == 11) {
+                    rg = "";
+                    final boolean matches = cpf.matches("[0-9]*");
+                    if (!matches) {
+                        rg = cpf;
+                        cpf = "IMPORTACAO";
+                    }
+                } else {
+                    rg = cpf;
+                    cpf = "IMPORTACAO";
+                }
+
+                Cell cellNomeEmpresa = row.getCell(6);
+                String nomeEmpresa = cellNomeEmpresa.getStringCellValue().trim();
+
+                Cell cellCnpj = row.getCell(7);
+                if (null == cellCnpj) {
+                    erros.put(linha, "Erro no CNPJ " + linha);
+                    continue;
+                }
+                String cnpj = cellCnpj.getStringCellValue().trim();
+
+                Empresa empresa;
+                if (empresaMap.containsKey(cnpj)) {
+                    empresa = empresaMap.get(cnpj);
+                } else {
+                    empresa = this.empresaService.cadastraEmpresa(new Empresa(nomeEmpresa, cnpj));
+                    empresaMap.put(empresa.getCnpj(), empresa);
+                }
+
+                Funcionario func = new Funcionario(nome, rg, cpf, dataNascimento, "IMPORTAÇÃO", "IMPORTAÇÃO",
+                        numeroCadastro.longValue());
+                func.setEmpresas(Arrays.asList(empresa));
+
+                if (funcionarioMap.containsKey(func.getCpf()))
+
+                funcionarios.add(func);
+
+                linha++;
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            log.info("Arquivo Excel não encontrado!");
+        } catch (Exception e) {
+            erros.put(linha, e.getMessage());
+            e.printStackTrace();
+        }
+
+        rowsImport.setTotalImportado(linha - 1);
+        if (!erros.isEmpty()) {
+            rowsImport.setTotalFalhas(erros.size());
+            this.registraLinhasComErro(erros, rowsImport);
+        }
+
+        return rowsImport;
+
+    }
+
+    private Map<String, Funcionario> loadFuncionarios() {
+        Map<String, Funcionario> funcionarioMap = new HashMap<>();
+
+        this.funcionarioRepository.findAll().forEach(func -> {
+            funcionarioMap.put(func.getCpf(), func);
+        });
+
+        return funcionarioMap;
+    }
 
 }

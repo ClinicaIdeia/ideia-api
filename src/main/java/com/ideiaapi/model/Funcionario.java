@@ -108,6 +108,21 @@ public class Funcionario {
     @Column(name = "numero_cadastro")
     private Long numeroCadastro;
 
+    public Funcionario(String nome, String rg, String cpf, LocalDate dataNascimento, String cargo,
+            String telefone, Long numeroCadastro) {
+        this.nome = nome;
+        this.rg = rg;
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.cargo = cargo;
+        this.telefone = telefone;
+        this.numeroCadastro = numeroCadastro;
+    }
+
+    public Funcionario() {
+        super();
+    }
+
     public Long getNumeroCadastro() {
         return numeroCadastro;
     }

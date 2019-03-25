@@ -43,6 +43,15 @@ public class Empresa {
 
     private Boolean ativa;
 
+    public Empresa(String nome, String cnpj) {
+        this.nome = nome;
+        this.cnpj = cnpj;
+    }
+
+    public Empresa() {
+        super();
+    }
+
     public Long getCodigo() {
         return codigo;
     }
