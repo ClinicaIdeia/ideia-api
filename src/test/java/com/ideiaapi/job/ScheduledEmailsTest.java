@@ -125,8 +125,7 @@ public class ScheduledEmailsTest extends BaseTest {
 
         scheduledEmails.emailMensalEmpresas();
 
-        //TODO voltar para 01 quando estiver em PROD
-        verify(envioEmail, times(0)).enviarEmail(any(), any(), any(), any(), any());
+        verify(envioEmail, times(1)).enviarEmail(any(), any(), any(), any(), any());
     }
 
     @Test
