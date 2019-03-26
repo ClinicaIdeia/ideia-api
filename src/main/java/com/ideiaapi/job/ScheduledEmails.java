@@ -208,11 +208,12 @@ public class ScheduledEmails {
         map.put("empresa", empresa);
         map.put("exames", listaDosExamesDaEmpresa);
 
-
-//        this.envioEmail.enviarEmail(emailNilza,
-//                Collections.singletonList(emailPoliciaFederal),
-//                "Clinica Ideia - Relatorio mensal de exames psicologicos",
-//                "email/relatorio-mensal-por-empresa", map);
+        this.envioEmail.enviarEmail(emailNilza,
+//        Collections.singletonList(emailPoliciaFederal),
+//      TODO : Colocar de volta quando envoar diretamente para Policia Federal
+                Collections.singletonList(emailNilza),
+                "Clinica Ideia - Relatorio mensal de exames psicologicos",
+                "email/relatorio-mensal-por-empresa", map);
     }
 
     /**
