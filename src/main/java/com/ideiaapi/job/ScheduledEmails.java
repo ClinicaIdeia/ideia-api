@@ -130,7 +130,7 @@ public class ScheduledEmails {
 
         this.envioEmail.enviarEmail(emailIdeia,
 //                Collections.singletonList(emailPoliciaFederal),
-//                TODO : Colocar de volta quando envoar diretamente para Policia Federal
+//                TODO : Colocar de volta quando enviar diretamente para Policia Federal
                 Collections.singletonList(emailNilza),
                 "Clinica Ideia - Agendamentos de exames psicologicos para trabalhos armados",
                 "email/policia-federal", map);
@@ -210,7 +210,7 @@ public class ScheduledEmails {
 
         this.envioEmail.enviarEmail(emailNilza,
 //        Collections.singletonList(emailPoliciaFederal),
-//      TODO : Colocar de volta quando envoar diretamente para Policia Federal
+//      TODO : Colocar de volta quando enviar diretamente para Policia Federal
                 Collections.singletonList(emailNilza),
                 "Clinica Ideia - Relatorio mensal de exames psicologicos",
                 "email/relatorio-mensal-por-empresa", map);
