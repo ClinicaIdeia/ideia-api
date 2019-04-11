@@ -1,7 +1,10 @@
 package com.ideiaapi.service;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,7 @@ import com.ideiaapi.validate.EmpresaValidate;
 public class EmpresaService {
 
     @Autowired
-    private EmpresaRepository empresaRepository;
+    private EmpresaRepository repository;
 
     @Autowired
     private ContatoService contatoService;
@@ -29,11 +32,11 @@ public class EmpresaService {
     private EmpresaValidate empresaValidate;
 
     public Page<Empresa> filtrar(EmpresaFilter filter, Pageable pageable) {
-        return this.empresaRepository.filtrar(filter, pageable);
+        return this.repository.filtrar(filter, pageable);
     }
 
     public Page<ResumoEmpresa> resumo(EmpresaFilter filter, Pageable pageable) {
-        return this.empresaRepository.resumir(filter, pageable);
+        return this.repository.resumir(filter, pageable);
     }
 
     public Empresa cadastraEmpresa(Empresa entity) {
@@ -44,11 +47,11 @@ public class EmpresaService {
         }
 
         this.contatoService.cadastraContatos(entity);
-        return this.empresaRepository.save(entity);
+        return this.repository.save(entity);
     }
 
     public Empresa buscaEmpresa(Long codigo) {
-        Empresa empresa = this.empresaRepository.findOne(codigo);
+        Empresa empresa = this.repository.findOne(codigo);
         if (empresa != null) {
             return empresa;
         }
@@ -57,23 +60,28 @@ public class EmpresaService {
     }
 
     public void deletaEmpresa(Long codigo) {
-        this.empresaRepository.delete(codigo);
+        this.repository.delete(codigo);
     }
 
     public ResponseEntity<Empresa> atualizaEmpresa(Long codigo, Empresa empresa) {
         Empresa empresaSalva = this.buscaEmpresa(codigo);
         BeanUtils.copyProperties(empresa, empresaSalva, "codigo");
 
-        this.empresaRepository.save(empresaSalva);
+        this.repository.save(empresaSalva);
         return ResponseEntity.ok(empresaSalva);
     }
 
     public Map<String, Empresa> loadEmpresas() {
         Map<String, Empresa> empresaMap = new HashMap<>();
 
-        this.empresaRepository.findAll().forEach(emp -> {
+        this.repository.findAll().forEach(emp -> {
             empresaMap.put(emp.getCnpj(), emp);
         });
         return empresaMap;
+    }
+
+    public List<Empresa> buscarTodas() {
+        return this.repository.findAll().stream().sorted(Comparator.comparing(Empresa::getNome)).collect(
+                Collectors.toList());
     }
 }

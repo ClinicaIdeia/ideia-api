@@ -1,5 +1,7 @@
 package com.ideiaapi.resource;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -30,7 +32,7 @@ import com.ideiaapi.service.EmpresaService;
 public class EmpresaResource {
 
     @Autowired
-    public EmpresaService empresaService;
+    public EmpresaService service;
 
     @Autowired
     private ApplicationEventPublisher publisher;
@@ -38,14 +40,21 @@ public class EmpresaResource {
     @GetMapping
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_EMPRESA') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
     public Page<Empresa> listar(EmpresaFilter filter, Pageable pageable) {
-        return this.empresaService.filtrar(filter, pageable);
+        return this.service.filtrar(filter, pageable);
+    }
+
+    @GetMapping("/todas")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_EMPRESA') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
+    public ResponseEntity<List<Empresa>> listarTodas() {
+        List<Empresa> empresas = this.service.buscarTodas();
+        return ResponseEntity.ok(empresas);
     }
 
     @PostMapping
     @PreAuthorize(value = "hasAuthority('ROLE_CADASTRAR_EMPRESA') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('write')")
     public ResponseEntity<Empresa> criar(@RequestBody @Valid Empresa empresa, HttpServletResponse response) {
 
-        final Empresa empresaSalva = this.empresaService.cadastraEmpresa(empresa);
+        final Empresa empresaSalva = this.service.cadastraEmpresa(empresa);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, empresaSalva.getCodigo()));
         return ResponseEntity.status(HttpStatus.CREATED).body(empresaSalva);
     }
@@ -54,7 +63,7 @@ public class EmpresaResource {
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_EMPRESA') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
     public ResponseEntity<Empresa> busca(@PathVariable Long codigo) {
 
-        Empresa empresa = this.empresaService.buscaEmpresa(codigo);
+        Empresa empresa = this.service.buscaEmpresa(codigo);
 
         if (null == empresa)
             return ResponseEntity.notFound().build();
@@ -66,7 +75,7 @@ public class EmpresaResource {
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_EMPRESA') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('write')")
     public ResponseEntity<Empresa> atualiza(@PathVariable Long codigo,
             @RequestBody @Valid Empresa empresa) {
-        return this.empresaService.atualizaEmpresa(codigo, empresa);
+        return this.service.atualizaEmpresa(codigo, empresa);
 
     }
 
@@ -74,6 +83,6 @@ public class EmpresaResource {
     @PreAuthorize(value = "hasAuthority('ROLE_REMOVER_EMPRESA') or hasAuthority('ROLE_ADMIN')  and #oauth2.hasScope('read')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleta(@PathVariable Long codigo) {
-        this.empresaService.deletaEmpresa(codigo);
+        this.service.deletaEmpresa(codigo);
     }
 }
