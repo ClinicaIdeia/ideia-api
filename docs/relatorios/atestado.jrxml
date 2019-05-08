@@ -11,6 +11,7 @@
 	<parameter name="FUNC_PROFISSAO" class="java.lang.String"/>
 	<parameter name="DT_AVALIACAO" class="java.util.Date"/>
 	<parameter name="DT_NASCIMENTO" class="java.util.Date"/>
+	<parameter name="DATA_EMISSAO" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -70,7 +71,7 @@
 			<textField>
 				<reportElement x="172" y="155" width="211" height="14" uuid="9c6fe9b0-6208-43f9-b67e-3612514d3da3"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["Uberlândia " +  DATEFORMAT( TODAY( ),  "d ")  + " de " +  DATEFORMAT( TODAY( ),  "MMM") + " de "  + DATEFORMAT( TODAY( ),  "yyyy") + "."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Uberlândia " +  $P{DATA_EMISSAO} + "."]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="41" y="70" width="79" height="13" uuid="fab94e57-5b31-4210-87c2-d37ebf6c8ff9"/>
