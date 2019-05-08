@@ -24,6 +24,7 @@ import com.ideiaapi.model.Funcionario;
 import com.ideiaapi.model.Laudo;
 import com.ideiaapi.repository.LaudoRepository;
 import com.ideiaapi.repository.filter.LaudoFilter;
+import com.ideiaapi.util.datas.UtilsData;
 import com.ideiaapi.validate.LaudoValidate;
 
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -75,6 +76,7 @@ public class LaudoService {
         parametros.put("FUNC_CPF", funcionario.getCpf());
         parametros.put("FUNC_PROFISSAO", funcionario.getCargo());
         parametros.put("DT_AVALIACAO", Date.valueOf(laudo.getDataExame()));
+        parametros.put("DATA_EMISSAO", UtilsData.getDataFormatadaPorExtenso());
 
         InputStream inputStream = this.getClass().getResourceAsStream("/relatorios/laudo.jasper");
 
@@ -102,6 +104,7 @@ public class LaudoService {
         parametros.put("FUNC_PROFISSAO", funcionario.getCargo());
         parametros.put("DT_AVALIACAO", Date.valueOf(laudo.getDataExame()));
         parametros.put("DT_NASCIMENTO", Date.valueOf(funcionario.getDataNascimento()));
+        parametros.put("DATA_EMISSAO", UtilsData.getDataFormatadaPorExtenso());
 
         InputStream inputStream = this.getClass().getResourceAsStream("/relatorios/atestado.jasper");
 

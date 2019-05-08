@@ -40,13 +40,14 @@ public class AgendaService {
     public PageImpl<List<Agenda>> listaFuturosAgendamentos(Boolean isTrabalhoArmado) {
         List<Agenda> agendasList;
 
-        if (null == isTrabalhoArmado) {
-            isTrabalhoArmado = false;
-        }
-
-        if (isTrabalhoArmado)
-            agendasList = agendaRepository.findAllByDiaAgendaAfter(LocalDate.now().plusDays(3L));
-        else
+        //TODO DEIXAR AQUI CASO LEGISLAÇÃO MUDE
+//        if (null == isTrabalhoArmado) {
+//            isTrabalhoArmado = false;
+//        }
+//
+//        if (isTrabalhoArmado)
+//            agendasList = agendaRepository.findAllByDiaAgendaAfter(LocalDate.now().plusDays(3L));
+//        else
             agendasList = agendaRepository.findAllByDiaAgendaAfter(LocalDate.now());
 
         return new PageImpl(agendasList);
