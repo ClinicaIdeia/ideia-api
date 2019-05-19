@@ -93,6 +93,17 @@ public class FuncionarioResource {
         return ResponseEntity.ok(funcionario);
     }
 
+    @GetMapping("/auto-complete")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
+    public ResponseEntity<List<Funcionario>> buscaComAutoComlete(@PathParam("nome") String nome) {
+        List<Funcionario> funcionarios = this.funcionarioService.buscaFuncionarioComAutoComplete(nome);
+
+        if (null == funcionarios && funcionarios.isEmpty())
+            return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(funcionarios);
+    }
+
     @GetMapping("/cpf")
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
     public ResponseEntity<Funcionario> buscaPorCpf(@PathParam("cpf") String cpf) {

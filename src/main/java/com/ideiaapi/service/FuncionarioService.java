@@ -50,25 +50,19 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-@Service
-public class FuncionarioService {
+@Service public class FuncionarioService {
 
     private static final Logger log = LoggerFactory.getLogger(FuncionarioService.class);
 
-    @Autowired
-    private FuncionarioRepository funcionarioRepository;
+    @Autowired private FuncionarioRepository funcionarioRepository;
 
-    @Autowired
-    private FuncionarioValidate funcionarioValidate;
+    @Autowired private FuncionarioValidate funcionarioValidate;
 
-    @Autowired
-    private FuncCargoEmpresaService funcCargoEmpresaService;
+    @Autowired private FuncCargoEmpresaService funcCargoEmpresaService;
 
-    @Autowired
-    private EmpresaService empresaService;
+    @Autowired private EmpresaService empresaService;
 
-    @Autowired
-    private S3 s3;
+    @Autowired private S3 s3;
 
     public AnexoS3DTO salvarFotoFuncionarioS3(MultipartFile file) {
         String nome = s3.salvarArquivoS3Temporatimente(file, Boolean.TRUE);
@@ -78,8 +72,7 @@ public class FuncionarioService {
     public Page<Funcionario> filtrar(FuncionarioFilter filter, Pageable pageable) {
         Page<Funcionario> filtrar = this.funcionarioRepository.filtrar(filter, pageable);
         Usuario usuarioLogado = UsuarioSessao.getUserLogado();
-        if (!UsuarioSessao.isAdmin(
-                usuarioLogado) && (null != filtrar.getContent() && !filtrar.getContent().isEmpty())) {
+        if (!UsuarioSessao.isAdmin(usuarioLogado) && (null != filtrar.getContent() && !filtrar.getContent().isEmpty())) {
 
             filtrar.getContent().forEach(funcionario -> this.deparaCargoFuncionario(funcionario, usuarioLogado));
 
@@ -92,8 +85,7 @@ public class FuncionarioService {
         return this.funcionarioRepository.resumir(filter, pageable);
     }
 
-    @Transactional
-    public Funcionario cadastraFuncionario(Funcionario entity) {
+    @Transactional public Funcionario cadastraFuncionario(Funcionario entity) {
 
         this.funcionarioValidate.fluxoCriacao(entity);
         if (StringUtils.hasText(entity.getAnexo())) {
@@ -106,8 +98,7 @@ public class FuncionarioService {
         return salvo;
     }
 
-    @Transactional
-    public void insereEmBatch(List<Funcionario> funcionarios) {
+    @Transactional public void insereEmBatch(List<Funcionario> funcionarios) {
         this.funcionarioRepository.save(funcionarios);
     }
 
@@ -139,8 +130,8 @@ public class FuncionarioService {
     }
 
     private void deparaCargoFuncionario(Funcionario funcionario, Usuario userLogado) {
-        final FuncCargoEmpresa funcCargoEmpresa = this.funcCargoEmpresaService.getByCodFuncionarioAndCodEmpresa(
-                funcionario, userLogado.getEmpresa().getCodigo());
+        final FuncCargoEmpresa funcCargoEmpresa = this.funcCargoEmpresaService.getByCodFuncionarioAndCodEmpresa(funcionario,
+                                                                                                                userLogado.getEmpresa().getCodigo());
 
         if (null != funcCargoEmpresa)
             funcionario.setCargo(funcCargoEmpresa.getCargo());
@@ -157,8 +148,7 @@ public class FuncionarioService {
 
         if (StringUtils.isEmpty(funcionario.getAnexo()) && StringUtils.hasText(funcionarioSalvo.getAnexo())) {
             this.s3.remover(funcionarioSalvo.getAnexo());
-        } else if (StringUtils.hasText(
-                funcionario.getAnexo()) && !funcionario.getAnexo().equals(funcionarioSalvo.getAnexo())) {
+        } else if (StringUtils.hasText(funcionario.getAnexo()) && !funcionario.getAnexo().equals(funcionarioSalvo.getAnexo())) {
             this.s3.substituir(funcionarioSalvo.getAnexo(), funcionario.getAnexo());
         }
         BeanUtils.copyProperties(funcionario, funcionarioSalvo, "codigo");
@@ -211,8 +201,7 @@ public class FuncionarioService {
         Usuario userLogado = UsuarioSessao.getUserLogado();
         if (!UsuarioSessao.isAdmin(userLogado)) {
 
-            return this.funcionarioRepository.findAllByEmpresas(
-                    userLogado.getEmpresa().getCodigo());
+            return this.funcionarioRepository.findAllByEmpresas(userLogado.getEmpresa().getCodigo());
 
         }
         return this.funcionarioRepository.findAll();
@@ -248,8 +237,8 @@ public class FuncionarioService {
         parametros.put("FUNC_PROFISSAO", null != funcionario.getCargo() ? funcionario.getCargo() : "");
         parametros.put("NUM_CADASTRO", String.valueOf(funcionario.getNumeroCadastro()));
         parametros.put("FUNC_NATURALIDADE", null != funcionario.getNaturalidade() ? funcionario.getNaturalidade() : "");
-        parametros.put("FUNC_NASCIMENTO", null != funcionario.getDataNascimento() ?
-                UtilsData.getDataConvertida(funcionario.getDataNascimento(), "dd/MM/yyyy") : "");
+        parametros.put("FUNC_NASCIMENTO",
+                       null != funcionario.getDataNascimento() ? UtilsData.getDataConvertida(funcionario.getDataNascimento(), "dd/MM/yyyy") : "");
         parametros.put("EMP_NOME", "");
         parametros.put("FUNC_EMAIL", null != funcionario.getEmail() ? funcionario.getEmail() : "");
         parametros.put("FUNC_TELEFONE", null != funcionario.getTelefone() ? funcionario.getTelefone() : "");
@@ -273,8 +262,7 @@ public class FuncionarioService {
 
         final List<Empresa> empresas = funcionario.getEmpresas();
 
-        JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parametros,
-                new JRBeanCollectionDataSource(empresas));
+        JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parametros, new JRBeanCollectionDataSource(empresas));
 
         return JasperExportManager.exportReportToPdf(jasperPrint);
     }
@@ -293,8 +281,7 @@ public class FuncionarioService {
         rowsImportDTO.setFalhas(values);
     }
 
-    @Transactional
-    public RowsImportDTO importaFuncionarios(MultipartFile reapExcelDataFile) {//NOSONAR
+    @Transactional public RowsImportDTO importaFuncionarios(MultipartFile reapExcelDataFile) {//NOSONAR
 
         Map<Integer, String> erros = new HashMap<>();
         Map<String, Empresa> empresaMap = this.empresaService.loadEmpresas();
@@ -375,8 +362,7 @@ public class FuncionarioService {
 
                 Empresa empresa = getEmpresa(empresaMap, nomeEmpresa, cnpj);
 
-                Funcionario func = new Funcionario(nome, rg, cpf, dataNascimento, "IMPORTAÇÃO", "IMPORTAÇÃO",
-                        numeroCadastro.longValue());
+                Funcionario func = new Funcionario(nome, rg, cpf, dataNascimento, "IMPORTAÇÃO", "IMPORTAÇÃO", numeroCadastro.longValue());
                 func.setEmpresas(Arrays.asList(empresa));
                 this.calculaIdade(func);
 
@@ -433,8 +419,7 @@ public class FuncionarioService {
         } catch (Exception e) {
             cpf = "CPF-ilegivel";
         }
-        cpf = cpf.replace(".", "")
-                .replace(":", "").replace("-", "").trim();
+        cpf = cpf.replace(".", "").replace(":", "").replace("-", "").trim();
         return cpf;
     }
 
@@ -451,4 +436,7 @@ public class FuncionarioService {
         return dataNascimento;
     }
 
+    public List<Funcionario> buscaFuncionarioComAutoComplete(String nome) {
+        return this.funcionarioRepository.findByNomeContainingIgnoreCaseOrderByNome(nome);
+    }
 }
