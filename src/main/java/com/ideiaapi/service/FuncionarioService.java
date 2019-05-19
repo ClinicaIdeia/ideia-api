@@ -19,6 +19,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ideiaapi.dto.FuncionarioDTO;
 import com.ideiaapi.dto.RowsImportDTO;
 import com.ideiaapi.dto.s3.AnexoS3DTO;
 import com.ideiaapi.model.Empresa;
@@ -436,7 +438,12 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
         return dataNascimento;
     }
 
-    public List<Funcionario> buscaFuncionarioComAutoComplete(String nome) {
-        return this.funcionarioRepository.findByNomeContainingIgnoreCaseOrderByNome(nome);
+    public List<FuncionarioDTO> buscaFuncionarioComAutoComplete(String nome) {
+
+        List<FuncionarioDTO> funcionarios = new ArrayList<>();
+        ModelMapper mp = new ModelMapper();
+        this.funcionarioRepository.findByNomeContainingIgnoreCaseOrderByNome(nome)
+                                  .forEach(func -> funcionarios.add(mp.map(func, FuncionarioDTO.class)));
+        return funcionarios;
     }
 }

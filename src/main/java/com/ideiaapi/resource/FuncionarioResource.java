@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ideiaapi.dto.FuncionarioDTO;
 import com.ideiaapi.dto.RowsImportDTO;
 import com.ideiaapi.dto.s3.AnexoS3DTO;
 import com.ideiaapi.event.RecursoCriadoEvent;
@@ -95,8 +96,8 @@ public class FuncionarioResource {
 
     @GetMapping("/auto-complete")
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
-    public ResponseEntity<List<Funcionario>> buscaComAutoComlete(@PathParam("nome") String nome) {
-        List<Funcionario> funcionarios = this.funcionarioService.buscaFuncionarioComAutoComplete(nome);
+    public ResponseEntity<List<FuncionarioDTO>> buscaComAutoComlete(@PathParam("nome") String nome) {
+        List<FuncionarioDTO> funcionarios = this.funcionarioService.buscaFuncionarioComAutoComplete(nome);
 
         if (null == funcionarios && funcionarios.isEmpty())
             return ResponseEntity.notFound().build();

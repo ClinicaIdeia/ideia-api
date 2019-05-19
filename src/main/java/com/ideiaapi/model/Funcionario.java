@@ -95,8 +95,7 @@ public class Funcionario {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "funcionario_empresa", joinColumns = @JoinColumn(name = "codigo_funcionario")
-            , inverseJoinColumns = @JoinColumn(name = "codigo_empresa"))
-    private List<Empresa> empresas;
+            , inverseJoinColumns = @JoinColumn(name = "codigo_empresa")) private List<Empresa> empresas;
 
     private Integer idade;
 
