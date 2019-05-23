@@ -27,6 +27,61 @@ public abstract class UtilsData {
     return fmt.format(new Date()).toUpperCase();
   }
 
+    public static String getDataFormatadaRecibo(LocalDate emissao) {
+
+        int year = emissao.getYear();
+        int month = emissao.getMonthValue();
+        int day = emissao.getDayOfMonth();
+
+        String mes = "JANEIRO";
+
+        switch (month) {
+            case 1:
+                mes = "JANEIRO";
+                break;
+            case 2:
+                mes = "FEVEREIRO";
+                break;
+            case 3:
+                mes = "MARÇO";
+                break;
+            case 4:
+                mes = "ABRIL";
+                break;
+            case 5:
+                mes = "MAIO";
+                break;
+            case 6:
+                mes = "JUNHO";
+                break;
+            case 7:
+                mes = "JULHO";
+                break;
+            case 8:
+                mes = "AGOSTO";
+                break;
+            case 9:
+                mes = "SETEMBRO";
+                break;
+            case 10:
+                mes = "OUTUBRO";
+                break;
+            case 11:
+                mes = "NOVEMBRO";
+                break;
+            case 12:
+                mes = "DEZEMBRO";
+                break;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(day).append(" de ")
+                .append(mes).append(" de ")
+                .append(year);
+
+        return sb.toString();
+    }
+
   public static LocalDateTime getDateTimeFormatted(final String dateTime, final String split) {
 
     String[] dataQuebrada = dateTime.split(split);
