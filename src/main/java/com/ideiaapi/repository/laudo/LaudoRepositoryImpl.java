@@ -72,7 +72,7 @@ public class LaudoRepositoryImpl extends RestricoesPaginacao implements LaudoRep
 
         if (!StringUtils.isEmpty(laudoFilter.getMotivo())) {
             predicates.add(builder.like(builder.lower(root.get(Laudo_.motivo).get(Motivo_.descricao)),
-                    "%" + laudoFilter.getObservacao().toLowerCase() + "%"));
+                    "%" + laudoFilter.getMotivo().toLowerCase() + "%"));
         }
 
         if (null != laudoFilter.getDataAgendamentoDe() && null != laudoFilter.getDataAgendamentoAte()) {
