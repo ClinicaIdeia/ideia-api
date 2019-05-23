@@ -1,7 +1,14 @@
 package com.ideiaapi.repository.laudo;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.ideiaapi.model.*;
+import com.ideiaapi.repository.filter.LaudoFilter;
+import com.ideiaapi.repository.projection.ResumoLaudo;
+import com.ideiaapi.repository.restricoes.paginacao.RestricoesPaginacao;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,49 +18,27 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-
-import com.ideiaapi.model.Laudo;
-import com.ideiaapi.model.Laudo_;
-import com.ideiaapi.repository.filter.LaudoFilter;
-import com.ideiaapi.repository.projection.ResumoLaudo;
-import com.ideiaapi.repository.restricoes.paginacao.RestricoesPaginacao;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LaudoRepositoryImpl extends RestricoesPaginacao implements LaudoRepositoryQuery {
 
     @PersistenceContext
     private EntityManager manager;
+    private Integer castada = 0;
 
     @Override
     public Page<Laudo> filtrar(LaudoFilter laudoFilter, Pageable pageable) {
+
         CriteriaBuilder builder = manager.getCriteriaBuilder();
         CriteriaQuery<Laudo> criteria = builder.createQuery(Laudo.class);
         Root<Laudo> root = criteria.from(Laudo.class);
+        criteria.orderBy(builder.desc(root.get(Laudo_.dataExame)));
 
         Predicate[] predicates = criarRestricoes(laudoFilter, builder, root);
         criteria.where(predicates);
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("from Laudo l where 1=1");
-
-        if (null != laudoFilter.getObservacao()) {
-            sb.append(" and lower(l.observacao) like lower('%");
-            sb.append(laudoFilter.getObservacao());
-            sb.append("%')");
-        }
-
-        if (null != laudoFilter.getDataLaudoDe() && null != laudoFilter.getDataLaudoAte()) {
-            sb.append(" and l.dataEmissao between '").append(laudoFilter.getDataLaudoDe());
-            sb.append("' and '").append(laudoFilter.getDataLaudoAte()).append("'");
-        }
-
-
-        TypedQuery<Laudo> query =
-                manager.createQuery(sb.toString(),
-                        Laudo.class);
-
+        TypedQuery<Laudo> query = manager.createQuery(criteria);
         adicionarRestricoesDePaginacao(query, pageable);
 
         return new PageImpl<>(query.getResultList(), pageable, total(laudoFilter));
@@ -66,9 +51,7 @@ public class LaudoRepositoryImpl extends RestricoesPaginacao implements LaudoRep
         CriteriaQuery<ResumoLaudo> criteria = builder.createQuery(ResumoLaudo.class);
         Root<Laudo> root = criteria.from(Laudo.class);
 
-        criteria.select(builder.construct(ResumoLaudo.class
-                , root.get(Laudo_.codigo)
-        ));
+        criteria.select(builder.construct(ResumoLaudo.class, root.get(Laudo_.codigo)));
 
         Predicate[] predicates = criarRestricoes(laudoFilter, builder, root);
         criteria.where(predicates);
@@ -79,9 +62,48 @@ public class LaudoRepositoryImpl extends RestricoesPaginacao implements LaudoRep
         return new PageImpl<>(query.getResultList(), pageable, total(laudoFilter));
     }
 
-    private Predicate[] criarRestricoes(LaudoFilter laudoFilter, CriteriaBuilder builder,
-            Root<Laudo> root) {
+    private Predicate[] criarRestricoes(LaudoFilter laudoFilter, CriteriaBuilder builder, Root<Laudo> root) {
+
         List<Predicate> predicates = new ArrayList<>();
+
+        if (!StringUtils.isEmpty(laudoFilter.getObservacao())) {
+            predicates.add(builder.like(builder.lower(root.get(Laudo_.observacao)), "%" + laudoFilter.getObservacao().toLowerCase() + "%"));
+        }
+
+        if (!StringUtils.isEmpty(laudoFilter.getMotivo())) {
+            predicates.add(builder.like(builder.lower(root.get(Laudo_.motivo).get(Motivo_.descricao)),
+                    "%" + laudoFilter.getObservacao().toLowerCase() + "%"));
+        }
+
+        if (null != laudoFilter.getDataAgendamentoDe() && null != laudoFilter.getDataAgendamentoAte()) {
+
+            predicates.add(builder.greaterThanOrEqualTo(root.get(Laudo_.agendamento).get(Agendamento_.agenda).get(Agenda_.diaAgenda),
+                    laudoFilter.getDataAgendamentoDe()));
+
+            predicates.add(builder.lessThanOrEqualTo(root.get(Laudo_.agendamento).get(Agendamento_.agenda).get(Agenda_.diaAgenda),
+                    laudoFilter.getDataAgendamentoAte()));
+        }
+
+        if (null != laudoFilter.getCodEmpresa()) {
+
+            predicates.add(builder.greaterThanOrEqualTo(root.get(Laudo_.agendamento).get(Agendamento_.empresa).get(Empresa_.codigo),
+                    laudoFilter.getCodEmpresa()));
+
+            predicates.add(builder.lessThanOrEqualTo(root.get(Laudo_.agendamento).get(Agendamento_.empresa).get(Empresa_.codigo),
+                    laudoFilter.getCodEmpresa()));
+
+        }
+
+        if (null != laudoFilter.getCodFuncionario()) {
+
+            predicates.add(builder.greaterThanOrEqualTo(root.get(Laudo_.agendamento).get(Agendamento_.funcionario).get(Funcionario_.codigo),
+                    laudoFilter.getCodFuncionario()));
+
+            predicates.add(builder.lessThanOrEqualTo(root.get(Laudo_.agendamento).get(Agendamento_.funcionario).get(Funcionario_.codigo),
+                    laudoFilter.getCodFuncionario()));
+
+        }
+
 
         return predicates.toArray(new Predicate[predicates.size()]);
     }
