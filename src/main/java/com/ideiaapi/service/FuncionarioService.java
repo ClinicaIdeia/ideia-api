@@ -1,20 +1,23 @@
 package com.ideiaapi.service;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.transaction.Transactional;
-
+import com.ideiaapi.dto.FuncionarioDTO;
+import com.ideiaapi.dto.RowsImportDTO;
+import com.ideiaapi.dto.s3.AnexoS3DTO;
+import com.ideiaapi.model.Empresa;
+import com.ideiaapi.model.FuncCargoEmpresa;
+import com.ideiaapi.model.Funcionario;
+import com.ideiaapi.model.Usuario;
+import com.ideiaapi.repository.FuncionarioRepository;
+import com.ideiaapi.repository.filter.FuncionarioFilter;
+import com.ideiaapi.repository.projection.ResumoFuncionario;
+import com.ideiaapi.security.UsuarioSessao;
+import com.ideiaapi.storage.S3;
+import com.ideiaapi.util.datas.UtilsData;
+import com.ideiaapi.validate.FuncionarioValidate;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -32,39 +35,33 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ideiaapi.dto.FuncionarioDTO;
-import com.ideiaapi.dto.RowsImportDTO;
-import com.ideiaapi.dto.s3.AnexoS3DTO;
-import com.ideiaapi.model.Empresa;
-import com.ideiaapi.model.FuncCargoEmpresa;
-import com.ideiaapi.model.Funcionario;
-import com.ideiaapi.model.Usuario;
-import com.ideiaapi.repository.FuncionarioRepository;
-import com.ideiaapi.repository.filter.FuncionarioFilter;
-import com.ideiaapi.repository.projection.ResumoFuncionario;
-import com.ideiaapi.security.UsuarioSessao;
-import com.ideiaapi.storage.S3;
-import com.ideiaapi.util.datas.UtilsData;
-import com.ideiaapi.validate.FuncionarioValidate;
+import javax.transaction.Transactional;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
-@Service public class FuncionarioService {
+@Service
+public class FuncionarioService {
 
     private static final Logger log = LoggerFactory.getLogger(FuncionarioService.class);
 
-    @Autowired private FuncionarioRepository funcionarioRepository;
+    @Autowired
+    private FuncionarioRepository funcionarioRepository;
 
-    @Autowired private FuncionarioValidate funcionarioValidate;
+    @Autowired
+    private FuncionarioValidate funcionarioValidate;
 
-    @Autowired private FuncCargoEmpresaService funcCargoEmpresaService;
+    @Autowired
+    private FuncCargoEmpresaService funcCargoEmpresaService;
 
-    @Autowired private EmpresaService empresaService;
+    @Autowired
+    private EmpresaService empresaService;
 
-    @Autowired private S3 s3;
+    @Autowired
+    private S3 s3;
 
     public AnexoS3DTO salvarFotoFuncionarioS3(MultipartFile file) {
         String nome = s3.salvarArquivoS3Temporatimente(file, Boolean.TRUE);
@@ -87,7 +84,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
         return this.funcionarioRepository.resumir(filter, pageable);
     }
 
-    @Transactional public Funcionario cadastraFuncionario(Funcionario entity) {
+    @Transactional
+    public Funcionario cadastraFuncionario(Funcionario entity) {
 
         this.funcionarioValidate.fluxoCriacao(entity);
         if (StringUtils.hasText(entity.getAnexo())) {
@@ -100,7 +98,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
         return salvo;
     }
 
-    @Transactional public void insereEmBatch(List<Funcionario> funcionarios) {
+    @Transactional
+    public void insereEmBatch(List<Funcionario> funcionarios) {
         this.funcionarioRepository.save(funcionarios);
     }
 
@@ -133,7 +132,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
     private void deparaCargoFuncionario(Funcionario funcionario, Usuario userLogado) {
         final FuncCargoEmpresa funcCargoEmpresa = this.funcCargoEmpresaService.getByCodFuncionarioAndCodEmpresa(funcionario,
-                                                                                                                userLogado.getEmpresa().getCodigo());
+                userLogado.getEmpresa().getCodigo());
 
         if (null != funcCargoEmpresa)
             funcionario.setCargo(funcCargoEmpresa.getCargo());
@@ -240,7 +239,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
         parametros.put("NUM_CADASTRO", String.valueOf(funcionario.getNumeroCadastro()));
         parametros.put("FUNC_NATURALIDADE", null != funcionario.getNaturalidade() ? funcionario.getNaturalidade() : "");
         parametros.put("FUNC_NASCIMENTO",
-                       null != funcionario.getDataNascimento() ? UtilsData.getDataConvertida(funcionario.getDataNascimento(), "dd/MM/yyyy") : "");
+                null != funcionario.getDataNascimento() ? UtilsData.getDataConvertida(funcionario.getDataNascimento(), "dd/MM/yyyy") : "");
         parametros.put("EMP_NOME", "");
         parametros.put("FUNC_EMAIL", null != funcionario.getEmail() ? funcionario.getEmail() : "");
         parametros.put("FUNC_TELEFONE", null != funcionario.getTelefone() ? funcionario.getTelefone() : "");
@@ -283,7 +282,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
         rowsImportDTO.setFalhas(values);
     }
 
-    @Transactional public RowsImportDTO importaFuncionarios(MultipartFile reapExcelDataFile) {//NOSONAR
+    @Transactional
+    public RowsImportDTO importaFuncionarios(MultipartFile reapExcelDataFile) {//NOSONAR
 
         Map<Integer, String> erros = new HashMap<>();
         Map<String, Empresa> empresaMap = this.empresaService.loadEmpresas();
@@ -442,8 +442,13 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
         List<FuncionarioDTO> funcionarios = new ArrayList<>();
         ModelMapper mp = new ModelMapper();
-        this.funcionarioRepository.findByNomeContainingIgnoreCaseOrderByNome(nome)
-                                  .forEach(func -> funcionarios.add(mp.map(func, FuncionarioDTO.class)));
+        this.funcionarioRepository.findByNomeContainingIgnoreCaseOrderByNomeAscNumeroCadastroDesc(nome)
+                .forEach(func -> {
+                    String name = func.getNome();
+                    String registro = func.getNumeroCadastro() != null ? func.getNumeroCadastro().toString() : "SEM N°";
+                    String nomeRegistro = name.concat(" - ").concat(registro);
+                    funcionarios.add(new FuncionarioDTO(func.getCodigo(), nomeRegistro, func.getEmpresas()));
+                });
         return funcionarios;
     }
 }

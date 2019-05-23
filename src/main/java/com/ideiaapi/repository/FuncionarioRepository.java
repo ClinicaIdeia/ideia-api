@@ -21,5 +21,5 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long>,
     @Query(value = "select max(numero_cadastro) + 1 as next from funcionario", nativeQuery = true)
     Long getProximoNumeroCadastroDisponivel();
 
-    List<Funcionario> findByNomeContainingIgnoreCaseOrderByNome(String nome);
+    List<Funcionario> findByNomeContainingIgnoreCaseOrderByNomeAscNumeroCadastroDesc(String nome);
 }

@@ -10,6 +10,12 @@ public class FuncionarioDTO {
     private String        nome;
     private List<Empresa> empresas;
 
+    public FuncionarioDTO(Long codigo, String nome, List<Empresa> empresas) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.empresas = empresas;
+    }
+
     public List<Empresa> getEmpresas() {
         return empresas;
     }
