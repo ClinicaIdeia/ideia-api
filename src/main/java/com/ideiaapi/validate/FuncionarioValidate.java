@@ -19,7 +19,7 @@ public class FuncionarioValidate {
     private FuncionarioRepository repository;
 
     public void fluxoCriacao(Funcionario entity) {
-        this.validaCpfUnique(entity);
+//        this.validaCpfUnique(entity);
         this.validaDataAniversario(entity);
     }
 
