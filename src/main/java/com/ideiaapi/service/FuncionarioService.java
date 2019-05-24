@@ -120,7 +120,11 @@ public class FuncionarioService {
         }
     }
 
-    public Funcionario buscaFuncionario(Long codigo) {
+    private Funcionario buscaFuncionario(Long codigo) {
+        return this.loadFuncionario(codigo);
+    }
+
+    private Funcionario loadFuncionario(Long codigo) {
         Funcionario funcionario = this.funcionarioRepository.findOne(codigo);
 
         if (funcionario == null) {
@@ -129,11 +133,13 @@ public class FuncionarioService {
 
         Usuario userLogado = UsuarioSessao.getUserLogado();
         if (!UsuarioSessao.isAdmin(userLogado)) {
-
             deparaCargoFuncionario(funcionario, userLogado);
-
         }
+        return funcionario;
+    }
 
+    public Funcionario loadFuncionarioTela(Long codigo) {
+        Funcionario funcionario = loadFuncionario(codigo);
         this.geraNomeFormatadoComNumeroCadastro(funcionario);
         return funcionario;
     }

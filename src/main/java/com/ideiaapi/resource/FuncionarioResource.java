@@ -86,7 +86,7 @@ public class FuncionarioResource {
     @GetMapping("/{codigo}")
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
     public ResponseEntity<Funcionario> busca(@PathVariable Long codigo) {
-        Funcionario funcionario = this.funcionarioService.buscaFuncionario(codigo);
+        Funcionario funcionario = this.funcionarioService.loadFuncionarioTela(codigo);
 
         if (null == funcionario)
             return ResponseEntity.notFound().build();
