@@ -86,7 +86,7 @@ public class FuncionarioResource {
     @GetMapping("/{codigo}")
     @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
     public ResponseEntity<Funcionario> busca(@PathVariable Long codigo) {
-        Funcionario funcionario = this.funcionarioService.loadFuncionarioTela(codigo);
+        Funcionario funcionario = this.funcionarioService.buscaFuncionario(codigo);
 
         if (null == funcionario)
             return ResponseEntity.notFound().build();
@@ -99,7 +99,7 @@ public class FuncionarioResource {
     public ResponseEntity<List<FuncionarioDTO>> buscaComAutoComlete(@PathParam("nome") String nome) {
         List<FuncionarioDTO> funcionarios = this.funcionarioService.buscaFuncionarioComAutoComplete(nome);
 
-        if (null == funcionarios && funcionarios.isEmpty())
+        if (null == funcionarios || funcionarios.isEmpty())
             return ResponseEntity.notFound().build();
 
         return ResponseEntity.ok(funcionarios);

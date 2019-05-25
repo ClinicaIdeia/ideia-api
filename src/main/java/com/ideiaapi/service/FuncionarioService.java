@@ -120,7 +120,7 @@ public class FuncionarioService {
         }
     }
 
-    private Funcionario buscaFuncionario(Long codigo) {
+    public Funcionario buscaFuncionario(Long codigo) {
         return this.loadFuncionario(codigo);
     }
 
@@ -135,12 +135,6 @@ public class FuncionarioService {
         if (!UsuarioSessao.isAdmin(userLogado)) {
             deparaCargoFuncionario(funcionario, userLogado);
         }
-        return funcionario;
-    }
-
-    public Funcionario loadFuncionarioTela(Long codigo) {
-        Funcionario funcionario = loadFuncionario(codigo);
-        this.geraNomeFormatadoComNumeroCadastro(funcionario);
         return funcionario;
     }
 
