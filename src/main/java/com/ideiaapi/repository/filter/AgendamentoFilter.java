@@ -16,6 +16,8 @@ public class AgendamentoFilter {
 
     private Boolean laudoGerado;
 
+    private Long codFuncionario;
+
     public Boolean getLaudoGerado() {
         return laudoGerado;
     }
@@ -46,5 +48,13 @@ public class AgendamentoFilter {
 
     public void setDataExameAte(LocalDate dataExameAte) {
         this.dataExameAte = dataExameAte;
+    }
+
+    public Long getCodFuncionario() {
+        return codFuncionario;
+    }
+
+    public void setCodFuncionario(Long codFuncionario) {
+        this.codFuncionario = codFuncionario;
     }
 }
