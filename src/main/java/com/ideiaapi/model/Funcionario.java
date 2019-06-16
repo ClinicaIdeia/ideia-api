@@ -107,6 +107,9 @@ public class Funcionario {
     @Column(name = "numero_cadastro")
     private Long numeroCadastro;
 
+    @Transient
+    private String nomeFuncNum;
+
     public Funcionario(String nome, String rg, String cpf, LocalDate dataNascimento, String cargo,
             String telefone, Long numeroCadastro) {
         this.nome = nome;
@@ -280,6 +283,14 @@ public class Funcionario {
 
     public void setUrlAnexo(String urlAnexo) {
         this.urlAnexo = urlAnexo;
+    }
+
+    public String getNomeFuncNum() {
+        return nomeFuncNum;
+    }
+
+    public void setNomeFuncNum(String nomeFuncNum) {
+        this.nomeFuncNum = nomeFuncNum;
     }
 
     @Override
