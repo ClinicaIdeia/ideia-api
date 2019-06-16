@@ -18,6 +18,8 @@ public class AgendamentoFilter {
 
     private Long codFuncionario;
 
+    private Long codEmpresa;
+
     public Boolean getLaudoGerado() {
         return laudoGerado;
     }
@@ -56,5 +58,13 @@ public class AgendamentoFilter {
 
     public void setCodFuncionario(Long codFuncionario) {
         this.codFuncionario = codFuncionario;
+    }
+
+    public Long getCodEmpresa() {
+        return codEmpresa;
+    }
+
+    public void setCodEmpresa(Long codEmpresa) {
+        this.codEmpresa = codEmpresa;
     }
 }

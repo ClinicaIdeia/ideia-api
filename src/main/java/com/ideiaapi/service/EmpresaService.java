@@ -1,11 +1,12 @@
 package com.ideiaapi.service;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import com.ideiaapi.dto.EmpresaDTO;
+import com.ideiaapi.model.Empresa;
+import com.ideiaapi.repository.EmpresaRepository;
+import com.ideiaapi.repository.filter.EmpresaFilter;
+import com.ideiaapi.repository.projection.ResumoEmpresa;
+import com.ideiaapi.validate.EmpresaValidate;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,11 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.ideiaapi.model.Empresa;
-import com.ideiaapi.repository.EmpresaRepository;
-import com.ideiaapi.repository.filter.EmpresaFilter;
-import com.ideiaapi.repository.projection.ResumoEmpresa;
-import com.ideiaapi.validate.EmpresaValidate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EmpresaService {
@@ -83,5 +81,16 @@ public class EmpresaService {
     public List<Empresa> buscarTodas() {
         return this.repository.findAll().stream().sorted(Comparator.comparing(Empresa::getNome)).collect(
                 Collectors.toList());
+    }
+
+    public List<EmpresaDTO> buscaEmpresaComAutoComplete(String nome) {
+
+        List<EmpresaDTO> empresas = new ArrayList<>();
+        ModelMapper mp = new ModelMapper();
+        this.repository.findByNomeContainingIgnoreCaseOrderByNomeAscCodigoDesc(nome)
+                .forEach(func -> {
+                    empresas.add(mp.map(func, EmpresaDTO.class));
+                });
+        return empresas;
     }
 }
