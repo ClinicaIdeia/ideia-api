@@ -9,11 +9,13 @@ public class FuncionarioDTO {
     private Long          codigo;
     private String        nome;
     private List<Empresa> empresas;
+    private String nomeFuncCad;
 
-    public FuncionarioDTO(Long codigo, String nome, List<Empresa> empresas) {
+    public FuncionarioDTO(Long codigo, String nome, List<Empresa> empresas, String nomeFuncCad) {
         this.codigo = codigo;
         this.nome = nome;
         this.empresas = empresas;
+        this.nomeFuncCad = nomeFuncCad;
     }
 
     public List<Empresa> getEmpresas() {
@@ -38,5 +40,13 @@ public class FuncionarioDTO {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getNomeFuncCad() {
+        return nomeFuncCad;
+    }
+
+    public void setNomeFuncCad(String nomeFuncCad) {
+        this.nomeFuncCad = nomeFuncCad;
     }
 }

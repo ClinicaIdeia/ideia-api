@@ -455,7 +455,8 @@ public class FuncionarioService {
                     String name = func.getNome();
                     String registro = func.getNumeroCadastro() != null ? func.getNumeroCadastro().toString() : "SEM N°";
                     String nomeRegistro = name.concat(" - ").concat(registro);
-                    funcionarios.add(new FuncionarioDTO(func.getCodigo(), nomeRegistro, func.getEmpresas()));
+                    String nomeFuncCod = name + func.getCodigo();
+                    funcionarios.add(new FuncionarioDTO(func.getCodigo(), nomeRegistro, func.getEmpresas(), nomeFuncCod));
                 });
         return funcionarios;
     }

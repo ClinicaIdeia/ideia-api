@@ -107,6 +107,9 @@ public class Funcionario {
     @Column(name = "numero_cadastro")
     private Long numeroCadastro;
 
+    @Transient
+    private String nomeFuncCad;
+
     public Funcionario(String nome, String rg, String cpf, LocalDate dataNascimento, String cargo,
             String telefone, Long numeroCadastro) {
         this.nome = nome;
@@ -282,6 +285,14 @@ public class Funcionario {
         this.urlAnexo = urlAnexo;
     }
 
+    public String getNomeFuncCad() {
+        return nomeFuncCad;
+    }
+
+    public void setNomeFuncCad(String nomeFuncCad) {
+        this.nomeFuncCad = nomeFuncCad;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -305,15 +316,16 @@ public class Funcionario {
                 Objects.equals(getEmpresas(), that.getEmpresas()) &&
                 Objects.equals(getIdade(), that.getIdade()) &&
                 Objects.equals(getAnexo(), that.getAnexo()) &&
-                Objects.equals(getUrlAnexo(), that.getUrlAnexo());
+                Objects.equals(getUrlAnexo(), that.getUrlAnexo()) &&
+                Objects.equals(getNumeroCadastro(), that.getNumeroCadastro()) &&
+                Objects.equals(getNomeFuncCad(), that.getNomeFuncCad());
     }
 
     @Override
     public int hashCode() {
-
         return Objects.hash(getCodigo(), getNome(), getRg(), getCpf(), getDataNascimento(), getSexo(), getEstadoCivil(),
-                getEscolaridade(), getNaturalidade(), getEmail(), getMatricula(), getCargo(), getTelefone(),
-                getTelefoneFixo(), getEndereco(), getEmpresas(), getIdade(), getAnexo(), getUrlAnexo());
+                getEscolaridade(), getNaturalidade(), getEmail(), getMatricula(), getCargo(), getTelefone(), getTelefoneFixo(),
+                getEndereco(), getEmpresas(), getIdade(), getAnexo(), getUrlAnexo(), getNumeroCadastro(), getNomeFuncCad());
     }
 
     @Override
@@ -338,6 +350,8 @@ public class Funcionario {
                 ", idade=" + idade +
                 ", anexo='" + anexo + '\'' +
                 ", urlAnexo='" + urlAnexo + '\'' +
+                ", numeroCadastro=" + numeroCadastro +
+                ", nomeFuncCad='" + nomeFuncCad + '\'' +
                 '}';
     }
 }
