@@ -454,9 +454,11 @@ public class FuncionarioService {
                 .forEach(func -> {
                     String name = func.getNome();
                     String registro = func.getNumeroCadastro() != null ? func.getNumeroCadastro().toString() : "SEM N°";
-                    String nomeRegistro = name.concat(" - ").concat(registro);
-                    String nomeFuncCod = name.concat(" - ").concat(func.getCodigo().toString());
-                    funcionarios.add(new FuncionarioDTO(func.getCodigo(), nomeRegistro, func.getEmpresas(), nomeFuncCod));
+                    String nomeFuncNum = name.concat(" - ").concat(registro);
+
+                    func.setNomeFuncNum(nomeFuncNum);
+
+                    funcionarios.add(mp.map(func, FuncionarioDTO.class));
                 });
         return funcionarios;
     }

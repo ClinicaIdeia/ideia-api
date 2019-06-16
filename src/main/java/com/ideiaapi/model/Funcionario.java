@@ -108,7 +108,7 @@ public class Funcionario {
     private Long numeroCadastro;
 
     @Transient
-    private String nomeFuncCad;
+    private String nomeFuncNum;
 
     public Funcionario(String nome, String rg, String cpf, LocalDate dataNascimento, String cargo,
             String telefone, Long numeroCadastro) {
@@ -285,12 +285,12 @@ public class Funcionario {
         this.urlAnexo = urlAnexo;
     }
 
-    public String getNomeFuncCad() {
-        return nomeFuncCad;
+    public String getNomeFuncNum() {
+        return nomeFuncNum;
     }
 
-    public void setNomeFuncCad(String nomeFuncCad) {
-        this.nomeFuncCad = nomeFuncCad;
+    public void setNomeFuncNum(String nomeFuncNum) {
+        this.nomeFuncNum = nomeFuncNum;
     }
 
     @Override
