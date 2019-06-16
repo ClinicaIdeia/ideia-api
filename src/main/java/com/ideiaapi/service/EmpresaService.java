@@ -6,6 +6,7 @@ import com.ideiaapi.repository.EmpresaRepository;
 import com.ideiaapi.repository.filter.EmpresaFilter;
 import com.ideiaapi.repository.projection.ResumoEmpresa;
 import com.ideiaapi.validate.EmpresaValidate;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -85,9 +86,10 @@ public class EmpresaService {
     public List<EmpresaDTO> buscaEmpresaComAutoComplete(String nome) {
 
         List<EmpresaDTO> empresas = new ArrayList<>();
+        ModelMapper mp = new ModelMapper();
         this.repository.findByNomeContainingIgnoreCaseOrderByNomeAscCodigoDesc(nome)
                 .forEach(func -> {
-                    empresas.add(new EmpresaDTO(func.getCodigo(), func.getNome()));
+                    empresas.add(mp.map(func, EmpresaDTO.class));
                 });
         return empresas;
     }
