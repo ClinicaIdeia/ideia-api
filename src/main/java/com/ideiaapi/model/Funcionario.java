@@ -316,16 +316,15 @@ public class Funcionario {
                 Objects.equals(getEmpresas(), that.getEmpresas()) &&
                 Objects.equals(getIdade(), that.getIdade()) &&
                 Objects.equals(getAnexo(), that.getAnexo()) &&
-                Objects.equals(getUrlAnexo(), that.getUrlAnexo()) &&
-                Objects.equals(getNumeroCadastro(), that.getNumeroCadastro()) &&
-                Objects.equals(getNomeFuncCad(), that.getNomeFuncCad());
+                Objects.equals(getUrlAnexo(), that.getUrlAnexo());
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(getCodigo(), getNome(), getRg(), getCpf(), getDataNascimento(), getSexo(), getEstadoCivil(),
-                getEscolaridade(), getNaturalidade(), getEmail(), getMatricula(), getCargo(), getTelefone(), getTelefoneFixo(),
-                getEndereco(), getEmpresas(), getIdade(), getAnexo(), getUrlAnexo(), getNumeroCadastro(), getNomeFuncCad());
+                getEscolaridade(), getNaturalidade(), getEmail(), getMatricula(), getCargo(), getTelefone(),
+                getTelefoneFixo(), getEndereco(), getEmpresas(), getIdade(), getAnexo(), getUrlAnexo());
     }
 
     @Override
@@ -350,8 +349,6 @@ public class Funcionario {
                 ", idade=" + idade +
                 ", anexo='" + anexo + '\'' +
                 ", urlAnexo='" + urlAnexo + '\'' +
-                ", numeroCadastro=" + numeroCadastro +
-                ", nomeFuncCad='" + nomeFuncCad + '\'' +
                 '}';
     }
 }
