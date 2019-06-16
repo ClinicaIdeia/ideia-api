@@ -1,9 +1,15 @@
 package com.ideiaapi.repository.agendamento;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import com.ideiaapi.dto.AgendamentoEstatisticaEmpresa;
+import com.ideiaapi.model.*;
+import com.ideiaapi.repository.filter.AgendamentoFilter;
+import com.ideiaapi.repository.projection.ResumoAgendamento;
+import com.ideiaapi.repository.restricoes.paginacao.RestricoesPaginacao;
+import com.ideiaapi.security.UsuarioSessao;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,25 +18,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.util.StringUtils;
-
-import com.ideiaapi.dto.AgendamentoEstatisticaEmpresa;
-import com.ideiaapi.model.Agenda;
-import com.ideiaapi.model.Agenda_;
-import com.ideiaapi.model.Agendamento;
-import com.ideiaapi.model.Agendamento_;
-import com.ideiaapi.model.Empresa;
-import com.ideiaapi.model.Empresa_;
-import com.ideiaapi.model.Funcionario_;
-import com.ideiaapi.model.Usuario;
-import com.ideiaapi.repository.filter.AgendamentoFilter;
-import com.ideiaapi.repository.projection.ResumoAgendamento;
-import com.ideiaapi.repository.restricoes.paginacao.RestricoesPaginacao;
-import com.ideiaapi.security.UsuarioSessao;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements AgendamentoRepositoryQuery {
 
@@ -39,7 +29,7 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
 
     @Override
     public List<AgendamentoEstatisticaEmpresa> agendamentosPorEmpresa(LocalDate inicio, LocalDate fim,
-            Long codEmpresa, Long codFuncionario) {
+                                                                      Long codEmpresa, Long codFuncionario) {
 
         CriteriaBuilder builder = manager.getCriteriaBuilder();
         CriteriaQuery<AgendamentoEstatisticaEmpresa> criteria = builder.createQuery(
@@ -126,6 +116,8 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
                 , root.get(Agendamento_.codigo)
                 , root.get(Agendamento_.observacao)
                 , root.get(Agendamento_.laudoGerado)
+                , root.get(Agendamento_.funcionario).get(Funcionario_.codigo)
+                , root.get(Agendamento_.empresa).get(Empresa_.codigo)
         ));
 
         Predicate[] predicates = criarRestricoes(agendamentoFilter, builder, root);
@@ -138,7 +130,7 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
     }
 
     private Predicate[] criarRestricoes(AgendamentoFilter agendamentoFilter, CriteriaBuilder builder,
-            Root<Agendamento> root) {
+                                        Root<Agendamento> root) {
         List<Predicate> predicates = new ArrayList<>();
 
         if (!StringUtils.isEmpty(agendamentoFilter.getObservacao())) {
@@ -172,6 +164,15 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
 
             predicates.add(builder.lessThanOrEqualTo(root.get(Agendamento_.funcionario).get(Funcionario_.codigo),
                     agendamentoFilter.getCodFuncionario()));
+
+        }
+        if (null != agendamentoFilter.getCodEmpresa()) {
+
+            predicates.add(builder.greaterThanOrEqualTo(root.get(Agendamento_.empresa).get(Empresa_.codigo),
+                    agendamentoFilter.getCodEmpresa()));
+
+            predicates.add(builder.lessThanOrEqualTo(root.get(Agendamento_.empresa).get(Empresa_.codigo),
+                    agendamentoFilter.getCodEmpresa()));
 
         }
 

@@ -4,7 +4,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
+import com.ideiaapi.dto.EmpresaDTO;
+import com.ideiaapi.dto.FuncionarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -85,4 +88,16 @@ public class EmpresaResource {
     public void deleta(@PathVariable Long codigo) {
         this.service.deletaEmpresa(codigo);
     }
+
+    @GetMapping("/auto-complete")
+    @PreAuthorize(value = "hasAuthority('ROLE_PESQUISAR_FUNCIONARIO')  or hasAuthority('ROLE_DEFAULT') or hasAuthority('ROLE_ADMIN') and #oauth2.hasScope('read')")
+    public ResponseEntity<List<EmpresaDTO>> buscaComAutoComlete(@PathParam("nome") String nome) {
+        List<EmpresaDTO> empresas = this.service.buscaEmpresaComAutoComplete(nome);
+
+        if (null == empresas || empresas.isEmpty())
+            return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(empresas);
+    }
+
 }
