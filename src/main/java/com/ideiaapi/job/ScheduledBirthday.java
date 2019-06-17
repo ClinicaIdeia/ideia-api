@@ -37,7 +37,7 @@ public class ScheduledBirthday {
      * E: Mês (1 – 12).
      * F: Dia da semana (0 – 6).
      */
-    @Scheduled(cron = "0 0 6 * * *")
+    @Scheduled(cron = "0 0 9 * * *")
     public void aniversario() {
         LocalDate hoje = LocalDate.now();
         List<Funcionario> funcionarios = this.funcionarioRepository.findByDataNascimentoAndEmailNotNull(hoje.getMonthValue(), hoje.getDayOfMonth());
