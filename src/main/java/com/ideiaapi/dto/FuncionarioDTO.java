@@ -6,10 +6,14 @@ import com.ideiaapi.model.Empresa;
 
 public class FuncionarioDTO {
 
-    private Long          codigo;
-    private String        nome;
+    private Long codigo;
+    private String nome;
     private List<Empresa> empresas;
     private String nomeFuncNum;
+
+    public FuncionarioDTO() {
+        super();
+    }
 
     public FuncionarioDTO(Long codigo, String nome, List<Empresa> empresas, String nomeFuncNum) {
         this.codigo = codigo;

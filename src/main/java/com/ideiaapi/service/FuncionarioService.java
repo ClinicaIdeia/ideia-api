@@ -449,16 +449,14 @@ public class FuncionarioService {
     public List<FuncionarioDTO> buscaFuncionarioComAutoComplete(String nome) {
 
         List<FuncionarioDTO> funcionarios = new ArrayList<>();
-        ModelMapper mp = new ModelMapper();
         this.funcionarioRepository.findByNomeContainingIgnoreCaseOrderByNomeAscNumeroCadastroDesc(nome)
                 .forEach(func -> {
                     String name = func.getNome();
                     String registro = func.getNumeroCadastro() != null ? func.getNumeroCadastro().toString() : "SEM N°";
                     String nomeFuncNum = name.concat(" - ").concat(registro);
-
                     func.setNomeFuncNum(nomeFuncNum);
 
-                    funcionarios.add(mp.map(func, FuncionarioDTO.class));
+                    funcionarios.add(new ModelMapper().map(func, FuncionarioDTO.class));
                 });
         return funcionarios;
     }

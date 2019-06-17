@@ -86,11 +86,8 @@ public class EmpresaService {
     public List<EmpresaDTO> buscaEmpresaComAutoComplete(String nome) {
 
         List<EmpresaDTO> empresas = new ArrayList<>();
-        ModelMapper mp = new ModelMapper();
         this.repository.findByNomeContainingIgnoreCaseOrderByNomeAscCodigoDesc(nome)
-                .forEach(func -> {
-                    empresas.add(mp.map(func, EmpresaDTO.class));
-                });
+                .forEach(func -> empresas.add(new ModelMapper().map(func, EmpresaDTO.class)));
         return empresas;
     }
 }

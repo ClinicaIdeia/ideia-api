@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import com.ideiaapi.model.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,11 +22,6 @@ import org.springframework.stereotype.Service;
 
 import com.ideiaapi.dto.AgendamentoEstatisticaEmpresa;
 import com.ideiaapi.exceptions.BusinessException;
-import com.ideiaapi.model.Agenda;
-import com.ideiaapi.model.Agendamento;
-import com.ideiaapi.model.Empresa;
-import com.ideiaapi.model.Horario;
-import com.ideiaapi.model.Laudo;
 import com.ideiaapi.repository.AgendamentoRepository;
 import com.ideiaapi.repository.filter.AgendamentoFilter;
 import com.ideiaapi.repository.projection.ResumoAgendamento;
@@ -66,7 +62,13 @@ public class AgendamentoService {
     }
 
     public Page<Agendamento> listaAgendamentos(AgendamentoFilter filter, Pageable pageable) {
-        return this.agendamentoRepository.filtrar(filter, pageable);
+        Page<Agendamento> agendamentos = this.agendamentoRepository.filtrar(filter, pageable);
+        agendamentos.iterator().forEachRemaining(agendamento -> {
+            final Funcionario funcionario = agendamento.getFuncionario();
+            String nomeFuncNum = funcionario.getNome() + " - " + funcionario.getNumeroCadastro();
+            agendamento.getFuncionario().setNomeFuncNum(nomeFuncNum);
+        });
+        return agendamentos;
     }
 
     public Page<ResumoAgendamento> resumo(AgendamentoFilter filter, Pageable pageable) {
