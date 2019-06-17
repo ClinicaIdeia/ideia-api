@@ -28,39 +28,6 @@ public class ScheduledEmails {
     private static String emailIdeia = "clinica.ideia@gmail.com";
     private static String emailNilza = "nilzamarquez5@gmail.com";
 
-    /**
-     * ANIVERSARIO
-     */
-
-    @Scheduled(cron = "0 6 * * * *")
-    public void aniversario() {
-
-        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
-
-        LocalDate hoje = LocalDate.now();
-
-        funcionarioList.stream()
-                .filter(funcionario ->
-                        StringUtils.isNotBlank(funcionario.getEmail())
-                                && this.diaDeAniversarioHoje(funcionario, hoje))
-                .forEach(this::enviarEmailAniversario);
-    }
-
-    private Boolean diaDeAniversarioHoje(Funcionario funcionario, LocalDate hoje) {
-
-        LocalDate dataNascimento = funcionario.getDataNascimento();
-
-        return (dataNascimento.getDayOfMonth() == hoje.getDayOfMonth()) && (dataNascimento.getMonth() == hoje.getMonth());
-    }
-
-    private void enviarEmailAniversario(Funcionario funcionario) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", funcionario.getNome());
-
-        this.envioEmail.enviarEmail(emailIdeia,
-                Collections.singletonList(funcionario.getEmail()),
-                "Feliz Aniversário", "email/aniversario", map);
-    }
 
     /**
      * EXAME EXPIRANDO

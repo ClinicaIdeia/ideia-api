@@ -119,7 +119,13 @@ public class LaudoService {
 
 
     public Page<Laudo> filtrar(LaudoFilter filter, Pageable pageable) {
-        return this.laudoRepository.filtrar(filter, pageable);
+        Page<Laudo> laudos = this.laudoRepository.filtrar(filter, pageable);
+        laudos.iterator().forEachRemaining(laudo -> {
+            final Funcionario funcionario = laudo.getFuncionario();
+            String nomeFuncNum = funcionario.getNome() + " - " + funcionario.getNumeroCadastro();
+            laudo.getFuncionario().setNomeFuncNum(nomeFuncNum);
+        });
+        return laudos;
     }
 
     public Laudo cadastraLaudo(Laudo entity) {

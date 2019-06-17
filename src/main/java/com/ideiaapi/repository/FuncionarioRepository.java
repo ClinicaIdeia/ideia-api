@@ -1,13 +1,12 @@
 package com.ideiaapi.repository;
 
-import java.util.List;
-
+import com.ideiaapi.model.Funcionario;
+import com.ideiaapi.repository.funcionario.FuncionarioRepositoryQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ideiaapi.model.Funcionario;
-import com.ideiaapi.repository.funcionario.FuncionarioRepositoryQuery;
+import java.util.List;
 
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Long>, FuncionarioRepositoryQuery {
 
@@ -22,4 +21,11 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long>,
     Long getProximoNumeroCadastroDisponivel();
 
     List<Funcionario> findByNomeContainingIgnoreCaseOrderByNomeAscNumeroCadastroDesc(String nome);
+
+    @Query(value = "select *\n" +
+            "from funcionario\n" +
+            "where extract(month from data_nascimento) =:mes\n" +
+            "    AND  extract(day from data_nascimento) =:dia\n" +
+            "AND email IS NOT NULL;", nativeQuery = true)
+    List<Funcionario> findByDataNascimentoAndEmailNotNull(@Param(value = "mes") int mes, @Param(value = "dia") int dia);
 }
