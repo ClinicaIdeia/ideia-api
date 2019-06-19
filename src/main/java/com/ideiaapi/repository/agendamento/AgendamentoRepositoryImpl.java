@@ -6,6 +6,7 @@ import com.ideiaapi.repository.filter.AgendamentoFilter;
 import com.ideiaapi.repository.projection.ResumoAgendamento;
 import com.ideiaapi.repository.restricoes.paginacao.RestricoesPaginacao;
 import com.ideiaapi.security.UsuarioSessao;
+import com.ideiaapi.util.datas.UtilsData;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -64,7 +65,11 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
         TypedQuery<AgendamentoEstatisticaEmpresa> tpQuery = manager.createQuery(criteria);
 
 
-        return tpQuery.getResultList();
+        List<AgendamentoEstatisticaEmpresa> resultList = tpQuery.getResultList();
+
+        resultList.forEach(age -> age.getAgenda().setDataAgendaTemp(UtilsData.getDataConvertida(age.getAgenda().getDiaAgenda(), "dd/MM/yyyy")));
+
+        return resultList;
     }
 
     @Override

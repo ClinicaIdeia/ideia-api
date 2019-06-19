@@ -7,11 +7,11 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="agenda" class="com.ideiaapi.model.Agenda"/>
 	<field name="horaExame" class="java.time.LocalTime"/>
 	<field name="motivo" class="com.ideiaapi.model.Motivo"/>
 	<field name="funcionario" class="com.ideiaapi.model.Funcionario"/>
 	<field name="empresa" class="com.ideiaapi.model.Empresa"/>
+	<field name="agenda" class="com.ideiaapi.model.Agenda"/>
 	<title>
 		<band height="79" splitType="Stretch">
 			<textField>
@@ -28,7 +28,7 @@
 		</band>
 	</title>
 	<columnHeader>
-		<band height="31" splitType="Stretch">
+		<band height="26" splitType="Stretch">
 			<rectangle>
 				<reportElement x="0" y="0" width="555" height="25" uuid="6b43f478-10f2-4a65-b4e6-51a63f1b5b8e"/>
 			</rectangle>
@@ -72,7 +72,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="36" splitType="Stretch">
+		<band height="31" splitType="Stretch">
 			<line>
 				<reportElement x="0" y="0" width="1" height="30" uuid="ecc43e07-ee11-483d-ad56-33dcbd707cb6"/>
 			</line>
@@ -93,8 +93,8 @@
 			</line>
 			<textField>
 				<reportElement x="1" y="1" width="89" height="30" uuid="1a35fc3f-eba1-47cc-a663-09fcb65e36e6"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{agenda}.getDiaAgenda()]]></textFieldExpression>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{agenda}.getDataAgendaTemp()]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="381" y="1" width="174" height="30" uuid="143774ba-06f0-45a2-9aa4-daa331fcd780"/>
@@ -108,12 +108,12 @@
 			</textField>
 			<textField>
 				<reportElement x="90" y="1" width="38" height="30" uuid="8737f752-367f-4cf7-8d2f-c1b49ca149ca"/>
-				<textElement verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{horaExame}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="260" y="-1" width="121" height="30" uuid="f9c19974-11f0-49b7-81e2-3855d09b9288"/>
-				<textElement verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{motivo}.getDescricao()]]></textFieldExpression>
 			</textField>
 			<line>

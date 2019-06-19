@@ -40,6 +40,17 @@ public class Agenda {
     @Transient
     private List<LocalDate> diasCopia;
 
+    @Transient
+    private String dataAgendaTemp;
+
+    public String getDataAgendaTemp() {
+        return dataAgendaTemp;
+    }
+
+    public void setDataAgendaTemp(String dataAgendaTemp) {
+        this.dataAgendaTemp = dataAgendaTemp;
+    }
+
     public List<LocalDate> getDiasCopia() {
         return diasCopia;
     }
