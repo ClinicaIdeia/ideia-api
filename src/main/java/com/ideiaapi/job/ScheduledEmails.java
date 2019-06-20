@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.*;
 
+/***
+ * Considerar 03 horas a mais, pos servidor fica na europa.
+ */
 @Component
 public class ScheduledEmails {
 
@@ -106,7 +109,6 @@ public class ScheduledEmails {
     /**
      * EMPRESA (MENSAL)
      */
-
     @Scheduled(cron = "0 1 1 * * *")
     public void emailMensalEmpresas() {
 
@@ -186,7 +188,6 @@ public class ScheduledEmails {
     /**
      * ANO NOVO
      */
-
     @Scheduled(cron = "0 0 6 1 1 *")
     public void anoNovo() {
 
