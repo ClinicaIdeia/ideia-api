@@ -2,16 +2,13 @@ package com.ideiaapi.job;
 
 import com.ideiaapi.mail.EnvioEmail;
 import com.ideiaapi.model.Funcionario;
-import com.ideiaapi.repository.AgendamentoRepository;
 import com.ideiaapi.repository.FuncionarioRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -41,11 +38,9 @@ public class ScheduledAnoNovo {
     @Scheduled(cron = "0 0 6 1 1 *")
     public void anoNovo() {
 
-        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
-
-        funcionarioList.stream()
-                .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail()))
+        this.funcionarioRepository.findAllByEmailIsNotNull()
                 .forEach(this::enviarEmailAnoNovo);
+
     }
 
     private void enviarEmailAnoNovo(Funcionario funcionario) {

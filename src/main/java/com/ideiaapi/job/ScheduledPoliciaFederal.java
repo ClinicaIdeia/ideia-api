@@ -36,7 +36,7 @@ public class ScheduledPoliciaFederal {
      * F: Dia da semana (0 – 6).
      */
 
-    @Scheduled(cron = "0 16 * * * *")
+//    @Scheduled(cron = "0 16 * * * *")
     public void avisoPoliciaFederal() {
 
         LocalDate hoje = LocalDate.now();
@@ -44,6 +44,7 @@ public class ScheduledPoliciaFederal {
         List<Agendamento> agendamentosList = this.agendamentoRepository.findAllByDate(hoje.plusDays(3L));
         List<Funcionario> funcionariosList = new ArrayList<>();
 
+        // Alterar para mandar somenteo como os moitvos Porte de arma, Registrop de Arma, certificadpo de registor de marma e renovação de certificado de registro
         agendamentosList.stream()
                 .filter(Agendamento::getTrabalhoArmado)
                 .forEach(agendamento -> funcionariosList.add(agendamento.getFuncionario()));
@@ -65,4 +66,11 @@ public class ScheduledPoliciaFederal {
                 "Clinica Ideia - Agendamentos de exames psicologicos para trabalhos armados",
                 "email/policia-federal", map);
     }
+
+
+    /*
+    as 18
+    texto:Olá. Segue agenda do dia X
+
+     */
 }

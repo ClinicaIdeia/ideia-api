@@ -39,12 +39,13 @@ public class ScheduledExameExpirado {
      * F: Dia da semana (0 – 6).
      */
 
-    @Scheduled(cron = "0 6 * * * *")
+//    @Scheduled(cron = "0 6 * * * *")
+//    @Scheduled(fixedDelay = 1l)
     public void exameExpirando() {
 
         LocalDate hoje = LocalDate.now();
 
-        List<Agendamento> agendamentosList = this.agendamentoRepository.findAllByDate(hoje.minusDays(335L));
+        List<Agendamento> agendamentosList = this.agendamentoRepository.findAll();
         List<Funcionario> funcionariosList = new ArrayList<>();
 
         agendamentosList.forEach(agendamento -> funcionariosList.add(agendamento.getFuncionario()));
@@ -69,8 +70,9 @@ public class ScheduledExameExpirado {
         Map<String, Object> map = new HashMap<>();
         map.put("name", funcionario.getNome());
 
+        //Mandar par aos dois emails
         this.envioEmail.enviarEmail(emailIdeia,
-                Collections.singletonList(emailEmpresa),
+                Collections.singletonList("alvesdesouzaalex@gmail.com"),
                 "Clinica Ideia - Exame expirando",
                 "email/exame-expirando", map);
     }

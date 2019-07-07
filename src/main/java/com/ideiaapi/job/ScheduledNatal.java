@@ -37,7 +37,7 @@ public class ScheduledNatal {
      * E: Mês (1 – 12).
      * F: Dia da semana (0 – 6).
      */
-    @Scheduled(cron = "0 0 6 25 12 *")
+//    @Scheduled(cron = "0 0 6 25 12 *")
     public void natal() {
 
         List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();

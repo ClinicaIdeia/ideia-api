@@ -37,16 +37,23 @@ public class ScheduledDiaMulheres {
      * E: Mês (1 – 12).
      * F: Dia da semana (0 – 6).
      */
-    @Scheduled(cron = "0 0 6 8 3 *")
+//    @Scheduled(cron = "0 0 6 8 3 *")
+//        @Scheduled(fixedDelay = 1)
     public void diaMulheres() {
 
-        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
+//        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
+//
+//        funcionarioList.stream()
+//                .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail())
+//                        && StringUtils.isNotBlank(funcionario.getSexo())
+//                        && "F".equalsIgnoreCase(funcionario.getSexo()))
+//                .forEach(this::enviarEmailDiaMulheres);
 
-        funcionarioList.stream()
-                .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail())
-                        && StringUtils.isNotBlank(funcionario.getSexo())
-                        && "F".equalsIgnoreCase(funcionario.getSexo()))
-                .forEach(this::enviarEmailDiaMulheres);
+        Funcionario funcionario = new Funcionario();
+        funcionario.setNome("Nilza");
+//        funcionario.setEmail("alvesdesouzaalex@gmail.com");
+        funcionario.setEmail(emailNilza);
+        this.enviarEmailDiaMulheres(funcionario);
     }
 
     private void enviarEmailDiaMulheres(Funcionario funcionario) {

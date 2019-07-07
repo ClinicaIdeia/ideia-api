@@ -37,14 +37,21 @@ public class ScheduledDiaTrabalhador {
      * E: Mês (1 – 12).
      * F: Dia da semana (0 – 6).
      */
-    @Scheduled(cron = "0 0 6 1 5 *")
+//    @Scheduled(cron = "0 0 6 1 5 *")
+//        @Scheduled(fixedDelay = 1)
     public void diaTrabalhador() {
 
-        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
+//        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
+//
+//        funcionarioList.stream()
+//                .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail()))
+//                .forEach(this::enviarEmailDiaTrabalhador);
 
-        funcionarioList.stream()
-                .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail()))
-                .forEach(this::enviarEmailDiaTrabalhador);
+        Funcionario funcionario = new Funcionario();
+        funcionario.setNome("Nilza");
+        funcionario.setEmail("alvesdesouzaalex@gmail.com");
+//        funcionario.setEmail(emailNilza);
+        this.enviarEmailDiaTrabalhador(funcionario);
     }
 
     private void enviarEmailDiaTrabalhador(Funcionario funcionario) {

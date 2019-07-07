@@ -28,4 +28,6 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long>,
             "    AND  extract(day from data_nascimento) =:dia\n" +
             "AND email IS NOT NULL;", nativeQuery = true)
     List<Funcionario> findByDataNascimentoAndEmailNotNull(@Param(value = "mes") int mes, @Param(value = "dia") int dia);
+
+    List<Funcionario> findAllByEmailIsNotNull();
 }

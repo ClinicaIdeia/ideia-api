@@ -37,11 +37,18 @@ public class ScheduledBirthday {
      * E: Mês (1 – 12).
      * F: Dia da semana (0 – 6).
      */
-    @Scheduled(cron = "0 0 9 * * *")
+//    @Scheduled(cron = "0 0 9 * * *")
+//    @Scheduled(fixedDelay = 1)
     public void aniversario() {
-        LocalDate hoje = LocalDate.now();
-        List<Funcionario> funcionarios = this.funcionarioRepository.findByDataNascimentoAndEmailNotNull(hoje.getMonthValue(), hoje.getDayOfMonth());
-        funcionarios.forEach(this::enviarEmailAniversario);
+//        LocalDate hoje = LocalDate.now();
+//        List<Funcionario> funcionarios = this.funcionarioRepository.findByDataNascimentoAndEmailNotNull(hoje.getMonthValue(), hoje.getDayOfMonth());
+//        funcionarios.forEach(this::enviarEmailAniversario);
+
+        Funcionario funcionario = new Funcionario();
+        funcionario.setNome("Nilza");
+//        funcionario.setEmail("alvesdesouzaalex@gmail.com");
+        funcionario.setEmail(emailNilza);
+        this.enviarEmailAniversario(funcionario);
 
     }
 
