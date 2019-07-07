@@ -1,7 +1,6 @@
 package com.ideiaapi.job;
 
 import com.ideiaapi.mail.EnvioEmail;
-import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Exame;
 import com.ideiaapi.repository.AgendamentoRepository;
 import com.ideiaapi.util.datas.UtilsData;
@@ -17,10 +16,10 @@ import java.util.stream.Collectors;
 @Component
 public class ScheduledMensalEmpresas {
 
-    private static String emailIdeia = "clinica.ideia@gmail.com";
-    private static String emailNilza = "nilzamarquez5@gmail.com";
-    private static String auditor = "alvesdesouzaalex@gmail.com";
-    private static String PATTERN_DATE = "dd-MM-yyyy";
+    private static final String EMAIL_IDEIA = "clinica.ideia@gmail.com";
+    private static final String EMAIL_NILZA = "nilzamarquez5@gmail.com";
+    private static final String AUDITOR = "alvesdesouzaalex@gmail.com";
+    private static final String PATTERN_DATE = "dd-MM-yyyy";
 
     @Autowired
     private AgendamentoRepository agendamentoRepository;
@@ -88,8 +87,8 @@ public class ScheduledMensalEmpresas {
         map.put("empresa", empresa);
         map.put("exames", listaDosExamesDaEmpresa);
 
-        this.envioEmail.enviarEmail(emailNilza,
-                Arrays.asList(emailIdeia, emailIdeia, auditor),
+        this.envioEmail.enviarEmail(EMAIL_NILZA,
+                Arrays.asList(EMAIL_IDEIA, EMAIL_IDEIA, AUDITOR),
                 "Clinica Ideia - Relatorio mensal de exames psicologicos",
                 "email/relatorio-mensal-por-empresa", map);
     }

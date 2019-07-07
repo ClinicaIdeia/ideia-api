@@ -3,6 +3,7 @@ package com.ideiaapi.repository;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.ideiaapi.model.Agenda;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -52,4 +53,5 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long>,
             "and a.dia_agenda <=:fim\n" +
             "order by e.nome;", nativeQuery = true)
     List<Agendamento> findAllByAgenda_DiaAgenda_Day(@Param(value = "inicio") LocalDate inicio, @Param(value = "fim") LocalDate fim);
+
 }

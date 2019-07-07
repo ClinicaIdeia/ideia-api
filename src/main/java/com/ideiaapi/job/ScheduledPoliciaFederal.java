@@ -14,9 +14,10 @@ import java.util.*;
 @Component
 public class ScheduledPoliciaFederal {
 
-    private static String emailPoliciaFederal = "psicologos.deleaq.mg@dpf.gov.br";
-    private static String emailIdeia = "clinica.ideia@gmail.com";
-    private static String emailNilza = "nilzamarquez5@gmail.com";
+    private static final String EMAIL_PF = "psicologos.deleaq.mg@dpf.gov.br";
+    private static final String EMAIL_IDEIA = "clinica.ideia@gmail.com";
+    private static final String EMAIL_NILZA = "nilzamarquez5@gmail.com";
+    private static final String AUDITOR = "alvesdesouzaalex@gmail.com";
 
     @Autowired
     private AgendamentoRepository agendamentoRepository;
@@ -59,10 +60,10 @@ public class ScheduledPoliciaFederal {
         funcionariosList.forEach(funcionario -> nomesFuncionarios.add(funcionario.getNome()));
         map.put("names", nomesFuncionarios);
 
-        this.envioEmail.enviarEmail(emailIdeia,
-//                Collections.singletonList(emailPoliciaFederal),
+        this.envioEmail.enviarEmail(EMAIL_IDEIA,
+//                Collections.singletonList(EMAIL_PF),
 //                TODO : Colocar de volta quando enviar diretamente para Policia Federal
-                Collections.singletonList(emailNilza),
+                Arrays.asList(EMAIL_NILZA, EMAIL_IDEIA, AUDITOR),
                 "Clinica Ideia - Agendamentos de exames psicologicos para trabalhos armados",
                 "email/policia-federal", map);
     }

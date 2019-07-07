@@ -1,26 +1,23 @@
 package com.ideiaapi.job;
 
 import com.ideiaapi.mail.EnvioEmail;
-import com.ideiaapi.model.Agendamento;
-import com.ideiaapi.model.Contato;
-import com.ideiaapi.model.Empresa;
 import com.ideiaapi.model.Funcionario;
 import com.ideiaapi.repository.AgendamentoRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class ScheduledExameExpirado {
 
-    private static String emailPoliciaFederal = "psicologos.deleaq.mg@dpf.gov.br";
-    private static String emailIdeia = "clinica.ideia@gmail.com";
-    private static String emailNilza = "nilzamarquez5@gmail.com";
+    private static final String EMAIL_IDEIA = "clinica.ideia@gmail.com";
+    private static final String EMAIL_NILZA = "nilzamarquez5@gmail.com";
+    private static final String AUDITOR = "alvesdesouzaalex@gmail.com";
 
     @Autowired
     private AgendamentoRepository agendamentoRepository;
@@ -39,40 +36,26 @@ public class ScheduledExameExpirado {
      * E: Mês (1 – 12).
      * F: Dia da semana (0 – 6).
      */
-
-//    @Scheduled(cron = "0 0 9 1 * *")
-//    @Scheduled(fixedDelay = 1l)
+    @Scheduled(cron = "0 0 13 * * *")
     public void exameExpirando() {
 
+        this.agendamentoRepository.findAllByDate(LocalDate.now().minusDays(335L))
+                .forEach(agendamento -> {
 
-        List<Agendamento> agendamentosList = this.agendamentoRepository.findAll();
-        List<Funcionario> funcionariosList = new ArrayList<>();
+                    final Funcionario funcionario = agendamento.getFuncionario();
+                    String nome = funcionario.getNome().concat(" - ").concat(funcionario.getNumeroCadastro().toString());
+                    this.enviarEmailExameExpirando(nome);
 
-        agendamentosList.forEach(agendamento -> funcionariosList.add(agendamento.getFuncionario()));
+                });
 
-        funcionariosList.forEach(funcionario -> {
-
-            List<Empresa> empresasList = funcionario.getEmpresas();
-
-            empresasList.forEach(empresa -> {
-                List<Contato> contatosList = empresa.getContatos();
-                contatosList.forEach(
-                        contato -> this.enviarEmailExameExpirando(funcionario, contato.getEmail())
-                );
-            });
-
-            if (StringUtils.isNotBlank(funcionario.getEmail()))
-                this.enviarEmailExameExpirando(funcionario, funcionario.getEmail());
-        });
     }
 
-    private void enviarEmailExameExpirando(Funcionario funcionario, String emailEmpresa) {
+    private void enviarEmailExameExpirando(String nome) {
         Map<String, Object> map = new HashMap<>();
-        map.put("name", funcionario.getNome());
+        map.put("name", nome);
 
-        //Mandar par aos dois emails
-        this.envioEmail.enviarEmail(emailIdeia,
-                Collections.singletonList("alvesdesouzaalex@gmail.com"),
+        this.envioEmail.enviarEmail(EMAIL_IDEIA,
+                Arrays.asList(EMAIL_NILZA, EMAIL_IDEIA, AUDITOR),
                 "Clinica Ideia - Exame expirando",
                 "email/exame-expirando", map);
     }

@@ -15,7 +15,7 @@ import java.util.Map;
 @Component
 public class ScheduledBirthday {
 
-    private static String emailIdeia = "clinica.ideia@gmail.com";
+    private static final String EMAIL_IDEIA = "clinica.ideia@gmail.com";
 
     @Autowired
     private EnvioEmail envioEmail;
@@ -46,7 +46,7 @@ public class ScheduledBirthday {
         Map<String, Object> map = new HashMap<>();
         map.put("name", funcionario.getNome());
 
-        this.envioEmail.enviarEmail(emailIdeia,
+        this.envioEmail.enviarEmail(EMAIL_IDEIA,
                 Collections.singletonList(funcionario.getEmail()),
                 "Feliz Aniversário", "email/aniversario", map);
     }
