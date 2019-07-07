@@ -3,22 +3,18 @@ package com.ideiaapi.job;
 import com.ideiaapi.mail.EnvioEmail;
 import com.ideiaapi.model.Funcionario;
 import com.ideiaapi.repository.FuncionarioRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
 public class ScheduledDiaTrabalhador {
 
-    private static String emailPoliciaFederal = "psicologos.deleaq.mg@dpf.gov.br";
     private static String emailIdeia = "clinica.ideia@gmail.com";
-    private static String emailNilza = "nilzamarquez5@gmail.com";
 
     @Autowired
     private FuncionarioRepository funcionarioRepository;
@@ -37,21 +33,13 @@ public class ScheduledDiaTrabalhador {
      * E: Mês (1 – 12).
      * F: Dia da semana (0 – 6).
      */
-//    @Scheduled(cron = "0 0 6 1 5 *")
-//        @Scheduled(fixedDelay = 1)
+    @Scheduled(cron = "0 0 6 1 5 *")
     public void diaTrabalhador() {
 
-//        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
-//
-//        funcionarioList.stream()
-//                .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail()))
-//                .forEach(this::enviarEmailDiaTrabalhador);
+        this.funcionarioRepository.findAllByEmailIsNotNull()
+                .forEach(this::enviarEmailDiaTrabalhador);
 
-        Funcionario funcionario = new Funcionario();
-        funcionario.setNome("Nilza");
-        funcionario.setEmail("alvesdesouzaalex@gmail.com");
-//        funcionario.setEmail(emailNilza);
-        this.enviarEmailDiaTrabalhador(funcionario);
+
     }
 
     private void enviarEmailDiaTrabalhador(Funcionario funcionario) {

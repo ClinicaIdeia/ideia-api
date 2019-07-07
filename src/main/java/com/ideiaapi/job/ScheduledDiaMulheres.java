@@ -1,24 +1,21 @@
 package com.ideiaapi.job;
 
+import com.ideiaapi.enums.OrientacaoSexual;
 import com.ideiaapi.mail.EnvioEmail;
 import com.ideiaapi.model.Funcionario;
 import com.ideiaapi.repository.FuncionarioRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
 public class ScheduledDiaMulheres {
 
-    private static String emailPoliciaFederal = "psicologos.deleaq.mg@dpf.gov.br";
     private static String emailIdeia = "clinica.ideia@gmail.com";
-    private static String emailNilza = "nilzamarquez5@gmail.com";
 
     @Autowired
     private FuncionarioRepository funcionarioRepository;
@@ -37,23 +34,12 @@ public class ScheduledDiaMulheres {
      * E: Mês (1 – 12).
      * F: Dia da semana (0 – 6).
      */
-//    @Scheduled(cron = "0 0 6 8 3 *")
-//        @Scheduled(fixedDelay = 1)
+    @Scheduled(cron = "0 0 6 8 3 *")
     public void diaMulheres() {
 
-//        List<Funcionario> funcionarioList = this.funcionarioRepository.findAll();
-//
-//        funcionarioList.stream()
-//                .filter(funcionario -> StringUtils.isNotBlank(funcionario.getEmail())
-//                        && StringUtils.isNotBlank(funcionario.getSexo())
-//                        && "F".equalsIgnoreCase(funcionario.getSexo()))
-//                .forEach(this::enviarEmailDiaMulheres);
+        this.funcionarioRepository.findAllByEmailIsNotNullAndSexo(OrientacaoSexual.FEMININO.name())
+                .forEach(this::enviarEmailDiaMulheres);
 
-        Funcionario funcionario = new Funcionario();
-        funcionario.setNome("Nilza");
-//        funcionario.setEmail("alvesdesouzaalex@gmail.com");
-        funcionario.setEmail(emailNilza);
-        this.enviarEmailDiaMulheres(funcionario);
     }
 
     private void enviarEmailDiaMulheres(Funcionario funcionario) {

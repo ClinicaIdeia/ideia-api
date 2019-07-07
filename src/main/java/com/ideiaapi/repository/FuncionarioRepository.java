@@ -29,5 +29,8 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long>,
             "AND email IS NOT NULL;", nativeQuery = true)
     List<Funcionario> findByDataNascimentoAndEmailNotNull(@Param(value = "mes") int mes, @Param(value = "dia") int dia);
 
+    //TODO filtrar emails vazios
     List<Funcionario> findAllByEmailIsNotNull();
+
+    List<Funcionario> findAllByEmailIsNotNullAndSexo(String sexo);
 }

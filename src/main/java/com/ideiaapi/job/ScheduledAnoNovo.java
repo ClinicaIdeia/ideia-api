@@ -14,9 +14,7 @@ import java.util.Map;
 @Component
 public class ScheduledAnoNovo {
 
-    private static String emailPoliciaFederal = "psicologos.deleaq.mg@dpf.gov.br";
     private static String emailIdeia = "clinica.ideia@gmail.com";
-    private static String emailNilza = "nilzamarquez5@gmail.com";
 
     @Autowired
     private FuncionarioRepository funcionarioRepository;

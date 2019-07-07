@@ -10,16 +10,12 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
 public class ScheduledBirthday {
 
-    private static String emailPoliciaFederal = "psicologos.deleaq.mg@dpf.gov.br";
     private static String emailIdeia = "clinica.ideia@gmail.com";
-    private static String emailNilza = "nilzamarquez5@gmail.com";
-
 
     @Autowired
     private EnvioEmail envioEmail;
@@ -37,18 +33,12 @@ public class ScheduledBirthday {
      * E: Mês (1 – 12).
      * F: Dia da semana (0 – 6).
      */
-//    @Scheduled(cron = "0 0 9 * * *")
-//    @Scheduled(fixedDelay = 1)
+    @Scheduled(cron = "0 0 6 * * *")
     public void aniversario() {
-//        LocalDate hoje = LocalDate.now();
-//        List<Funcionario> funcionarios = this.funcionarioRepository.findByDataNascimentoAndEmailNotNull(hoje.getMonthValue(), hoje.getDayOfMonth());
-//        funcionarios.forEach(this::enviarEmailAniversario);
 
-        Funcionario funcionario = new Funcionario();
-        funcionario.setNome("Nilza");
-//        funcionario.setEmail("alvesdesouzaalex@gmail.com");
-        funcionario.setEmail(emailNilza);
-        this.enviarEmailAniversario(funcionario);
+        LocalDate hoje = LocalDate.now();
+        this.funcionarioRepository.findByDataNascimentoAndEmailNotNull(hoje.getMonthValue(), hoje.getDayOfMonth())
+                .forEach(this::enviarEmailAniversario);
 
     }
 
