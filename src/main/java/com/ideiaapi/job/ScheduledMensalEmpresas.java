@@ -1,6 +1,7 @@
 package com.ideiaapi.job;
 
 import com.ideiaapi.mail.EnvioEmail;
+import com.ideiaapi.model.Agendamento;
 import com.ideiaapi.model.Exame;
 import com.ideiaapi.repository.AgendamentoRepository;
 import com.ideiaapi.util.datas.UtilsData;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class ScheduledMensalEmpresas {
@@ -37,11 +39,10 @@ public class ScheduledMensalEmpresas {
      * E: Mês (1 – 12).
      * F: Dia da semana (0 – 6).
      */
-//    @Scheduled(cron = "0 1 1 * * *")
-    @Scheduled(fixedDelay = 3000)
+    @Scheduled(cron = "0 0 12 1 * *")
     public void emailMensalEmpresas() {
 
-        LocalDate ultimoDiaMesAnterior = LocalDate.now().minusDays(30);
+        LocalDate ultimoDiaMesAnterior = LocalDate.now().minusDays(1);
         LocalDate primeitoDia = ultimoDiaMesAnterior.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate ultimoDia = ultimoDiaMesAnterior.with(TemporalAdjusters.lastDayOfMonth());
 
@@ -55,12 +56,12 @@ public class ScheduledMensalEmpresas {
 
             if (examesMap.containsKey(empresa)) {
 
-                examesMap.get(empresa).add(new Exame(agendamento.getFuncionario().getNome(), UtilsData.getDataConvertida(agendamento.getAgenda().getDiaAgenda(), PATTERN_DATE)));
+                examesMap.get(empresa).add(new Exame(agendamento.getFuncionario().getNome().toUpperCase(), UtilsData.getDataConvertida(agendamento.getAgenda().getDiaAgenda(), PATTERN_DATE)));
 
             } else {
 
                 Set<Exame> exames = new HashSet<>();
-                exames.add(new Exame(agendamento.getFuncionario().getNome(), UtilsData.getDataConvertida(agendamento.getAgenda().getDiaAgenda(), PATTERN_DATE)));
+                exames.add(new Exame(agendamento.getFuncionario().getNome().toUpperCase(), UtilsData.getDataConvertida(agendamento.getAgenda().getDiaAgenda(), PATTERN_DATE)));
                 examesMap.put(empresa, exames);
 
             }
@@ -70,9 +71,11 @@ public class ScheduledMensalEmpresas {
         if (!examesMap.isEmpty() && !empresas.isEmpty()) {
 
             empresas.forEach(emp -> {
-                final Set<Exame> exs = examesMap.get(emp);
+                Set<Exame> exs = examesMap.get(emp);
                 if (!exs.isEmpty()) {
-                    this.enviarRelatorioDosExamesDeMes(emp, exs);
+
+                    final List<Exame> resultList = exs.stream().sorted(Comparator.comparing(Exame::getDataExame)).collect(Collectors.toList());
+                    this.enviarRelatorioDosExamesDeMes(emp, resultList);
                 }
             });
         }
@@ -80,7 +83,7 @@ public class ScheduledMensalEmpresas {
         empresas.clear();
     }
 
-    private void enviarRelatorioDosExamesDeMes(String empresa, Set<Exame> listaDosExamesDaEmpresa) {
+    private void enviarRelatorioDosExamesDeMes(String empresa, List<Exame> listaDosExamesDaEmpresa) {
         Map<String, Object> map = new HashMap<>();
         map.put("empresa", empresa);
         map.put("exames", listaDosExamesDaEmpresa);
