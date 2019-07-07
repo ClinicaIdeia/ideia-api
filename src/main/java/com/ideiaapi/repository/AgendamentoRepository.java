@@ -42,4 +42,14 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long>,
     List<Agendamento> findAllByAgendamentoRelatorioPorEmpresaAdmin(
             @Param(value = "inicio") LocalDate inicio,
             @Param(value = "fim") LocalDate fim);
+
+
+    @Query(value = "select age.*\n" +
+            "from agendamento age inner join agenda a on age.codigo_agenda = a.codigo\n" +
+            "                    inner join empresa e on age.codigo_empresa = e.codigo\n" +
+            "where 1=1\n" +
+            "and a.dia_agenda >=:inicio\n" +
+            "and a.dia_agenda <=:fim\n" +
+            "order by e.nome;", nativeQuery = true)
+    List<Agendamento> findAllByAgenda_DiaAgenda_Day(@Param(value = "inicio") LocalDate inicio, @Param(value = "fim") LocalDate fim);
 }

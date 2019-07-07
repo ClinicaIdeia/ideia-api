@@ -1,24 +1,24 @@
 package com.ideiaapi.job;
 
 import com.ideiaapi.mail.EnvioEmail;
-import com.ideiaapi.model.Agendamento;
-import com.ideiaapi.model.Empresa;
 import com.ideiaapi.model.Exame;
-import com.ideiaapi.model.Funcionario;
 import com.ideiaapi.repository.AgendamentoRepository;
+import com.ideiaapi.util.datas.UtilsData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 @Component
 public class ScheduledMensalEmpresas {
 
-    private static String emailPoliciaFederal = "psicologos.deleaq.mg@dpf.gov.br";
     private static String emailIdeia = "clinica.ideia@gmail.com";
     private static String emailNilza = "nilzamarquez5@gmail.com";
+    private static String auditor = "alvesdesouzaalex@gmail.com";
+    private static String PATTERN_DATE = "dd-MM-yyyy";
 
     @Autowired
     private AgendamentoRepository agendamentoRepository;
@@ -38,77 +38,55 @@ public class ScheduledMensalEmpresas {
      * F: Dia da semana (0 – 6).
      */
 //    @Scheduled(cron = "0 1 1 * * *")
+    @Scheduled(fixedDelay = 3000)
     public void emailMensalEmpresas() {
 
-        LocalDate hoje = LocalDate.now();
-        LocalDate earlier = hoje.minusMonths(1); // 01-11-2018
+        LocalDate ultimoDiaMesAnterior = LocalDate.now().minusDays(30);
+        LocalDate primeitoDia = ultimoDiaMesAnterior.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate ultimoDia = ultimoDiaMesAnterior.with(TemporalAdjusters.lastDayOfMonth());
 
-        Integer lastMonth = earlier.getMonth().getValue(); // java.time.Month = 11
-        Integer year = earlier.getYear(); // 2018
+        SortedSet<String> empresas = new TreeSet<>();
+        Map<String, Set<Exame>> examesMap = new HashMap<>();
 
-        List<Agendamento> agendamentosList = this.agendamentoRepository.findAllByMonthAndYear(lastMonth, year);
+        this.agendamentoRepository.findAllByAgenda_DiaAgenda_Day(primeitoDia, ultimoDia).forEach(agendamento -> {
 
-        this.enviarRelatorioPorEmpresa(agendamentosList);
+            final String empresa = agendamento.getEmpresa().getNome();
+            empresas.add(empresa);
+
+            if (examesMap.containsKey(empresa)) {
+
+                examesMap.get(empresa).add(new Exame(agendamento.getFuncionario().getNome(), UtilsData.getDataConvertida(agendamento.getAgenda().getDiaAgenda(), PATTERN_DATE)));
+
+            } else {
+
+                Set<Exame> exames = new HashSet<>();
+                exames.add(new Exame(agendamento.getFuncionario().getNome(), UtilsData.getDataConvertida(agendamento.getAgenda().getDiaAgenda(), PATTERN_DATE)));
+                examesMap.put(empresa, exames);
+
+            }
+
+        });
+
+        if (!examesMap.isEmpty() && !empresas.isEmpty()) {
+
+            empresas.forEach(emp -> {
+                final Set<Exame> exs = examesMap.get(emp);
+                if (!exs.isEmpty()) {
+                    this.enviarRelatorioDosExamesDeMes(emp, exs);
+                }
+            });
+        }
+
+        empresas.clear();
     }
 
-    private void enviarRelatorioPorEmpresa(List<Agendamento> agendamentosList) {
-        HashMap<Funcionario, LocalDate> dataAgendaPorFuncionario = new HashMap<>();
-        List<Funcionario> listaDeTodosOsFuncionarios = new ArrayList<>();
-        List<Empresa> listaDeTodasAsEmpresas = new ArrayList<>();
-        List<Funcionario> listaDosFuncionariosDaEmpresa = new ArrayList<>();
-        List<Exame> listaDosExamesDaEmpresa = new ArrayList<>();
-
-        agendamentosList.forEach(
-                agendamento -> {
-                    Funcionario funcionario = agendamento.getFuncionario();
-                    listaDeTodosOsFuncionarios.add(funcionario);
-                    LocalDate diaDoExame = agendamento.getAgenda().getDiaAgenda();
-                    dataAgendaPorFuncionario.put(funcionario, diaDoExame);
-                }
-        );
-
-        listaDeTodosOsFuncionarios.forEach(
-                funcionario -> {
-                    List<Empresa> empresasDoFuncionario = funcionario.getEmpresas();
-                    empresasDoFuncionario.forEach(
-                            empresa -> {
-                                if (!listaDeTodasAsEmpresas.contains(empresa))
-                                    listaDeTodasAsEmpresas.add(empresa);
-                            }
-                    );
-                }
-        );
-
-        listaDeTodasAsEmpresas.forEach(
-                empresa -> {
-                    listaDeTodosOsFuncionarios.forEach(
-                            funcionario -> {
-                                if (funcionario.getEmpresas().contains(empresa))
-                                    listaDosFuncionariosDaEmpresa.add(funcionario);
-                            }
-                    );
-
-                    listaDosFuncionariosDaEmpresa.forEach(
-                            funcionario -> {
-                                LocalDate dataDoExameDoFuncionario = dataAgendaPorFuncionario.get(funcionario);
-                                listaDosExamesDaEmpresa.add(new Exame(funcionario.getNome(), dataDoExameDoFuncionario));
-                            }
-                    );
-
-                    this.enviarRelatorioDosExamesDeMes(empresa.getNome(), listaDosExamesDaEmpresa);
-                }
-        );
-    }
-
-    private void enviarRelatorioDosExamesDeMes(String empresa, List<Exame> listaDosExamesDaEmpresa) {
+    private void enviarRelatorioDosExamesDeMes(String empresa, Set<Exame> listaDosExamesDaEmpresa) {
         Map<String, Object> map = new HashMap<>();
         map.put("empresa", empresa);
         map.put("exames", listaDosExamesDaEmpresa);
 
         this.envioEmail.enviarEmail(emailNilza,
-//        Collections.singletonList(emailPoliciaFederal),
-//      TODO : Colocar de volta quando enviar diretamente para Policia Federal
-                Collections.singletonList(emailNilza),
+                Arrays.asList(emailIdeia, emailIdeia, auditor),
                 "Clinica Ideia - Relatorio mensal de exames psicologicos",
                 "email/relatorio-mensal-por-empresa", map);
     }
