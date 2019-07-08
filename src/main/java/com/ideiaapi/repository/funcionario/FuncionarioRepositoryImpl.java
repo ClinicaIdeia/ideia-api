@@ -12,15 +12,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.ideiaapi.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import com.ideiaapi.model.Empresa;
-import com.ideiaapi.model.Funcionario;
-import com.ideiaapi.model.Funcionario_;
-import com.ideiaapi.model.Usuario;
 import com.ideiaapi.repository.filter.FuncionarioFilter;
 import com.ideiaapi.repository.projection.ResumoFuncionario;
 import com.ideiaapi.repository.restricoes.paginacao.RestricoesPaginacao;
@@ -90,6 +87,7 @@ public class FuncionarioRepositoryImpl extends RestricoesPaginacao implements Fu
                 , root.get(Funcionario_.rg)
                 , root.get(Funcionario_.cpf)
                 , root.get(Funcionario_.telefone)
+                , root.get(Funcionario_.numeroCadastro)
                 , root.get(Funcionario_.cargo)
 //                , root.get(Funcionario_.empresa).get(Empresa_.nome)
         ));
@@ -119,9 +117,14 @@ public class FuncionarioRepositoryImpl extends RestricoesPaginacao implements Fu
         }
 
         if (funcionarioFilter.getCpf() != null) {
-            predicates.add(builder.like(
-                    builder.lower(root.get(Funcionario_.cpf)),
+            predicates.add(builder.like(builder.lower(root.get(Funcionario_.cpf)),
                     "%" + funcionarioFilter.getCpf().toLowerCase() + "%"));
+        }
+
+        if (funcionarioFilter.getNumeroCadastro() != null) {
+
+            predicates.add(builder.greaterThanOrEqualTo(root.get(Funcionario_.numeroCadastro), funcionarioFilter.getNumeroCadastro()));
+            predicates.add(builder.lessThanOrEqualTo(root.get(Funcionario_.numeroCadastro), funcionarioFilter.getNumeroCadastro()));
         }
 
         return predicates.toArray(new Predicate[predicates.size()]);

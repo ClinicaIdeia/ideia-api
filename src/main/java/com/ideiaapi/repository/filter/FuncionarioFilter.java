@@ -6,6 +6,8 @@ public class FuncionarioFilter {
 
     private String matricula;
 
+    private Long numeroCadastro;
+
     private String rg;
 
     private String cpf;
@@ -13,6 +15,14 @@ public class FuncionarioFilter {
     private String telefone;
 
     private Long codigoEmpresa;
+
+    public Long getNumeroCadastro() {
+        return numeroCadastro;
+    }
+
+    public void setNumeroCadastro(Long numeroCadastro) {
+        this.numeroCadastro = numeroCadastro;
+    }
 
     public Long getCodigoEmpresa() {
         return codigoEmpresa;
