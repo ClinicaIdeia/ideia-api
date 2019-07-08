@@ -5,6 +5,7 @@ import com.ideiaapi.mail.EnvioEmail;
 import com.ideiaapi.model.*;
 import com.ideiaapi.repository.AgendamentoRepository;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -16,6 +17,7 @@ import java.util.List;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
+@Ignore
 public class ScheduledExameExpiradoTest extends BaseTest {
 
     @Mock

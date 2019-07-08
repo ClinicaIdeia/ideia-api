@@ -4,10 +4,7 @@ import java.io.InputStream;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import javax.transaction.Transactional;
 
@@ -46,7 +43,7 @@ public class AgendamentoService {
     public byte[] relatorioPorEmpresa(LocalDate inicio, LocalDate fim, Long codEmpresa,
             Long codFuncionario) throws Exception { //NOSONAR
 
-        List<AgendamentoEstatisticaEmpresa> dados = this.agendamentoRepository.agendamentosPorEmpresa(inicio, fim,
+        Set<AgendamentoEstatisticaEmpresa> dados = this.agendamentoRepository.agendamentosPorEmpresa(inicio, fim,
                 codEmpresa, codFuncionario);
 
         Map<String, Object> parametros = new HashMap<>();

@@ -21,7 +21,10 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements AgendamentoRepositoryQuery {
 
@@ -29,13 +32,16 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
     private EntityManager manager;
 
     @Override
-    public List<AgendamentoEstatisticaEmpresa> agendamentosPorEmpresa(LocalDate inicio, LocalDate fim,
-                                                                      Long codEmpresa, Long codFuncionario) {
+    public Set<AgendamentoEstatisticaEmpresa> agendamentosPorEmpresa(LocalDate inicio, LocalDate fim,
+                                                                     Long codEmpresa, Long codFuncionario) {
 
         CriteriaBuilder builder = manager.getCriteriaBuilder();
         CriteriaQuery<AgendamentoEstatisticaEmpresa> criteria = builder.createQuery(
                 AgendamentoEstatisticaEmpresa.class);
         Root<Agendamento> root = criteria.from(Agendamento.class);
+
+        //TODO verificar pq não esta ordenando
+        criteria.orderBy(builder.asc(root.get(Agendamento_.agenda).get(Agenda_.diaAgenda)));
 
         criteria.select(builder.construct(
                 AgendamentoEstatisticaEmpresa.class,
@@ -45,6 +51,7 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
                 root.get(Agendamento_.motivo),
                 root.get(Agendamento_.horaExame)));
 
+        //TODO verificar pq não esta filtrando
         criteria.where(
                 builder.greaterThanOrEqualTo(root.get(Agendamento_.agenda).get(Agenda_.diaAgenda), inicio),
                 builder.lessThanOrEqualTo(root.get(Agendamento_.agenda).get(Agenda_.diaAgenda), fim)
@@ -64,12 +71,20 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
 
         TypedQuery<AgendamentoEstatisticaEmpresa> tpQuery = manager.createQuery(criteria);
 
+        List<AgendamentoEstatisticaEmpresa> resultList = tpQuery.getResultList()
+                .stream().filter(age -> age.getAgenda().getDiaAgenda().isAfter(inicio))
+                .filter(age -> age.getAgenda().getDiaAgenda().isBefore(fim)).collect(Collectors.toList());
 
-        List<AgendamentoEstatisticaEmpresa> resultList = tpQuery.getResultList();
+        if (resultList.isEmpty()) {
+            return null;
+        }
 
         resultList.forEach(age -> age.getAgenda().setDataAgendaTemp(UtilsData.getDataConvertida(age.getAgenda().getDiaAgenda(), "dd/MM/yyyy")));
 
-        return resultList;
+        Set<AgendamentoEstatisticaEmpresa> result = new HashSet<>();
+        result.addAll(resultList);
+
+        return result;
     }
 
     @Override
