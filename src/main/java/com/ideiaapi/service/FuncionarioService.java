@@ -95,14 +95,7 @@ public class FuncionarioService {
         this.geraNumeroCadastro(entity);
         Funcionario salvo = this.funcionarioRepository.save(entity);
         this.funcCargoEmpresaService.insereCargo(salvo);
-        this.geraNomeFormatadoComNumeroCadastro(salvo);
         return salvo;
-    }
-
-    private void geraNomeFormatadoComNumeroCadastro(Funcionario salvo) {
-        String registro = null != salvo.getNumeroCadastro() ? salvo.getNumeroCadastro().toString() : "SEM N°";
-        String nome = salvo.getNome().concat(" - ").concat(registro);
-        salvo.setNome(nome);
     }
 
     @Transactional
