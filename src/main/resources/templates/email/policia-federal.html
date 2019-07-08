@@ -23,23 +23,31 @@
 
     <div style="margin: 10px 0 10px 10px; padding: 50px;">
 
-        <img src="https://oplk-it-ideia-arquivos.s3.amazonaws.com/11ceb45a-851e-4d4a-8155-1de650e578bd__logo_ideia.png" width="300" height="150"/>
+        <img src="https://oplk-it-ideia-arquivos.s3.amazonaws.com/11ceb45a-851e-4d4a-8155-1de650e578bd__logo_ideia.png"
+             width="300" height="150"/>
 
         <h3>Ol&aacute;,</h3>
 
-        <p class="bg-primary">Segue a lista dos agendamentos daqui 3 dias para exames psicologicos para trabalho com armas :</p>
+        <p class="bg-primary">Segue a agenda de Avaliação Psicológica do dia: <span th:text="${diaAgenda}"></span></p>
 
         <table style="width: 100%; border-collapse: collapse;  margin: 20px 0">
             <thead>
             <tr>
-                <th>Nome do Funcionario</th>
+                <th style="text-align: left">HORÁRIO</th>
+                <th style="text-align: left">NOME</th>
+                <th style="text-align: left">CPF</th>
+                <th style="text-align: left">TELEFONE</th>
             </tr>
             </thead>
 
             <tbody>
             <tr style="border-bottom: 1px solid #ccc; border-top: 1px solid #ccc;"
-                th:each="name: ${names}">
-                <td th:text="${name}"></td>
+                th:each="func: ${funcs}">
+
+                <td th:text="${func.hora}"></td>
+                <td th:text="${func.nome}"></td>
+                <td th:text="${func.cpf}"></td>
+                <td th:text="${func.telefone}"></td>
 
             </tr>
             </tbody>

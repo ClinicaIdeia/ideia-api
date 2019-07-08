@@ -5,27 +5,28 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.format.TextStyle;
 import java.util.Date;
 import java.util.Locale;
 
 public abstract class UtilsData {
 
-  public static String getDateTimeShort(final LocalDateTime agora) {
+    public static String getDateTimeShort(final LocalDateTime agora) {
 
-    DateTimeFormatter formatador = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
-                                                    .withLocale(new Locale("pt",
-                                                                           "br"));
-    String[] format = agora.format(formatador)
-                           .split(" "); // 08/04/14 10:02
+        DateTimeFormatter formatador = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
+                .withLocale(new Locale("pt",
+                        "br"));
+        String[] format = agora.format(formatador)
+                .split(" "); // 08/04/14 10:02
 
-    return format[0];
-  }
+        return format[0];
+    }
 
-  public static String getDataFormatadaPorExtenso() {
-    Locale localeBR = new Locale("pt", "BR");
-    SimpleDateFormat fmt = new SimpleDateFormat("dd 'de' MMMM 'de' yyyy", localeBR);
-    return fmt.format(new Date()).toUpperCase();
-  }
+    public static String getDataFormatadaPorExtenso() {
+        Locale localeBR = new Locale("pt", "BR");
+        SimpleDateFormat fmt = new SimpleDateFormat("dd 'de' MMMM 'de' yyyy", localeBR);
+        return fmt.format(new Date()).toUpperCase();
+    }
 
     public static String getDataFormatadaRecibo(LocalDate emissao) {
 
@@ -82,115 +83,121 @@ public abstract class UtilsData {
         return sb.toString();
     }
 
-  public static LocalDateTime getDateTimeFormatted(final String dateTime, final String split) {
+    public static LocalDateTime getDateTimeFormatted(final String dateTime, final String split) {
 
-    String[] dataQuebrada = dateTime.split(split);
-    String dia = dataQuebrada[0];
-    String mes = dataQuebrada[1];
-    String ano = dataQuebrada[2];
-    String horaMinut = "00";
+        String[] dataQuebrada = dateTime.split(split);
+        String dia = dataQuebrada[0];
+        String mes = dataQuebrada[1];
+        String ano = dataQuebrada[2];
+        String horaMinut = "00";
 
-    return LocalDateTime.of(Integer.parseInt(ano),
-                            Integer.parseInt(mes),
-                            Integer.parseInt(dia),
-                            Integer.parseInt(horaMinut),
-                            Integer.parseInt(horaMinut));
-  }
-
-  public static LocalDate getDateFormatted(final String dateTime, final String split) {
-
-    String[] dataQuebrada = dateTime.split(split);
-    String dia = dataQuebrada[0];
-    String mes = dataQuebrada[1];
-    String ano = dataQuebrada[2];
-
-    return LocalDate.of(Integer.parseInt(ano), Integer.parseInt(mes), Integer.parseInt(dia));
-  }
-
-  public static String getLocalDateTimeToString(final LocalDateTime now, final String locale, final String patthern) {
-
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    String formatDateTime = now.format(formatter);
-    String split = "/";
-    String dateResult = null;
-
-    if ("US".equalsIgnoreCase(locale)) {
-      split = "-";
+        return LocalDateTime.of(Integer.parseInt(ano),
+                Integer.parseInt(mes),
+                Integer.parseInt(dia),
+                Integer.parseInt(horaMinut),
+                Integer.parseInt(horaMinut));
     }
 
-    if ("BR".equals(locale)) {
-      split = "/";
+    public static LocalDate getDateFormatted(final String dateTime, final String split) {
+
+        String[] dataQuebrada = dateTime.split(split);
+        String dia = dataQuebrada[0];
+        String mes = dataQuebrada[1];
+        String ano = dataQuebrada[2];
+
+        return LocalDate.of(Integer.parseInt(ano), Integer.parseInt(mes), Integer.parseInt(dia));
     }
 
-    final String[] dateTimeArray = formatDateTime.split(split);
-    final String dia = dateTimeArray[2];
-    final String mes = dateTimeArray[1];
-    final String ano = dateTimeArray[0];
+    public static String getLocalDateTimeToString(final LocalDateTime now, final String locale, final String patthern) {
 
-    dateResult = patthern.replace("dd", dia)
-                         .replaceAll("mm", mes)
-                         .replaceAll("yyyy", ano);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formatDateTime = now.format(formatter);
+        String split = "/";
+        String dateResult = null;
 
-    return dateResult;
-  }
+        if ("US".equalsIgnoreCase(locale)) {
+            split = "-";
+        }
 
-  public static String getLocalDateToString(final LocalDate now, final String locale, final String patthern) {
+        if ("BR".equals(locale)) {
+            split = "/";
+        }
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    String formatDateTime = now.format(formatter);
-    String split = "/";
-    String dateResult = null;
+        final String[] dateTimeArray = formatDateTime.split(split);
+        final String dia = dateTimeArray[2];
+        final String mes = dateTimeArray[1];
+        final String ano = dateTimeArray[0];
 
-    if ("US".equalsIgnoreCase(locale)) {
-      split = "-";
+        dateResult = patthern.replace("dd", dia)
+                .replaceAll("mm", mes)
+                .replaceAll("yyyy", ano);
+
+        return dateResult;
     }
 
-    if ("BR".equals(locale)) {
-      split = "/";
+    public static String getLocalDateToString(final LocalDate now, final String locale, final String patthern) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formatDateTime = now.format(formatter);
+        String split = "/";
+        String dateResult = null;
+
+        if ("US".equalsIgnoreCase(locale)) {
+            split = "-";
+        }
+
+        if ("BR".equals(locale)) {
+            split = "/";
+        }
+
+        final String[] dateTimeArray = formatDateTime.split(split);
+        final String dia = dateTimeArray[2];
+        final String mes = dateTimeArray[1];
+        final String ano = dateTimeArray[0];
+
+        dateResult = patthern.replace("dd", dia)
+                .replaceAll("mm", mes)
+                .replaceAll("yyyy", ano);
+
+        return dateResult;
     }
 
-    final String[] dateTimeArray = formatDateTime.split(split);
-    final String dia = dateTimeArray[2];
-    final String mes = dateTimeArray[1];
-    final String ano = dateTimeArray[0];
+    private String reformattDate(String dateFormatt) {
+        StringBuffer sb = new StringBuffer();
 
-    dateResult = patthern.replace("dd", dia)
-                         .replaceAll("mm", mes)
-                         .replaceAll("yyyy", ano);
+        String[] formats = dateFormatt.split("-");
+        for (int i = 0; i < formats.length; i++) {
 
-    return dateResult;
-  }
+            String parteOfDate = formats[i];
+            if (parteOfDate.length() == 1) {
+                parteOfDate = "0".concat(parteOfDate);
+                sb.append(parteOfDate)
+                        .append("-");
+            } else {
+                sb.append(parteOfDate)
+                        .append("-");
+            }
+        }
 
-  private String reformattDate(String dateFormatt) {
-    StringBuffer sb = new StringBuffer();
+        String formattFinal = sb.toString();
+        int tamanho = formattFinal.length();
+        formattFinal = formattFinal.substring(0, tamanho - 1);
 
-    String[] formats = dateFormatt.split("-");
-    for (int i = 0; i < formats.length; i++) {
-
-      String parteOfDate = formats[i];
-      if (parteOfDate.length() == 1) {
-        parteOfDate = "0".concat(parteOfDate);
-        sb.append(parteOfDate)
-          .append("-");
-      } else {
-        sb.append(parteOfDate)
-          .append("-");
-      }
+        return formattFinal;
     }
 
-    String formattFinal = sb.toString();
-    int tamanho = formattFinal.length();
-    formattFinal = formattFinal.substring(0, tamanho - 1);
+    public static String getDataConvertida(LocalDate data, String pattern) {
 
-    return formattFinal;
-  }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 
-  public static String getDataConvertida(LocalDate data, String pattern) {
+        return data.format(formatter);
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+    }
 
-    return data.format(formatter);
+    public static String getDiaDaSemanaFormatado(LocalDate data) {
 
-  }
+        return data.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("pt",
+                "br")).toUpperCase();
+    }
 
 }
