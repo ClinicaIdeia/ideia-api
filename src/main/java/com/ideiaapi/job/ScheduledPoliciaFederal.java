@@ -68,8 +68,7 @@ public class ScheduledPoliciaFederal {
         this.envioEmail.enviarEmail(EMAIL_IDEIA,
 //                Collections.singletonList(EMAIL_PF),
 //                TODO : Colocar de volta quando enviar diretamente para Policia Federal
-//                Arrays.asList(EMAIL_NILZA, EMAIL_IDEIA, AUDITOR),
-                Arrays.asList(AUDITOR),
+                Arrays.asList(EMAIL_NILZA, EMAIL_IDEIA, AUDITOR),
                 assunto,
                 "email/policia-federal", map);
     }
