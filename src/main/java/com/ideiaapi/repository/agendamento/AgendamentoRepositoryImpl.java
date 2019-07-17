@@ -20,10 +20,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements AgendamentoRepositoryQuery {
@@ -38,6 +35,7 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
         CriteriaBuilder builder = manager.getCriteriaBuilder();
         CriteriaQuery<AgendamentoEstatisticaEmpresa> criteria = builder.createQuery(
                 AgendamentoEstatisticaEmpresa.class);
+
         Root<Agendamento> root = criteria.from(Agendamento.class);
 
         //TODO verificar pq não esta ordenando
@@ -73,10 +71,20 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
 
         List<AgendamentoEstatisticaEmpresa> resultList = tpQuery.getResultList()
                 .stream().filter(age -> age.getAgenda().getDiaAgenda().isAfter(inicio))
-                .filter(age -> age.getAgenda().getDiaAgenda().isBefore(fim)).collect(Collectors.toList());
+                .filter(age -> age.getAgenda().getDiaAgenda().isBefore(fim))
+                .collect(Collectors.toList());
 
         if (resultList.isEmpty()) {
             return null;
+        }
+
+        if (codEmpresa.compareTo(0l) > 0) {
+
+            resultList = resultList
+                    .stream().filter(age -> age.getFuncionario().getEmpresas().stream()
+                            .max(Comparator.comparing(Empresa::getCodigo)).map(Empresa::getCodigo).get().compareTo(codEmpresa) == 0)
+                    .collect(Collectors.toList());
+
         }
 
         resultList.forEach(age -> age.getAgenda().setDataAgendaTemp(UtilsData.getDataConvertida(age.getAgenda().getDiaAgenda(), "dd/MM/yyyy")));
