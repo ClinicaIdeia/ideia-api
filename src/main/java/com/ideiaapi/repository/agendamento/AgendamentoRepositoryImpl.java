@@ -115,7 +115,7 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
         Set<AgendamentoEstatisticaEmpresa> result = new HashSet<>(resultList);
         List<AgendamentoEstatisticaEmpresa> agendamentos = new ArrayList<>(result);
         agendamentos.sort(Comparator.comparing(AgendamentoEstatisticaEmpresa::getDtaTemp));
-        agendamentos.sort(Comparator.comparing(AgendamentoEstatisticaEmpresa::getNomeEmpresaTemp));
+//        agendamentos.sort(Comparator.comparing(AgendamentoEstatisticaEmpresa::getNomeEmpresaTemp));
         return agendamentos;
     }
 
