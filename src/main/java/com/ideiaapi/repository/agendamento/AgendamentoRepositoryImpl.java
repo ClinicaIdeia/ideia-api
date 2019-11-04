@@ -20,6 +20,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,12 +31,10 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
     private EntityManager manager;
 
     @Override
-    public Set<AgendamentoEstatisticaEmpresa> agendamentosPorEmpresa(LocalDate inicio, LocalDate fim,
-                                                                     Long codEmpresa, Long codFuncionario) {
+    public List<AgendamentoEstatisticaEmpresa> agendamentosPorEmpresa(LocalDate inicio, LocalDate fim, Long codEmpresa, Long codFuncionario) {
 
         CriteriaBuilder builder = manager.getCriteriaBuilder();
-        CriteriaQuery<AgendamentoEstatisticaEmpresa> criteria = builder.createQuery(
-                AgendamentoEstatisticaEmpresa.class);
+        CriteriaQuery<AgendamentoEstatisticaEmpresa> criteria = builder.createQuery(AgendamentoEstatisticaEmpresa.class);
 
         Root<Agendamento> root = criteria.from(Agendamento.class);
 
@@ -55,13 +55,13 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
                 builder.lessThanOrEqualTo(root.get(Agendamento_.agenda).get(Agenda_.diaAgenda), fim)
         );
 
-        if (codEmpresa.compareTo(0l) > 0) {
+        if (codEmpresa.compareTo(0L) > 0) {
             criteria.where(
                     builder.equal(root.get(Agendamento_.empresa).get(Empresa_.codigo), codEmpresa)
             );
         }
 
-        if (codFuncionario.compareTo(0l) > 0) {
+        if (codFuncionario.compareTo(0L) > 0) {
             criteria.where(
                     builder.equal(root.get(Agendamento_.funcionario).get(Funcionario_.codigo), codFuncionario)
             );
@@ -87,12 +87,36 @@ public class AgendamentoRepositoryImpl extends RestricoesPaginacao implements Ag
 
         }
 
-        resultList.forEach(age -> age.getAgenda().setDataAgendaTemp(UtilsData.getDataConvertida(age.getAgenda().getDiaAgenda(), "dd/MM/yyyy")));
+        this.incrementResultSetAgendamentos(resultList);
+        return this.getAgendamentosOrdenados(resultList);
+    }
 
-        Set<AgendamentoEstatisticaEmpresa> result = new HashSet<>();
-        result.addAll(resultList);
+    private void incrementResultSetAgendamentos(List<AgendamentoEstatisticaEmpresa> resultList) {
+        resultList.forEach(age -> {
+            age.getAgenda().setDataAgendaTemp(UtilsData.getDataConvertida(age.getAgenda().getDiaAgenda(), "dd/MM/yyyy"));
 
-        return result;
+            LocalDate diaAgenda = age.getAgenda().getDiaAgenda();
+            LocalTime horaExame = age.getHoraExame();
+
+            try {
+                LocalDateTime dtaExame = LocalDateTime.of(diaAgenda.getYear(), diaAgenda.getMonthValue(), diaAgenda.getDayOfMonth(), horaExame.getHour(),
+                        horaExame.getMinute(), horaExame.getSecond());
+                age.setDtaTemp(dtaExame);
+            } catch (Exception e) {
+                e.printStackTrace();
+                age.setDtaTemp(LocalDateTime.now());
+            }
+
+            age.setNomeEmpresaTemp(age.getEmpresa().getNome());
+        });
+    }
+
+    private List<AgendamentoEstatisticaEmpresa> getAgendamentosOrdenados(List<AgendamentoEstatisticaEmpresa> resultList) {
+        Set<AgendamentoEstatisticaEmpresa> result = new HashSet<>(resultList);
+        List<AgendamentoEstatisticaEmpresa> agendamentos = new ArrayList<>(result);
+        agendamentos.sort(Comparator.comparing(AgendamentoEstatisticaEmpresa::getDtaTemp));
+        agendamentos.sort(Comparator.comparing(AgendamentoEstatisticaEmpresa::getNomeEmpresaTemp));
+        return agendamentos;
     }
 
     @Override

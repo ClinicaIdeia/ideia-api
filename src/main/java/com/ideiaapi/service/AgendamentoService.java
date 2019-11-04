@@ -40,11 +40,9 @@ public class AgendamentoService {
     @Autowired
     private AgendaService agendaService;
 
-    public byte[] relatorioPorEmpresa(LocalDate inicio, LocalDate fim, Long codEmpresa,
-            Long codFuncionario) throws Exception { //NOSONAR
+    public byte[] relatorioPorEmpresa(LocalDate inicio, LocalDate fim, Long codEmpresa, Long codFuncionario) throws Exception { //NOSONAR
 
-        Set<AgendamentoEstatisticaEmpresa> dados = this.agendamentoRepository.agendamentosPorEmpresa(inicio, fim,
-                codEmpresa, codFuncionario);
+        List<AgendamentoEstatisticaEmpresa> dados = this.agendamentoRepository.agendamentosPorEmpresa(inicio, fim, codEmpresa, codFuncionario);
 
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("DT_INICIO", Date.valueOf(inicio));

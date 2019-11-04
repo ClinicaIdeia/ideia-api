@@ -1,11 +1,13 @@
 package com.ideiaapi.dto;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import com.ideiaapi.model.Agenda;
 import com.ideiaapi.model.Empresa;
 import com.ideiaapi.model.Funcionario;
 import com.ideiaapi.model.Motivo;
+import java.time.LocalDate;
 
 public class AgendamentoEstatisticaEmpresa {
 
@@ -18,6 +20,10 @@ public class AgendamentoEstatisticaEmpresa {
     private Motivo motivo;
 
     private LocalTime horaExame;
+
+    private LocalDateTime dtaTemp;
+
+    private String nomeEmpresaTemp;
 
     public AgendamentoEstatisticaEmpresa(Agenda agenda, Funcionario funcionario, Empresa empresa,
             Motivo motivo, LocalTime horaExame) {
@@ -66,5 +72,21 @@ public class AgendamentoEstatisticaEmpresa {
 
     public void setHoraExame(LocalTime horaExame) {
         this.horaExame = horaExame;
+    }
+
+    public LocalDateTime getDtaTemp() {
+        return dtaTemp;
+    }
+
+    public void setDtaTemp(LocalDateTime dtaTemp) {
+        this.dtaTemp = dtaTemp;
+    }
+
+    public String getNomeEmpresaTemp() {
+        return nomeEmpresaTemp;
+    }
+
+    public void setNomeEmpresaTemp(String nomeEmpresaTemp) {
+        this.nomeEmpresaTemp = nomeEmpresaTemp;
     }
 }
