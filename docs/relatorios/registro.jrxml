@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<!-- Created with Jaspersoft Studio version 6.14.0.final using JasperReports Library version 6.14.0-2ab0d8625be255bf609c78e1181801213e51db8f  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="laudo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d353ecc2-25bb-446f-953a-665af05a5ea0">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="FUNC_NOME" class="java.lang.String"/>
@@ -26,7 +26,7 @@
 		<band height="75" splitType="Stretch">
 			<image>
 				<reportElement x="10" y="0" width="115" height="45" uuid="eb8f25da-63d8-4bf1-a58b-5e55db214e7c"/>
-				<imageExpression><![CDATA["https://oplk-it-ideia-arquivos.s3.amazonaws.com/11ceb45a-851e-4d4a-8155-1de650e578bd__logo_ideia.png"]]></imageExpression>
+				<imageExpression><![CDATA["https://arche-tec-ideia-arquivos.s3.amazonaws.com/21e6005f-da3c-4a3d-aa54-30b80ef9e84b__logo_ideia.png"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="320" y="0" width="231" height="20" uuid="4e0efef2-5e45-474c-8dd5-dded75253362"/>
